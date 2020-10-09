@@ -8,7 +8,7 @@ class Fire {
       firebase.initializeApp(firebaseConfig);
     }
   }
-
+  // this is to add photo to firebase - storage
   uploadPhotoAsync = async (uri) => {
     const path = `photos/${Date.now()}.jpg`;
     return new Promise(async (res, rej) => {
@@ -17,7 +17,9 @@ class Fire {
       let upload = firebase.storage().ref(path).put(file);
       upload.on(
         'state_changed',
-        (snapshot) => {},
+        (snapshot) => {
+          console.log('Photo has been uploaded!');
+        },
         (err) => {
           rej(err);
         },
@@ -28,6 +30,8 @@ class Fire {
       );
     });
   };
+
+  // this is to add photo uri to firebase - cloud firestore
   addPhoto = async (localUri) => {
     const remoteUri = await this.uploadPhotoAsync(localUri);
     return new Promise((res, rej) => {
@@ -56,4 +60,5 @@ class Fire {
 }
 
 Fire.shared = new Fire();
+
 export default Fire;

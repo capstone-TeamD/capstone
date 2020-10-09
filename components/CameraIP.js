@@ -46,7 +46,7 @@ export default function ImagePickerExample() {
       quality: 1,
     });
 
-    console.log(result);
+    console.log('image picked', result);
 
     if (!result.cancelled) {
       setImage(result.uri);
