@@ -1,14 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import React, { Component } from "react";
+import React, { Component, useEffect, useReducer, useCallback } from "react";
 import cameraicon from '../assets/cameraicon.png';
+import {getList} from '../picsum';
+import { actionCreators, initialState, reducer } from '../photos'
+import PhotoGrid from './GalleryGrid'
+
 import {
   View,
   StyleSheet,
   Text,
   ScrollView,
-  Image
+  Image,
+  ActivityIndicator
 } from "react-native"
 
+
+// const [state, dispatch] = useReducer(reducer, initialState);
+// const { photos, nextPage, loading, error } = state;
 
 export default class Profile extends Component {
   render() {
@@ -24,6 +32,7 @@ export default class Profile extends Component {
             <Text>description</Text>
           </View>
         </View>
+        {/* <PhotoGrid numColumns={1} /> */}
         <ScrollView vertical style={styles.gallery}>
           <Text>Gallery Scrolling</Text>
           {/* postcards */}
