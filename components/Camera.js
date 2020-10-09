@@ -19,7 +19,7 @@ export default function ImagePickerExample() {
       alert('Permission to access camera roll is required!');
       return;
     }
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({base64: true});
     console.log(pickerResult);
     if (pickerResult.cancelled === true) {
       return;
