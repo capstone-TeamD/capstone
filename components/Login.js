@@ -9,8 +9,11 @@ import {
 } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { loginUser, getUser } from "./store/user";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -20,14 +23,22 @@ export default class Login extends Component {
     this.handleLogin = this.handleLogin.bind(this);
   }
 
-  handleLogin() {
-    const { email, password } = this.state
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.props.getUser(user.uid);
+        if (this.props.user !== null) {
+          this.props.navigation.navigate("Profile");
+        }
+      }
+    });
+  }
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Profile"))
-      .catch((error) => console.log(error));
+  handleLogin() {
+    const { email, password } = this.state;
+
+    this.props.loginUser(email, password);
+    this.props.navigation.navigate("Profile");
   }
 
   render() {
@@ -88,19 +99,22 @@ const styles = StyleSheet.create({
     borderColor: "#BC8F8F",
     borderWidth: 3.5,
     borderRadius: 8,
-    width: 200,
+    width: 190,
   },
   buttonText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
   },
-  buttonSignup: {
-    fontSize: 12,
-  },
   buttonlink: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#0000EE",
     marginTop: 18,
   },
 });
+
+const mapDispatch = (dispatch) => {
+  return bindActionCreators({ loginUser, getUser }, dispatch);
+};
+
+export default connect(null, mapDispatch)(Login);

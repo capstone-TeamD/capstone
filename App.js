@@ -1,11 +1,13 @@
 // @refresh reset
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from './firebaseConfig';
 import SwitchNavigator from './components/SwitchNavigator';
+import { Provider } from 'react-redux';
+import store from './components/store/index'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -23,8 +25,10 @@ const Tab = createBottomTabNavigator();
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
-const db = firebase.firestore();
 
+export const db = firebase.firestore();
+
+// for testing
 // db.collection('users')
 //   .add({
 //     email: 'newtest@test.com',
@@ -42,6 +46,12 @@ export default function App() {
   const isLoggedin = true;
 
   return (
+//     <Provider store={store}>
+//     <View style={styles.container}>
+//       <SwitchNavigator />
+//     </View>
+//     </Provider>
+    <Provider store={store}>
     <NavigationContainer>
       {isLoggedin ? (
         <Tab.Navigator>
@@ -98,6 +108,7 @@ export default function App() {
         <SwitchNavigator />
       )}
     </NavigationContainer>
+    </Provider>
   );
 }
 
