@@ -1,17 +1,21 @@
 // @refresh reset
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from './firebaseConfig';
 import SwitchNavigator from './components/SwitchNavigator';
+import { Provider } from 'react-redux';
+import store from './components/store/index'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
-const db = firebase.firestore();
 
+export const db = firebase.firestore();
+
+// for testing
 // db.collection('users')
 //   .add({
 //     email: 'newtest@test.com',
@@ -27,9 +31,11 @@ const db = firebase.firestore();
 
 export default function App() {
   return (
+    <Provider store={store}>
     <View style={styles.container}>
       <SwitchNavigator />
     </View>
+    </Provider>
   );
 }
 

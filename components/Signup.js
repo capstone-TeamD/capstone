@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,14 @@ import {
 } from "react-native";
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import { connect } from 'react-redux'
+import { signupUser } from './store/user'
 
-
-export default class Signup extends Component {
+class Signup extends Component {
   constructor() {
     super()
     this.state = {
-      userName: "",
+      username: "",
       email: "",
       password: "",
     }
@@ -23,12 +24,10 @@ export default class Signup extends Component {
   }
 
   handleSignUp() {
-    const { email, password } = this.state
+    const { email, password, username } = this.state
 
-    firebase.auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate('Profile'))
-      .catch(error => console.log(error))
+    this.props.signup(email, password, username)
+    this.props.navigation.navigate('Profile')
   }
 
   render() {
@@ -36,8 +35,8 @@ export default class Signup extends Component {
       <View style={styles.container}>
         <TextInput
           style={styles.inputBox}
-          value={this.state.userName}
-          onChangeText={(userName) => this.setState({ userName })}
+          value={this.state.username}
+          onChangeText={(username) => this.setState({ username })}
           placeholder="Username"
           autoCapitalize="none"
         />
@@ -94,19 +93,31 @@ const styles = StyleSheet.create({
     borderColor: "#BC8F8F",
     borderWidth: 3.5,
     borderRadius: 8,
-    width: 200,
+    width: 190,
   },
   buttonText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
   },
-  buttonSignup: {
-    fontSize: 12,
-  },
   buttonlink: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#0000EE",
     marginTop: 18,
   },
 });
+
+const mapState = state => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    signup: (username, email, password) => dispatch(signupUser(username, email, password))
+  }
+}
+
+
+export default connect(mapState, mapDispatch)(Signup)
