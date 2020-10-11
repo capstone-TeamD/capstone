@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import {
   View,
@@ -13,9 +12,10 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { loginUser, getUser } from "./store/user";
 
+
 class Login extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: "",
       password: "",

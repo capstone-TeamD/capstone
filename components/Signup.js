@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import {
   StyleSheet,
@@ -12,9 +11,10 @@ import 'firebase/firestore';
 import { connect } from 'react-redux'
 import { signupUser } from './store/user'
 
+
 class Signup extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       username: "",
       email: "",

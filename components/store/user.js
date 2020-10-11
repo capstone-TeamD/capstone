@@ -1,26 +1,27 @@
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { firebaseConfig } from "../../firebaseConfig";
+
+// initialize app
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
-export const db = firebase.firestore();
 
+const db = firebase.firestore();
 
 // ACTION TYPES
 export const LOGIN = "LOGIN";
 export const SIGNUP = "SIGNUP";
-
+// export const SIGNOUT = "SIGNOUT";
 
 // ACTION CREATORS
 export const login = (user) => ({ type: LOGIN, user });
 export const signup = (user) => ({ type: SIGNUP, user });
 
-
 // THUNK CREATORS
 export const loginUser = (email, password) => async (dispatch) => {
   try {
-    console.log("hello");
+
     // check to see if user credentials are authenticated or not
     const response = await firebase
       .auth()
@@ -30,7 +31,6 @@ export const loginUser = (email, password) => async (dispatch) => {
     alert(error);
   }
 };
-
 
 // fetch the user data
 export const getUser = (uid) => async (dispatch) => {
