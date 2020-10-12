@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import cameraicon from "../assets/cameraicon.png";
-import * as firebase from "firebase";
-import "firebase/firestore";
-import PhotoGrid from './GalleryGrid'
+import React, { Component } from 'react';
+import cameraicon from '../assets/cameraicon.png';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import PhotoGrid from './GalleryGrid';
 
 import {
   View,
@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-} from "react-native";
+} from 'react-native';
 
 // const [state, dispatch] = useReducer(reducer, initialState);
 // const { photos, nextPage, loading, error } = state;
@@ -40,26 +40,28 @@ export default class Profile extends Component {
           <View style={styles.info}>
             <Text>username</Text>
             <Text>description</Text>
-            <TouchableOpacity onPress={() =>
-                Alert.alert("LOGOUT", "Are you sure? You want to logout?", [
-                  { text: "Cancel", onPress: () => console.log("Cancel") },
-                  { text: "Confirm", onPress: this.signout },
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert('LOGOUT', 'Are you sure? You want to logout?', [
+                  { text: 'Cancel', onPress: () => console.log('Cancel') },
+                  { text: 'Confirm', onPress: this.signout },
                 ])
-              }>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
+              }
+            >
+              <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.gallery}>
-        <PhotoGrid
+          {/* <PhotoGrid
           photos={[cameraicon, cameraicon, cameraicon, cameraicon]}
           numColumns={1}
-        />
+        /> */}
         </View>
         {/* <ScrollView vertical style={styles.gallery}> */}
-          {/* <Text>Gallery Scrolling</Text> */}
-          {/* postcards */}
-          {/* <Image style={styles.icon} source={cameraicon} />
+        {/* <Text>Gallery Scrolling</Text> */}
+        {/* postcards */}
+        {/* <Image style={styles.icon} source={cameraicon} />
           <Image style={styles.icon} source={cameraicon} />
           <Image style={styles.icon} source={cameraicon} />
           <Image style={styles.icon} source={cameraicon} /> */}
@@ -71,22 +73,22 @@ export default class Profile extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "gray",
-    alignItems: "stretch",
-    justifyContent: "center",
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'gray',
+    alignItems: 'stretch',
+    justifyContent: 'center',
     // width: 50
   },
   gallery: {
     flex: 1,
-    backgroundColor: "lightblue",
+    backgroundColor: 'lightblue',
   },
   header: {
     flex: 0.4,
-    flexDirection: "row",
-    alignContent: "flex-end",
-    backgroundColor: "lightpink",
+    flexDirection: 'row',
+    alignContent: 'flex-end',
+    backgroundColor: 'lightpink',
   },
   icon: {
     width: 80,
@@ -99,6 +101,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 14,
-    color: "blue",
+    color: 'blue',
   },
 });

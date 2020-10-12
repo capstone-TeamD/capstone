@@ -1,6 +1,6 @@
-import * as firebase from "firebase";
-import "firebase/firestore";
-import { firebaseConfig } from "../../firebaseConfig";
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { firebaseConfig } from '../../firebaseConfig';
 
 // initialize app
 if (firebase.apps.length === 0) {
@@ -21,13 +21,22 @@ export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
 export const fetchPhotos = () => async (dispatch) => {
   try {
     // get user by uid using the get method
-    const photos = await db.collection("photos").get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        console.log('image', doc.data.image)
-      })
-    })
-    console.log('photos', photos)
-    dispatch(getPhotos(photos))
+
+    const allPhotos = [];
+    await db
+      .collection('photos')
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          // console.log(doc.id, ' => ', doc.data());
+          const data = doc.data();
+          // console.log('photoID', doc.id);
+          // console.log('photoURI', data.image);
+          allPhotos.push({ id: doc.id, imageURI: data.image });
+        });
+      });
+
+    dispatch(getPhotos(allPhotos));
   } catch (error) {
     alert(error);
   }
