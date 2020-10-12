@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import cameraicon from "../assets/cameraicon.png";
 import * as firebase from "firebase";

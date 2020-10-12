@@ -1,14 +1,13 @@
 // @refresh reset
 // import { StatusBar } from 'expo-status-bar';
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import SwitchNavigator from "./components/navigation/SwitchNavigator";
 import { Provider } from "react-redux";
 import store from "./components/store/index";
-
 
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigator from "./components/navigation/TabNavigator";
@@ -28,7 +27,6 @@ export default class App extends Component {
     };
 
   componentDidMount() {
-    console.log('hello')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({ isLoggedIn: true });
