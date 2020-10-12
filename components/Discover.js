@@ -12,9 +12,7 @@ class Discover extends Component {
 
   render() {
     return (
-      <SafeAreaView>
         <PhotoGrid numColumns={1} photos={this.props.allPhotos} />
-      </SafeAreaView>
     );
   }
 }
