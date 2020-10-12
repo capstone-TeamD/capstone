@@ -32,11 +32,16 @@ export default class Profile extends Component {
             <Text>description</Text>
           </View>
         </View>
-        {/* <PhotoGrid numColumns={1} /> */}
-        <ScrollView vertical style={styles.gallery}>
-          <Text>Gallery Scrolling</Text>
+        <View style={styles.gallery}>
+        <PhotoGrid
+          photos={[cameraicon, cameraicon, cameraicon, cameraicon]}
+          numColumns={1}
+        />
+        </View>
+        {/* <ScrollView vertical style={styles.gallery}> */}
+          {/* <Text>Gallery Scrolling</Text> */}
           {/* postcards */}
-          <Image
+          {/* <Image
                 style={styles.icon}
                 source={cameraicon}
                 />
@@ -51,8 +56,8 @@ export default class Profile extends Component {
           <Image
                 style={styles.icon}
                 source={cameraicon}
-                />
-        </ScrollView>
+                /> */}
+        {/* </ScrollView> */}
       </View>
     );
   }
@@ -68,11 +73,11 @@ const styles = StyleSheet.create({
       // width: 50
     },
     gallery: {
-      flex: 5,
+      flex: 2,
       backgroundColor: 'lightblue'
     },
     header: {
-      flex: 0.4,
+      flex: 0.8,
       flexDirection: 'row',
       alignContent: 'flex-end',
       backgroundColor: 'lightpink'
@@ -81,7 +86,7 @@ const styles = StyleSheet.create({
       width: 80,
       height: 80,
       marginTop: 50,
-      marginHorizontal: 25
+      marginHorizontal: 25,
     },
     info: {
       marginTop: 50
