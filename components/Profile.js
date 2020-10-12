@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import cameraicon from "../assets/cameraicon.png";
 import * as firebase from "firebase";
 import "firebase/firestore";
+import PhotoGrid from './GalleryGrid'
 
 import {
   View,
@@ -13,6 +14,9 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+
+// const [state, dispatch] = useReducer(reducer, initialState);
+// const { photos, nextPage, loading, error } = state;
 
 export default class Profile extends Component {
   constructor(props) {
@@ -46,14 +50,20 @@ export default class Profile extends Component {
         </TouchableOpacity>
           </View>
         </View>
-        <ScrollView vertical style={styles.gallery}>
-          <Text>Gallery Scrolling</Text>
+        <View style={styles.gallery}>
+        <PhotoGrid
+          photos={[cameraicon, cameraicon, cameraicon, cameraicon]}
+          numColumns={1}
+        />
+        </View>
+        {/* <ScrollView vertical style={styles.gallery}> */}
+          {/* <Text>Gallery Scrolling</Text> */}
           {/* postcards */}
+          {/* <Image style={styles.icon} source={cameraicon} />
           <Image style={styles.icon} source={cameraicon} />
           <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-        </ScrollView>
+          <Image style={styles.icon} source={cameraicon} /> */}
+        {/* </ScrollView> */}
       </View>
     );
   }
@@ -69,7 +79,7 @@ const styles = StyleSheet.create({
     // width: 50
   },
   gallery: {
-    flex: 5,
+    flex: 1,
     backgroundColor: "lightblue",
   },
   header: {
