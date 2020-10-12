@@ -4,10 +4,12 @@ import { View, StyleSheet, Text, SafeAreaView } from 'react-native';
 import { fetchPhotos } from './store/photo';
 import { connect } from 'react-redux';
 import PhotoGrid from './GalleryGrid';
+import { getUser } from './store/user'
 
 class Discover extends Component {
   componentDidMount() {
     this.props.getAllPhotos();
+    this.props.getUser()
   }
 
   render() {
@@ -26,6 +28,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getAllPhotos: () => dispatch(fetchPhotos()),
+    getUser: () => dispatch(getUser())
   };
 };
 
