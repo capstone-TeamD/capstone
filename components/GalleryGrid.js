@@ -11,7 +11,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
 
   return (
     <FlatList
-      data={photos} //arrray of photos data from firestore/cloud
+      data={photos} //arrray of uri data from firestore/cloud
       keyExtractor={(item) => item.id}
       numColumns={numColumns}
       onEndReached={onEndReached}
@@ -19,12 +19,11 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
         <TouchableOpacity>
           <Image
             key={index}
-            style={styles.icon}
+            style={styles.photo}
             source={{
-              width: size,
-              // uri: require('../assets/cameraicon.png')
+              uri: 'https://firebasestorage.googleapis.com/v0/b/capstone-postcards.appspot.com/o/photos%2F1602514126417.jpg?alt=media&token=f2718311-7c8e-41e3-a0e3-b4f5d751c273'
             }}
-          />
+           />
         </TouchableOpacity>
       )}
     />
@@ -32,10 +31,8 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
 }
 
 const styles = StyleSheet.create({
-  icon: {
-    // width: '100%',
-    // height: '100%',
+  photo: {
+    backgroundColor: 'black',
     marginTop: 15,
-    marginHorizontal: 20
   }
 })

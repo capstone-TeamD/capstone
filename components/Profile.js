@@ -1,8 +1,7 @@
-import { StatusBar } from "expo-status-bar";
-import React, { Component, useEffect, useReducer, useCallback } from "react";
-import cameraicon from '../assets/cameraicon.png';
-import {getList} from '../picsum';
-import { actionCreators, initialState, reducer } from '../photos'
+import React, { Component } from "react";
+import cameraicon from "../assets/cameraicon.png";
+import * as firebase from "firebase";
+import "firebase/firestore";
 import PhotoGrid from './GalleryGrid'
 
 import {
@@ -11,25 +10,44 @@ import {
   Text,
   ScrollView,
   Image,
-  ActivityIndicator
-} from "react-native"
-
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 
 // const [state, dispatch] = useReducer(reducer, initialState);
 // const { photos, nextPage, loading, error } = state;
 
 export default class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.signout = this.signout.bind(this);
+  }
+
+  signout() {
+    try {
+      firebase.auth().signOut();
+    } catch (error) {
+      alert(error);
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image
-            style={styles.icon}
-            source={cameraicon}
-            />
+          <Image style={styles.icon} source={cameraicon} />
           <View style={styles.info}>
             <Text>username</Text>
             <Text>description</Text>
+            <TouchableOpacity onPress={() =>
+                Alert.alert("LOGOUT", "Are you sure? You want to logout?", [
+                  { text: "Cancel", onPress: () => console.log("Cancel") },
+                  { text: "Confirm", onPress: this.signout },
+                ])
+              }>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
           </View>
         </View>
         <View style={styles.gallery}>
@@ -41,22 +59,10 @@ export default class Profile extends Component {
         {/* <ScrollView vertical style={styles.gallery}> */}
           {/* <Text>Gallery Scrolling</Text> */}
           {/* postcards */}
-          {/* <Image
-                style={styles.icon}
-                source={cameraicon}
-                />
-          <Image
-                style={styles.icon}
-                source={cameraicon}
-                />
-          <Image
-                style={styles.icon}
-                source={cameraicon}
-                />
-          <Image
-                style={styles.icon}
-                source={cameraicon}
-                /> */}
+          {/* <Image style={styles.icon} source={cameraicon} />
+          <Image style={styles.icon} source={cameraicon} />
+          <Image style={styles.icon} source={cameraicon} />
+          <Image style={styles.icon} source={cameraicon} /> */}
         {/* </ScrollView> */}
       </View>
     );
@@ -64,31 +70,35 @@ export default class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      width: '100%',
-      height: '100%',
-      backgroundColor: 'gray',
-      alignItems: 'stretch',
-      justifyContent: 'center',
-      // width: 50
-    },
-    gallery: {
-      flex: 2,
-      backgroundColor: 'lightblue'
-    },
-    header: {
-      flex: 0.8,
-      flexDirection: 'row',
-      alignContent: 'flex-end',
-      backgroundColor: 'lightpink'
-    },
-    icon: {
-      width: 80,
-      height: 80,
-      marginTop: 50,
-      marginHorizontal: 25,
-    },
-    info: {
-      marginTop: 50
-    }
-})
+  container: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "gray",
+    alignItems: "stretch",
+    justifyContent: "center",
+    // width: 50
+  },
+  gallery: {
+    flex: 1,
+    backgroundColor: "lightblue",
+  },
+  header: {
+    flex: 0.4,
+    flexDirection: "row",
+    alignContent: "flex-end",
+    backgroundColor: "lightpink",
+  },
+  icon: {
+    width: 80,
+    height: 80,
+    marginTop: 50,
+    marginHorizontal: 25,
+  },
+  info: {
+    marginTop: 50,
+  },
+  buttonText: {
+    fontSize: 14,
+    color: "blue",
+  },
+});
