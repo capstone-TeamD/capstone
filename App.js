@@ -1,122 +1,58 @@
 // @refresh reset
 // import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
-import { firebaseConfig } from './firebaseConfig';
-import SwitchNavigator from './components/SwitchNavigator';
-import { Provider } from 'react-redux';
-import store from './components/store/index'
+import React, { Component } from "react";
+import { StyleSheet, View, Dimensions } from "react-native";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import { firebaseConfig } from "./firebaseConfig";
+import SwitchNavigator from "./components/navigation/SwitchNavigator";
+import { Provider } from "react-redux";
+import store from "./components/store/index";
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NavigationContainer } from "@react-navigation/native";
+import BottomTabNavigator from "./components/navigation/TabNavigator";
 
-import Profile from './components/Profile';
-import Mailbox from './components/Mailbox';
-import Upload from './components/CameraIP';
-import Discover from './components/Discover';
 
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
-
+// initialize app
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
 
 export const db = firebase.firestore();
 
-// for testing
-// db.collection('users')
-//   .add({
-//     email: 'newtest@test.com',
-//     password: '12345678',
-//     username: 'newUser2',
-//   })
-//   .then(function (docRef) {
-//     console.log('Document written with ID: ', docRef.id);
-//   })
-//   .catch(function (error) {
-//     console.error('Error adding document: ', error);
-//   });
 
-export default function App() {
-  const isLoggedin = true;
+export default class App extends Component {
+  state = {
+      isLoggedIn: false,
+    };
 
-  return (
-//     <Provider store={store}>
-//     <View style={styles.container}>
-//       <SwitchNavigator />
-//     </View>
-//     </Provider>
-    <Provider store={store}>
-    <NavigationContainer>
-      {isLoggedin ? (
-        <Tab.Navigator>
-          <Tab.Screen
-            name='Profile'
-            component={Profile}
-            options={{
-              tabBarLabel: 'Profile',
-              tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons
-                  name='face-profile'
-                  color={color}
-                  size={26}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name='Mailbo'
-            component={Mailbox}
-            options={{
-              tabBarLabel: 'Mailbox',
-              tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons
-                  name='mailbox'
-                  color={color}
-                  size={26}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name='Mailbox'
-            component={Upload}
-            options={{
-              tabBarLabel: 'Upload',
-              tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons name='camera' color={color} size={26} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name='Discover'
-            component={Discover}
-            options={{
-              tabBarLabel: 'Discover',
-              tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons name='earth' color={color} size={26} />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      ) : (
-        <SwitchNavigator />
-      )}
-    </NavigationContainer>
-    </Provider>
-  );
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ isLoggedIn: true });
+      } else {
+        this.setState({ isLoggedIn: false });
+      }
+    });
+  }
+
+  render() {
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          {this.state.isLoggedIn ? <BottomTabNavigator /> : <SwitchNavigator />}
+        </NavigationContainer>
+      </Provider>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
+
