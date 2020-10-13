@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import cameraicon from '../assets/cameraicon.png';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
-import PhotoGrid from './GalleryGridProfile';
-import { connect } from 'react-redux';
-import { getUser } from './store/user';
+
+import React, { Component } from "react";
+import cameraicon from "../assets/cameraicon.png";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import PhotoGrid from "./GalleryGrid";
+import { connect } from "react-redux";
+import user, { getUser } from "./store/user";
 
 import {
   View,
@@ -13,20 +14,12 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  SafeAreaView,
-} from 'react-native';
+} from "react-native";
 
 // const [state, dispatch] = useReducer(reducer, initialState);
 // const { photos, nextPage, loading, error } = state;
 
 class Profile extends Component {
-  constructor(props) {
-    super(props);
-    this.signout = this.signout.bind(this);
-  }
-
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -35,16 +28,10 @@ class Profile extends Component {
     });
   }
 
-  signout() {
-    try {
-      firebase.auth().signOut();
-    } catch (error) {
-      alert(error);
-    }
-  }
-
   render() {
-    const { username, postcards } = this.props.user;
+
+    const { navigate } = this.props.navigation;
+    const { username, postcards, about } = this.props.user;
 
     return (
       <View style={styles.container}>
@@ -52,19 +39,14 @@ class Profile extends Component {
           <Image style={styles.icon} source={cameraicon} />
           <View style={styles.info}>
             <Text style={styles.infoName}>{username}</Text>
-            <Text style={styles.infoDesc}>description</Text>
+            <Text style={styles.infoDesc}>{about}</Text>
           </View>
         </View>
         <TouchableOpacity
-          style={styles.checkout}
-          onPress={() =>
-            Alert.alert('LOGOUT', 'Are you sure? You want to logout?', [
-              { text: 'Cancel', onPress: () => console.log('Cancel') },
-              { text: 'Confirm', onPress: this.signout },
-            ])
-          }
+          style={styles.edit}
+          onPress={() => navigate("EditProfile")}
         >
-          <Text style={styles.buttonText}>Logout</Text>
+          <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
         <View style={styles.gallery}>
           <PhotoGrid photos={postcards} numColumns={1} />
@@ -94,10 +76,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#BC8F8F',
   },
-  checkout: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F8F8F8',
+  edit: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8F8F8",
     height: 22,
     // borderBottomWidth: .2,
     borderWidth: 0.2,
@@ -124,6 +106,7 @@ const styles = StyleSheet.create({
   },
   info: {
     marginTop: 10,
+    alignItems: "center",
   },
   infoName: {
     fontWeight: 'bold',
