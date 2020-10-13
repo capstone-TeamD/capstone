@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
-import Fire from '../Fire';
+import Fire from './Fire';
 import { connect } from 'react-redux';
 
 export function CameraIP(props) {
