@@ -13,7 +13,7 @@ class Fire {
     const path = `photos/${Date.now()}.jpg`;
 
     return new Promise(async (res, rej) => {
-      const response = await fetch(obj.uri);
+      const response = await fetch(uri);
       const file = await response.blob();
       let upload = firebase.storage().ref(path).put(file);
       upload.on(
