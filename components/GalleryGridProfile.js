@@ -11,7 +11,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item, index) => index.toString()}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
@@ -26,7 +26,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
             /> */}
 
           <Image style={styles.icon} source={cameraicon} />
-          <Text>Postcard created by: {`${item.username}`}</Text>
+          <Text>Photo URI: {item}</Text>
         </TouchableOpacity>
       )}
     />

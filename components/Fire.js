@@ -8,7 +8,7 @@ class Fire {
       firebase.initializeApp(firebaseConfig);
     }
   }
-  // this is to add photo to firebase - storage
+  // this is to add photo to firebase - storage bucket
   uploadPhotoAsync = async (uri) => {
     const path = `photos/${Date.now()}.jpg`;
     return new Promise(async (res, rej) => {
@@ -18,7 +18,7 @@ class Fire {
       upload.on(
         'state_changed',
         (snapshot) => {
-          console.log('Photo has been uploaded!');
+          console.log('Postcard is uploading...');
         },
         (err) => {
           rej(err);
@@ -32,17 +32,32 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri) => {
+  addPhoto = async (localUri, currentUser) => {
     const remoteUri = await this.uploadPhotoAsync(localUri);
     return new Promise((res, rej) => {
       this.firestore
-        .collection('photos')
+        .collection('postcards')
         .add({
-          timestamp: this.timestamp,
-          image: remoteUri,
+          creatorID: currentUser.id,
+          creatorName: currentUser.username,
+          dateCreated: this.timestamp,
+          imageURI: remoteUri,
         })
         .then((ref) => {
-          res(ref);
+          this.firestore
+            .collection('users')
+            .doc(currentUser.id)
+            .update({
+              postcards: firebase.firestore.FieldValue.arrayUnion(remoteUri),
+            })
+            .then(function (ref) {
+              console.log('New postcard added to user array!');
+              // console.log('final ref in addPhoto', ref);
+              res(ref);
+            })
+            .catch(function (error) {
+              console.error('Error updating document: ', error);
+            });
         })
         .catch((err) => {
           rej(err);
@@ -56,6 +71,7 @@ class Fire {
 
   get timestamp() {
     return Date.now();
+    // return new Date();
   }
 }
 
