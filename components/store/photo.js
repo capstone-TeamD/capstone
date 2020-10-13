@@ -10,7 +10,6 @@ if (firebase.apps.length === 0) {
 
 const db = firebase.firestore();
 
-
 // ACTION TYPES
 export const GET_ALL_PHOTOS = 'GET_ALL_PHOTOS';
 
@@ -36,9 +35,15 @@ export const fetchPhotos = () => async (dispatch) => {
         querySnapshot.forEach(function (doc) {
           // console.log(doc.id, ' => ', doc.data());
           const data = doc.data();
-          // console.log('photoID', doc.id);
-          // console.log('photoURI', data.image);
-          allPhotos.push({ id: doc.id, imageURI: data.imageURI });
+          // console.log('postcard ID', doc.id);
+          // console.log('username', data.creatorName);
+          // console.log('photoURI', data.imageURI);
+          allPhotos.push({
+            id: doc.id,
+            username: data.creatorName,
+            dateCreated: data.dateCreated,
+            imageURI: data.imageURI,
+          });
         });
       });
 
