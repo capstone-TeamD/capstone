@@ -1,6 +1,6 @@
-import * as firebase from "firebase";
-import "firebase/firestore";
-import { firebaseConfig } from "../../firebaseConfig";
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { firebaseConfig } from '../../firebaseConfig';
 
 // initialize app
 if (firebase.apps.length === 0) {
@@ -12,12 +12,11 @@ const db = firebase.firestore();
 // ACTION TYPES
 export const LOGIN = "LOGIN";
 export const SIGNUP = "SIGNUP";
-export const UPDATEPROFILE = "UPDATEPROFILE";
+
 
 // ACTION CREATORS
 export const login = (user) => ({ type: LOGIN, user });
 export const signup = (user) => ({ type: SIGNUP, user });
-export const updateProfile = (profile) => ({ type: UPDATEPROFILE, profile });
 
 // THUNK CREATORS
 export const loginUser = (email, password) => async (dispatch) => {
@@ -36,7 +35,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const getUser = (uid) => async (dispatch) => {
   try {
     // get user by uid using the get method
-    const user = await db.collection("users").doc(uid).get();
+    const user = await db.collection('users').doc(uid).get();
     dispatch(login(user.data() || null));
   } catch (error) {
     alert(error);
@@ -58,11 +57,12 @@ export const signupUser = (email, password, username) => async (dispatch) => {
         email: email,
         password: password,
         username: username,
+        postcards: [],
       };
     }
 
     // add user object to the user database
-    db.collection("users").doc(response.user.uid).set(user);
+    db.collection('users').doc(response.user.uid).set(user);
     dispatch(signup(response.user));
   } catch (error) {
     alert(error);
@@ -92,8 +92,6 @@ export default function user(state = {}, action) {
       return action.user;
     case SIGNUP:
       return action.user;
-    case UPDATEPROFILE:
-      return action.profile;
     default:
       return state;
   }
