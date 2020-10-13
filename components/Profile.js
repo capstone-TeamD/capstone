@@ -1,11 +1,10 @@
-
-import React, { Component } from "react";
-import cameraicon from "../assets/cameraicon.png";
-import * as firebase from "firebase";
-import "firebase/firestore";
-import PhotoGrid from "./GalleryGrid";
-import { connect } from "react-redux";
-import user, { getUser } from "./store/user";
+import React, { Component } from 'react';
+import cameraicon from '../assets/cameraicon.png';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import PhotoGrid from './GalleryGridProfile';
+import { connect } from 'react-redux';
+import user, { getUser } from './store/user';
 
 import {
   View,
@@ -14,7 +13,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
 // const [state, dispatch] = useReducer(reducer, initialState);
 // const { photos, nextPage, loading, error } = state;
@@ -29,7 +28,6 @@ class Profile extends Component {
   }
 
   render() {
-
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
 
@@ -44,7 +42,7 @@ class Profile extends Component {
         </View>
         <TouchableOpacity
           style={styles.edit}
-          onPress={() => navigate("EditProfile")}
+          onPress={() => navigate('EditProfile')}
         >
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
@@ -77,9 +75,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#BC8F8F',
   },
   edit: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F8F8F8",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8F8F8',
     height: 22,
     // borderBottomWidth: .2,
     borderWidth: 0.2,
@@ -106,7 +104,7 @@ const styles = StyleSheet.create({
   },
   info: {
     marginTop: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   infoName: {
     fontWeight: 'bold',
