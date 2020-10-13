@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 70,
     alignItems: "center",
-    padding: 20,
+    padding: 100,
   },
   loginButton: {
     width: "100%",

@@ -15,3 +15,4 @@ const store = createStore(rootReducer, middleware)
 // export default rootReducer
 export default store
 export * from './user'
+export * from './photo'
