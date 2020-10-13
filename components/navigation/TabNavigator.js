@@ -26,7 +26,7 @@ function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
-              name="face-profile"
+              name="face"
               color={color}
               size={26}
             />
