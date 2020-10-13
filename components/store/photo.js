@@ -9,6 +9,7 @@ if (firebase.apps.length === 0) {
 
 const db = firebase.firestore();
 
+
 // ACTION TYPES
 export const GET_ALL_PHOTOS = 'GET_ALL_PHOTOS';
 

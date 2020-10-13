@@ -2,8 +2,6 @@ import React from "react";
 import { Dimensions, FlatList, Image, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { formatPhotoUri } from "../picsum";
-
 export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   const { width } = Dimensions.get("window");
 

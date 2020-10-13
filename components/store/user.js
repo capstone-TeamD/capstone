@@ -50,7 +50,7 @@ export const signupUser = (email, password, username) => async (dispatch) => {
       .auth()
       .createUserWithEmailAndPassword(email, password);
 
-    // if user does not exist, create the user object to store in the collection of users DB
+    // if userId exists in User signup, create the user object to store in the collection of users DB
     let user;
     if (response.user.uid) {
       user = {
