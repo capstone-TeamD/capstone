@@ -8,13 +8,14 @@ import { getUser } from './store/user'
 
 class Discover extends Component {
   componentDidMount() {
-    this.props.getAllPhotos();
+    // this.props.getAllPhotos();
     this.props.getUser()
   }
 
   render() {
     return (
-        <PhotoGrid numColumns={1} photos={this.props.allPhotos} />
+        // <PhotoGrid numColumns={1} photos={this.props.allPhotos} />
+        <View></View>
     );
   }
 }
@@ -27,7 +28,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getAllPhotos: () => dispatch(fetchPhotos()),
+    // getAllPhotos: () => dispatch(fetchPhotos()),
     getUser: () => dispatch(getUser())
   };
 };

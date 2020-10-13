@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import cameraicon from '../assets/cameraicon.png';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
-import PhotoGrid from './GalleryGrid';
+import React, { Component } from "react";
+import cameraicon from "../assets/cameraicon.png";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import PhotoGrid from "./GalleryGrid";
+import { connect } from "react-redux";
+import { getUser } from "./store/user";
 
 import {
   View,
@@ -13,15 +15,24 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-} from 'react-native';
+  SafeAreaView,
+} from "react-native";
 
 // const [state, dispatch] = useReducer(reducer, initialState);
 // const { photos, nextPage, loading, error } = state;
 
-export default class Profile extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props);
     this.signout = this.signout.bind(this);
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.props.getUser(user.uid);
+      }
+    });
   }
 
   signout() {
@@ -33,25 +44,29 @@ export default class Profile extends Component {
   }
 
   render() {
+    const {username} = this.props.user
+    console.log(this.props.user)
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <Image style={styles.icon} source={cameraicon} />
           <View style={styles.info}>
-            <Text>username</Text>
-            <Text>description</Text>
-            <TouchableOpacity
-              onPress={() =>
-                Alert.alert('LOGOUT', 'Are you sure? You want to logout?', [
-                  { text: 'Cancel', onPress: () => console.log('Cancel') },
-                  { text: 'Confirm', onPress: this.signout },
-                ])
-              }
-            >
-              <Text style={styles.buttonText}>Logout</Text>
-            </TouchableOpacity>
+            <Text style={styles.infoName}>{username}</Text>
+            <Text style={styles.infoDesc}>description</Text>
           </View>
         </View>
+        <TouchableOpacity
+          style={styles.checkout}
+          onPress={() =>
+            Alert.alert("LOGOUT", "Are you sure? You want to logout?", [
+              { text: "Cancel", onPress: () => console.log("Cancel") },
+              { text: "Confirm", onPress: this.signout },
+            ])
+          }
+        >
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
         <View style={styles.gallery}>
           {/* <PhotoGrid
           photos={[cameraicon, cameraicon, cameraicon, cameraicon]}
@@ -73,34 +88,69 @@ export default class Profile extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'gray',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    // width: 50
+    width: "100%",
+    height: "100%",
+    backgroundColor: "gray",
+    alignItems: "stretch",
+    justifyContent: "center",
   },
   gallery: {
     flex: 1,
-    backgroundColor: 'lightblue',
+    backgroundColor: "#BC8F8F",
+  },
+  checkout: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8F8F8",
+    height: 22,
+    // borderBottomWidth: .2,
+    borderWidth: 0.2,
+    borderBottomColor: "#585858",
+  },
+  buttonText: {
+    fontSize: 12,
+    color: "black",
   },
   header: {
-    flex: 0.4,
-    flexDirection: 'row',
-    alignContent: 'flex-end',
-    backgroundColor: 'lightpink',
+    flex: 0.3,
+    paddingTop: -20,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    alignContent: "flex-start",
+    backgroundColor: "#F8F8F8",
   },
   icon: {
     width: 80,
     height: 80,
-    marginTop: 50,
-    marginHorizontal: 25,
+    marginTop: 25,
+    marginHorizontal: 30,
   },
   info: {
-    marginTop: 50,
+    marginTop: 10,
   },
-  buttonText: {
+  infoName: {
+    fontWeight: "bold",
     fontSize: 14,
-    color: 'blue',
+    marginBottom: 3,
+    textAlign: "center",
+  },
+  infoDesc: {
+    fontSize: 13,
+    paddingBottom: 18,
   },
 });
+
+const mapState = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    getUser: (id) => dispatch(getUser(id)),
+  };
+};
+
+export default connect(mapState, mapDispatch)(Profile);

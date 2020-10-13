@@ -8,25 +8,26 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   const size = width / numColumns;
 
   return (
-    <FlatList
-      data={photos}
-      keyExtractor={(item) => item.id}
-      numColumns={numColumns}
-      onEndReached={onEndReached}
-      renderItem={({ item }) => (
-        <TouchableOpacity style={styles.container}>
-          <Image
-            key={item.id}
-            style={styles.photo}
-            source={{
-              // width: size,
-              uri: item.imageURI,
-            }}
-          />
-        </TouchableOpacity>
-      )}
-    />
-  );
+  //   <FlatList
+  //     data={photos}
+  //     keyExtractor={(item) => item.id}
+  //     numColumns={numColumns}
+  //     onEndReached={onEndReached}
+  //     renderItem={({ item }) => (
+  //       <TouchableOpacity style={styles.container}>
+  //         <Image
+  //           key={item.id}
+  //           style={styles.photo}
+  //           source={{
+  //             // width: size,
+  //             uri: item.imageURI,
+  //           }}
+  //         />
+  //       </TouchableOpacity>
+  //     )}
+  //   />
+  // );
+  <View></View>)
 }
 
 const styles = StyleSheet.create({
