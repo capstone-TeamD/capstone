@@ -14,6 +14,9 @@ class Discover extends Component {
 
   render() {
     return (
+      // <View>
+      //   <Text>Discover</Text>
+      // </View>
         <PhotoGrid numColumns={1} photos={this.props.allPhotos} />
     );
   }

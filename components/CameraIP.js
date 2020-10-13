@@ -8,7 +8,6 @@ import {
   Text,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
 import Fire from './Fire';
 
 export default function ImagePickerExample() {
@@ -44,9 +43,10 @@ export default function ImagePickerExample() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      // base64: true,
     });
 
-    console.log('image picked', result);
+    // console.log('image picked', result);
 
     if (!result.cancelled) {
       setImage(result.uri);

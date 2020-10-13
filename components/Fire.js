@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../firebaseConfig';
+import * as FileSystem from 'expo-file-system';
 
 class Fire {
   constructor() {
@@ -11,8 +12,9 @@ class Fire {
   // this is to add photo to firebase - storage
   uploadPhotoAsync = async (uri) => {
     const path = `photos/${Date.now()}.jpg`;
+
     return new Promise(async (res, rej) => {
-      const response = await fetch(uri);
+      const response = await fetch(obj.uri);
       const file = await response.blob();
       let upload = firebase.storage().ref(path).put(file);
       upload.on(

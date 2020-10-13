@@ -19,7 +19,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
             key={item.id}
             style={styles.photo}
             source={{
-              // width: size,
+              width: size,
               uri: item.imageURI,
             }}
           />
