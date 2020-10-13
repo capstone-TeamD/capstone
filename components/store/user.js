@@ -10,9 +10,8 @@ if (firebase.apps.length === 0) {
 const db = firebase.firestore();
 
 // ACTION TYPES
-export const LOGIN = "LOGIN";
-export const SIGNUP = "SIGNUP";
-
+export const LOGIN = 'LOGIN';
+export const SIGNUP = 'SIGNUP';
 
 // ACTION CREATORS
 export const login = (user) => ({ type: LOGIN, user });
@@ -54,6 +53,7 @@ export const signupUser = (email, password, username) => async (dispatch) => {
     let user;
     if (response.user.uid) {
       user = {
+        id: response.user.uid,
         email: email,
         password: password,
         username: username,
@@ -73,7 +73,7 @@ export const signupUser = (email, password, username) => async (dispatch) => {
 export const updateUserProfile = (username, about, id) => async () => {
   try {
     // find current userID
-    const profile = db.collection("users").doc(id);
+    const profile = db.collection('users').doc(id);
 
     // update profile info with user input in firestore
     await profile.update({
