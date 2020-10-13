@@ -18,7 +18,7 @@ class Fire {
       upload.on(
         'state_changed',
         (snapshot) => {
-          console.log('Photo has been uploaded!');
+          console.log('Photo is uploading');
         },
         (err) => {
           rej(err);
@@ -32,17 +32,32 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri) => {
+  addPhoto = async (localUri, currentUser) => {
     const remoteUri = await this.uploadPhotoAsync(localUri);
     return new Promise((res, rej) => {
       this.firestore
-        .collection('photos')
+        .collection('postcards')
         .add({
-          timestamp: this.timestamp,
-          image: remoteUri,
+          // timestamp: this.timestamp,
+          // image: remoteUri,
+          creatorID: currentUser.uid,
+          dateCreated: this.timestamp,
+          imageURI: remoteUri,
         })
         .then((ref) => {
+          // await db.collection('users')
+          //   .doc(currentUser)
+          //   .set({
+          //     postcards: [...postcards, ref.uid],
+          //   }, { merge: true })
+          //   .then(function (ref) {
+          //     console.log('Document successfully updated!');
+          console.log('final ref in addPhoto', ref);
           res(ref);
+          //   })
+          //   .catch(function (error) {
+          //     console.error('Error updating document: ', error);
+          //   });
         })
         .catch((err) => {
           rej(err);
@@ -56,6 +71,7 @@ class Fire {
 
   get timestamp() {
     return Date.now();
+    // return new Date();
   }
 }
 

@@ -10,9 +10,13 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import Fire from '../Fire';
+import { connect } from 'react-redux';
 
-export default function ImagePickerExample() {
+export function CameraIP(props) {
   const [image, setImage] = useState(null);
+
+  const currentUser = props.currentUser;
+  console.log('current user in camera', currentUser);
 
   useEffect(() => {
     (async () => {
@@ -29,7 +33,7 @@ export default function ImagePickerExample() {
 
   const upload = () => {
     Fire.shared
-      .addPhoto(image)
+      .addPhoto(image, currentUser)
       .then(() => {
         setImage(null);
       })
@@ -74,3 +78,11 @@ export default function ImagePickerExample() {
     </SafeAreaView>
   );
 }
+
+const mapState = (state) => {
+  return {
+    currentUser: state.user,
+  };
+};
+
+export default connect(mapState)(CameraIP);

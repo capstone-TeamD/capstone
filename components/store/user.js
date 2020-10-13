@@ -1,6 +1,6 @@
-import * as firebase from "firebase";
-import "firebase/firestore";
-import { firebaseConfig } from "../../firebaseConfig";
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { firebaseConfig } from '../../firebaseConfig';
 
 // initialize app
 if (firebase.apps.length === 0) {
@@ -10,8 +10,8 @@ if (firebase.apps.length === 0) {
 const db = firebase.firestore();
 
 // ACTION TYPES
-export const LOGIN = "LOGIN";
-export const SIGNUP = "SIGNUP";
+export const LOGIN = 'LOGIN';
+export const SIGNUP = 'SIGNUP';
 // export const SIGNOUT = "SIGNOUT";
 
 // ACTION CREATORS
@@ -21,7 +21,6 @@ export const signup = (user) => ({ type: SIGNUP, user });
 // THUNK CREATORS
 export const loginUser = (email, password) => async (dispatch) => {
   try {
-
     // check to see if user credentials are authenticated or not
     const response = await firebase
       .auth()
@@ -36,7 +35,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const getUser = (uid) => async (dispatch) => {
   try {
     // get user by uid using the get method
-    const user = await db.collection("users").doc(uid).get();
+    const user = await db.collection('users').doc(uid).get();
     dispatch(login(user.data() || null));
   } catch (error) {
     alert(error);
@@ -55,14 +54,16 @@ export const signupUser = (email, password, username) => async (dispatch) => {
     let user;
     if (response.user.uid) {
       user = {
+        id: response.user.uid,
         email: email,
         password: password,
         username: username,
+        postcards: [],
       };
     }
 
     // add user object to the user database
-    db.collection("users").doc(response.user.uid).set(user);
+    db.collection('users').doc(response.user.uid).set(user);
     dispatch(signup(response.user));
   } catch (error) {
     alert(error);
