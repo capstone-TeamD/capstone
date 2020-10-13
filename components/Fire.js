@@ -8,7 +8,7 @@ class Fire {
       firebase.initializeApp(firebaseConfig);
     }
   }
-  // this is to add photo to firebase - storage
+  // this is to add photo to firebase - storage bucket
   uploadPhotoAsync = async (uri) => {
     const path = `photos/${Date.now()}.jpg`;
     return new Promise(async (res, rej) => {
@@ -18,7 +18,7 @@ class Fire {
       upload.on(
         'state_changed',
         (snapshot) => {
-          console.log('Photo is uploading');
+          console.log('Postcard is uploading...');
         },
         (err) => {
           rej(err);
@@ -38,26 +38,26 @@ class Fire {
       this.firestore
         .collection('postcards')
         .add({
-          // timestamp: this.timestamp,
-          // image: remoteUri,
-          creatorID: currentUser.uid,
+          creatorID: currentUser.id,
+          creatorName: currentUser.username,
           dateCreated: this.timestamp,
           imageURI: remoteUri,
         })
         .then((ref) => {
-          // await db.collection('users')
-          //   .doc(currentUser)
-          //   .set({
-          //     postcards: [...postcards, ref.uid],
-          //   }, { merge: true })
-          //   .then(function (ref) {
-          //     console.log('Document successfully updated!');
-          console.log('final ref in addPhoto', ref);
-          res(ref);
-          //   })
-          //   .catch(function (error) {
-          //     console.error('Error updating document: ', error);
-          //   });
+          this.firestore
+            .collection('users')
+            .doc(currentUser.id)
+            .update({
+              postcards: firebase.firestore.FieldValue.arrayUnion(remoteUri),
+            })
+            .then(function (ref) {
+              console.log('New postcard added to user array!');
+              // console.log('final ref in addPhoto', ref);
+              res(ref);
+            })
+            .catch(function (error) {
+              console.error('Error updating document: ', error);
+            });
         })
         .catch((err) => {
           rej(err);

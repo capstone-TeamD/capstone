@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import cameraicon from "../assets/cameraicon.png";
-import * as firebase from "firebase";
-import "firebase/firestore";
-import PhotoGrid from "./GalleryGrid";
-import { connect } from "react-redux";
-import { getUser } from "./store/user";
+import React, { Component } from 'react';
+import cameraicon from '../assets/cameraicon.png';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import PhotoGrid from './GalleryGridProfile';
+import { connect } from 'react-redux';
+import { getUser } from './store/user';
 
 import {
   View,
@@ -16,7 +16,7 @@ import {
   Alert,
   ActivityIndicator,
   SafeAreaView,
-} from "react-native";
+} from 'react-native';
 
 // const [state, dispatch] = useReducer(reducer, initialState);
 // const { photos, nextPage, loading, error } = state;
@@ -44,8 +44,7 @@ class Profile extends Component {
   }
 
   render() {
-    const {username} = this.props.user
-    console.log(this.props.user)
+    const { username, postcards } = this.props.user;
 
     return (
       <View style={styles.container}>
@@ -59,19 +58,16 @@ class Profile extends Component {
         <TouchableOpacity
           style={styles.checkout}
           onPress={() =>
-            Alert.alert("LOGOUT", "Are you sure? You want to logout?", [
-              { text: "Cancel", onPress: () => console.log("Cancel") },
-              { text: "Confirm", onPress: this.signout },
+            Alert.alert('LOGOUT', 'Are you sure? You want to logout?', [
+              { text: 'Cancel', onPress: () => console.log('Cancel') },
+              { text: 'Confirm', onPress: this.signout },
             ])
           }
         >
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
         <View style={styles.gallery}>
-          {/* <PhotoGrid
-          photos={[cameraicon, cameraicon, cameraicon, cameraicon]}
-          numColumns={1}
-        /> */}
+          <PhotoGrid photos={postcards} numColumns={1} />
         </View>
         {/* <ScrollView vertical style={styles.gallery}> */}
         {/* <Text>Gallery Scrolling</Text> */}
@@ -88,37 +84,37 @@ class Profile extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "gray",
-    alignItems: "stretch",
-    justifyContent: "center",
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'gray',
+    alignItems: 'stretch',
+    justifyContent: 'center',
   },
   gallery: {
     flex: 1,
-    backgroundColor: "#BC8F8F",
+    backgroundColor: '#BC8F8F',
   },
   checkout: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F8F8F8",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8F8F8',
     height: 22,
     // borderBottomWidth: .2,
     borderWidth: 0.2,
-    borderBottomColor: "#585858",
+    borderBottomColor: '#585858',
   },
   buttonText: {
     fontSize: 12,
-    color: "black",
+    color: 'black',
   },
   header: {
     flex: 0.3,
     paddingTop: -20,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    alignContent: "flex-start",
-    backgroundColor: "#F8F8F8",
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    alignContent: 'flex-start',
+    backgroundColor: '#F8F8F8',
   },
   icon: {
     width: 80,
@@ -130,10 +126,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   infoName: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 3,
-    textAlign: "center",
+    textAlign: 'center',
   },
   infoDesc: {
     fontSize: 13,
