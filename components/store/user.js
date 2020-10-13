@@ -12,16 +12,16 @@ const db = firebase.firestore();
 // ACTION TYPES
 export const LOGIN = "LOGIN";
 export const SIGNUP = "SIGNUP";
-// export const SIGNOUT = "SIGNOUT";
+export const UPDATEPROFILE = "UPDATEPROFILE";
 
 // ACTION CREATORS
 export const login = (user) => ({ type: LOGIN, user });
 export const signup = (user) => ({ type: SIGNUP, user });
+export const updateProfile = (profile) => ({ type: UPDATEPROFILE, profile });
 
 // THUNK CREATORS
 export const loginUser = (email, password) => async (dispatch) => {
   try {
-
     // check to see if user credentials are authenticated or not
     const response = await firebase
       .auth()
@@ -51,11 +51,10 @@ export const signupUser = (email, password, username) => async (dispatch) => {
       .auth()
       .createUserWithEmailAndPassword(email, password);
 
-    // if userId exists in User signup, create the user object to store in the collection of users DB
+    // if user does not exist, create the user object to store in the collection of users DB
     let user;
     if (response.user.uid) {
       user = {
-        id: response.user.uid,
         email: email,
         password: password,
         username: username,
@@ -70,6 +69,22 @@ export const signupUser = (email, password, username) => async (dispatch) => {
   }
 };
 
+// update profile info
+export const updateUserProfile = (username, about, id) => async () => {
+  try {
+    // find current userID
+    const profile = db.collection("users").doc(id);
+
+    // update profile info with user input in firestore
+    await profile.update({
+      username: username,
+      about: about,
+    });
+  } catch (error) {
+    alert(error);
+  }
+};
+
 // REDUCER
 export default function user(state = {}, action) {
   switch (action.type) {
@@ -77,6 +92,8 @@ export default function user(state = {}, action) {
       return action.user;
     case SIGNUP:
       return action.user;
+    case UPDATEPROFILE:
+      return action.profile;
     default:
       return state;
   }
