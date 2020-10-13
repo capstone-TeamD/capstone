@@ -31,6 +31,7 @@ class Signup extends Component {
   }
 
   render() {
+
     return (
       <View style={styles.container}>
         <TextInput
@@ -107,11 +108,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapState = state => {
-  return {
-    user: state.user
-  }
-}
 
 const mapDispatch = dispatch => {
   return {
@@ -120,4 +116,4 @@ const mapDispatch = dispatch => {
 }
 
 
-export default connect(mapState, mapDispatch)(Signup)
+export default connect(null, mapDispatch)(Signup)

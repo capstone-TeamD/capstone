@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { firebaseConfig } from './firebaseConfig';
+import { firebaseConfig } from '../firebaseConfig';
 
 class Fire {
   constructor() {
