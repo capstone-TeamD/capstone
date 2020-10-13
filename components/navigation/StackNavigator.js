@@ -5,6 +5,7 @@ import Profile from "../Profile";
 import Mailbox from "../Mailbox";
 import Upload from "../CameraIP";
 import Discover from "../Discover";
+import EditProfile from "../EditProfile";
 
 
 const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ const ProfileStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };

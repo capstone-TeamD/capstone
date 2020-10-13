@@ -10,9 +10,9 @@ if (firebase.apps.length === 0) {
 const db = firebase.firestore();
 
 // ACTION TYPES
-export const LOGIN = 'LOGIN';
-export const SIGNUP = 'SIGNUP';
-// export const SIGNOUT = "SIGNOUT";
+export const LOGIN = "LOGIN";
+export const SIGNUP = "SIGNUP";
+
 
 // ACTION CREATORS
 export const login = (user) => ({ type: LOGIN, user });
@@ -50,11 +50,10 @@ export const signupUser = (email, password, username) => async (dispatch) => {
       .auth()
       .createUserWithEmailAndPassword(email, password);
 
-    // if userId exists in User signup, create the user object to store in the collection of users DB
+    // if user does not exist, create the user object to store in the collection of users DB
     let user;
     if (response.user.uid) {
       user = {
-        id: response.user.uid,
         email: email,
         password: password,
         username: username,
@@ -65,6 +64,22 @@ export const signupUser = (email, password, username) => async (dispatch) => {
     // add user object to the user database
     db.collection('users').doc(response.user.uid).set(user);
     dispatch(signup(response.user));
+  } catch (error) {
+    alert(error);
+  }
+};
+
+// update profile info
+export const updateUserProfile = (username, about, id) => async () => {
+  try {
+    // find current userID
+    const profile = db.collection("users").doc(id);
+
+    // update profile info with user input in firestore
+    await profile.update({
+      username: username,
+      about: about,
+    });
   } catch (error) {
     alert(error);
   }
