@@ -35,6 +35,7 @@ export const getUser = (uid) => async (dispatch) => {
   try {
     // get user by uid using the get method
     const user = await db.collection('users').doc(uid).get();
+    console.log(user.data())
     dispatch(login(user.data() || null));
   } catch (error) {
     alert(error);

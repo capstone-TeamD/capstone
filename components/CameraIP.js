@@ -50,10 +50,9 @@ export function CameraIP(props) {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-      // base64: true,
     });
 
-    // console.log('image picked', result);
+    console.log('image picked', result);
 
     if (!result.cancelled) {
       setImage(result.uri);
