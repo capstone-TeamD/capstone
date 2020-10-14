@@ -14,23 +14,24 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-
-// const [state, dispatch] = useReducer(reducer, initialState);
-// const { photos, nextPage, loading, error } = state;
+import { getProfilePhotos, profilePhotos } from './store/photo';
 
 class Profile extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.props.getUser(user.uid);
+        this.props.getProfilePhotos(this.props.user.postcards)
       }
     });
+    // console.log(this.props.user)
+    // this.props.getProfilePhotos(this.props.user.postcards)
   }
 
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
-
+    console.log('profile', this.props.postcards)
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -49,14 +50,6 @@ class Profile extends Component {
         <View style={styles.gallery}>
           <PhotoGrid photos={postcards} numColumns={1} />
         </View>
-        {/* <ScrollView vertical style={styles.gallery}> */}
-        {/* <Text>Gallery Scrolling</Text> */}
-        {/* postcards */}
-        {/* <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} /> */}
-        {/* </ScrollView> */}
       </View>
     );
   }
@@ -121,12 +114,14 @@ const styles = StyleSheet.create({
 const mapState = (state) => {
   return {
     user: state.user,
+    postcards: state.photo
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
     getUser: (id) => dispatch(getUser(id)),
+    getProfilePhotos: (data) => dispatch(profilePhotos(data))
   };
 };
 

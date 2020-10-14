@@ -12,9 +12,11 @@ const db = firebase.firestore();
 
 // ACTION TYPES
 export const GET_ALL_PHOTOS = 'GET_ALL_PHOTOS';
+export const GET_PROFILE_PHOTOS = 'GET_PROFILE_PHOTOS';
 
 // ACTION CREATORS
 export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
+export const getProfilePhotos = (photos) => ({ type: GET_PROFILE_PHOTOS, profile: photos });
 
 // THUNK CREATORS
 
@@ -53,6 +55,7 @@ export const fetchPhotos = () => async (dispatch) => {
     
     if (localPostcards.length === allPhotos.length) {
       // if local storage has all postcards, take from local storage
+      console.log('from storage')
       const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
         const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
         postcard.imageURI = newURL.uri
@@ -61,20 +64,21 @@ export const fetchPhotos = () => async (dispatch) => {
       newPostcards().then(data => dispatch(getPhotos(data)))
     } else {
       // if local storage has no postcards or lengh in database !== localPostcards
-
+      console.log('from database')
       //delete local storage postcard directory and make new directory
       await FileSystem.deleteAsync(dir)
       await FileSystem.makeDirectoryAsync(dir)
 
-      //download to local storage / cache
-      allPhotos.forEach(async postcardDB => {
-        await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
-          .then(() => {
-            console.log('finsh downloading')
-          }).catch(error => {
-            console.error(error)
-        })
-      })
+      // download to local storage / cache
+      // allPhotos.forEach(async postcardDB => {
+      //   await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
+      //     .then(() => {
+      //       console.log('finsh downloading')
+      //     }).catch(error => {
+      //       console.error(error)
+      //   })
+      // })
+      // allPhotos = []
 
       dispatch(getPhotos(allPhotos))
     }
@@ -84,11 +88,61 @@ export const fetchPhotos = () => async (dispatch) => {
   }
 };
 
+//profile photo fetch
+export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
+  //in component did mount. use this.props.user.postcards array
+  //contain id and image URL
+
+  console.log('inprofilePhotos')
+
+  const profileDir = `${FileSystem.cacheDirectory}profile`;
+  const {exists} = await FileSystem.getInfoAsync(profileDir)
+  if (!exists) {
+    await FileSystem.makeDirectoryAsync(profileDir)
+  }
+  const localPostcards = await FileSystem.readDirectoryAsync(profileDir)
+
+  console.log('localPostcards', localPostcards)
+
+  if (localPostcards.length === profilePhotosArr.length) {
+    const newPostcards = async () => Promise.all(profilePhotosArr.map(async postcard => {
+      const newURL =  await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`)
+      postcard.imageURI = newURL.uri
+      return postcard
+    }))
+    newPostcards().then(data => dispatch(getProfilePhotos(data)))
+  } else {
+    // if local storage has no postcards or lengh in database !== localPostcards
+
+    // delete local storage postcard directory and make new directory
+    await FileSystem.deleteAsync(profileDir)
+    await FileSystem.makeDirectoryAsync(profileDir)
+
+    // download to local storage / cache
+    const postcardLinks = []
+    console.log('profilePhotosArr', profilePhotosArr)
+    profilePhotosArr.forEach(async postcardDB => {
+      console.log(postcardDB)
+      const profileObj = await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'profile//' + postcardDB.id)
+        .then(() => {
+          console.log('finsh downloading')
+          postcardLinks.push({imageid: postcardDB.id, imageURI: profileObj.uri})
+        }).catch(error => {
+          console.error(error)
+      })
+    })
+
+    return dispatch(getProfilePhotos(postcardLinks))
+  }
+}
+
 // REDUCER
 export default function photo(state = {}, action) {
   switch (action.type) {
     case GET_ALL_PHOTOS:
       return action.photos;
+    case GET_PROFILE_PHOTOS:
+      return action.profile;
     default:
       return state;
   }

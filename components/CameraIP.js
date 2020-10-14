@@ -10,7 +10,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import Fire from './Fire';
 import { connect } from 'react-redux';
-import { fetchPhotos } from './store/photo';
+import { fetchPhotos, profilePhotos } from './store/photo';
 import { getUser } from './store/user';
 
 export function CameraIP(props) {
@@ -38,6 +38,7 @@ export function CameraIP(props) {
         setImage(null);
         props.getAllPhotos();
         props.getUser(currentUser.id);
+        props.getProfilePhotos(currentUser.postcards)
       })
       .catch((err) => {
         alert(err.message);
@@ -84,6 +85,7 @@ export function CameraIP(props) {
 const mapState = (state) => {
   return {
     currentUser: state.user,
+    profilePostcard: state.photo
   };
 };
 
@@ -91,6 +93,7 @@ const mapDispatch = (dispatch) => {
   return {
     getAllPhotos: () => dispatch(fetchPhotos()),
     getUser: (id) => dispatch(getUser(id)),
+    getProfilePhotos: (profileArr) => dispatch(profilePhotos(profileArr))
   };
 };
 
