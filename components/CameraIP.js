@@ -8,7 +8,6 @@ import {
   Text,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
 import Fire from './Fire';
 import { connect } from 'react-redux';
 import { fetchPhotos } from './store/photo';
@@ -53,7 +52,7 @@ export function CameraIP(props) {
       quality: 1,
     });
 
-    // console.log('image picked', result);
+    console.log('image picked', result);
 
     if (!result.cancelled) {
       setImage(result.uri);

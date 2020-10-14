@@ -11,6 +11,7 @@ class Fire {
   // this is to add photo to firebase - storage bucket
   uploadPhotoAsync = async (uri) => {
     const path = `photos/${Date.now()}.jpg`;
+
     return new Promise(async (res, rej) => {
       const response = await fetch(uri);
       const file = await response.blob();

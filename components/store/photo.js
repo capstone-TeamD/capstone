@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../../firebaseConfig';
+import * as FileSystem from 'expo-file-system';
 
 // initialize app
 if (firebase.apps.length === 0) {
@@ -20,8 +21,6 @@ export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
 // fetch the photo data (links)
 export const fetchPhotos = () => async (dispatch) => {
   try {
-    // get user by uid using the get method
-
     const allPhotos = [];
     await db
       .collection('postcards')
@@ -42,7 +41,45 @@ export const fetchPhotos = () => async (dispatch) => {
         });
       });
 
-    dispatch(getPhotos(allPhotos));
+    //directory name
+    const dir = `${FileSystem.cacheDirectory}postcards`;
+
+    //read what is listed in directory, if no directory exist then makedir
+    const {exists} = await FileSystem.getInfoAsync(dir)
+    if (!exists) {
+      await FileSystem.makeDirectoryAsync(dir)
+    }
+    const localPostcards = await FileSystem.readDirectoryAsync(dir)
+    
+    if (localPostcards.length === allPhotos.length) {
+      // if local storage has all postcards, take from local 
+      console.log('in local storage')
+      const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
+        const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
+        postcard.imageURI = newURL.uri
+        return postcard
+      }))
+      newPostcards().then(data => dispatch(getPhotos(data)))
+    } else {
+      // if local storage has no postcards or lengh in database !== localPostcards
+      console.log('from database')
+      //delete local storage postcard directory and make new directory
+      await FileSystem.deleteAsync(dir)
+      await FileSystem.makeDirectoryAsync(dir)
+
+      //download to local storage / cache
+      allPhotos.forEach(async postcardDB => {
+        await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
+          .then(() => {
+            console.log('finsh downloading')
+          }).catch(error => {
+            console.error(error)
+        })
+      })
+
+      dispatch(getPhotos(allPhotos))
+    }
+
   } catch (error) {
     alert(error);
   }
