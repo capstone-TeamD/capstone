@@ -1,6 +1,6 @@
-import * as firebase from 'firebase';
-import 'firebase/firestore';
-import { firebaseConfig } from '../../firebaseConfig';
+import * as firebase from "firebase";
+import "firebase/firestore";
+import { firebaseConfig } from "../../firebaseConfig";
 
 // initialize app
 if (firebase.apps.length === 0) {
@@ -10,10 +10,12 @@ if (firebase.apps.length === 0) {
 const db = firebase.firestore();
 
 // ACTION TYPES
-export const GET_ALL_PHOTOS = 'GET_ALL_PHOTOS';
+export const GET_ALL_PHOTOS = "GET_ALL_PHOTOS";
+export const DELETE_PHOTO = "DELETE_PHOTO";
 
 // ACTION CREATORS
 export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
+export const deletePhoto = (photo) => ({ type: DELETE_PHOTO, photo });
 
 // THUNK CREATORS
 
@@ -24,7 +26,7 @@ export const fetchPhotos = () => async (dispatch) => {
 
     const allPhotos = [];
     await db
-      .collection('postcards')
+      .collection("postcards")
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
@@ -48,11 +50,35 @@ export const fetchPhotos = () => async (dispatch) => {
   }
 };
 
+// delete a photo in the user's gallery
+export const deleteSinglePhoto = (photo) => async (dispatch) => {
+  try {
+    console.log(photo.id)
+    await db
+      .collection("photos")
+      .doc(photo.id)
+      .delete()
+      .then(function () {
+        console.log("Document successfully deleted!");
+      })
+      .catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
+      console.log("dispatch")
+      dispatch(deletePhoto(photo.id));
+  } catch (error) {
+    alert(error);
+  }
+};
+
 // REDUCER
 export default function photo(state = {}, action) {
   switch (action.type) {
     case GET_ALL_PHOTOS:
       return action.photos;
+    case DELETE_PHOTO:
+      const filteredPhotos = state.filter((photo) => photo.id !== action.id);
+      return filteredPhotos;
     default:
       return state;
   }

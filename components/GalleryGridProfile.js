@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, Text, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import cameraicon from '../assets/cameraicon.png';
 
-export default function PhotoGrid({ photos, numColumns, onEndReached }) {
+export default function PhotoGrid({ photos, numColumns, onEndReached, handleDelete }) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
@@ -16,17 +16,20 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
       onEndReached={onEndReached}
       renderItem={({ item }) => (
         <TouchableOpacity style={styles.container}>
-          <Image
+          {/* <Image
             // key={item.id}
             style={styles.photo}
             source={{
               // width: size,
               uri: item,
             }}
-          />
+          /> */}
 
-          {/* <Image style={styles.icon} source={cameraicon} />
-          <Text>Photo URI: {item}</Text> */}
+          <Image style={styles.icon} source={cameraicon} />
+          <Text>Photo URI: {item}</Text>
+          <TouchableOpacity onPress={() => handleDelete(item.id)}>
+          <Button title="Delete"></Button>
+          </TouchableOpacity>
         </TouchableOpacity>
       )}
     />
