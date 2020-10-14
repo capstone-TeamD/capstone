@@ -52,7 +52,8 @@ export const fetchPhotos = () => async (dispatch) => {
     const localPostcards = await FileSystem.readDirectoryAsync(dir)
     
     if (localPostcards.length === allPhotos.length) {
-      // if local storage has all postcards, take from local storage
+      // if local storage has all postcards, take from local 
+      console.log('in local storage')
       const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
         const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
         postcard.imageURI = newURL.uri
@@ -61,7 +62,7 @@ export const fetchPhotos = () => async (dispatch) => {
       newPostcards().then(data => dispatch(getPhotos(data)))
     } else {
       // if local storage has no postcards or lengh in database !== localPostcards
-
+      console.log('from database')
       //delete local storage postcard directory and make new directory
       await FileSystem.deleteAsync(dir)
       await FileSystem.makeDirectoryAsync(dir)
