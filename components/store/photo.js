@@ -21,12 +21,6 @@ export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
 // fetch the photo data (links)
 export const fetchPhotos = () => async (dispatch) => {
   try {
-    // check if discover needs to fetch data from the database
-    // access local storage to get the amount of photos in database (array length)
-    // if localStorage length === collection length , get from local storage
-
-    //find collection length
-
     const allPhotos = [];
     await db
       .collection('postcards')
@@ -49,44 +43,41 @@ export const fetchPhotos = () => async (dispatch) => {
 
     //directory name
     const dir = `${FileSystem.cacheDirectory}postcards`;
-    console.log(allPhotos)
 
-    //read what is listed in directory
+    //read what is listed in directory, if no directory exist then makedir
+    const {exists} = await FileSystem.getInfoAsync(dir)
+    if (!exists) {
+      await FileSystem.makeDirectoryAsync(dir)
+    }
     const localPostcards = await FileSystem.readDirectoryAsync(dir)
-    // console.log('localPostcards', localPostcards)
     
     if (localPostcards.length === allPhotos.length) {
-      console.log('here')
       // if local storage has all postcards, take from local storage
-      console.log('localPostcards', localPostcards)
-      const mapArr = localPostcards.map(async postcard => {
-        const info =  await FileSystem.getInfoAsync(dir + `/${postcard}`)
-        // console.log(postcard, info.uri)
-        return info.uri
-      })
-      // allPhotos = localPostcards
-      // console.log(mapArr)
+      const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
+        const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
+        postcard.imageURI = newURL.uri
+        return postcard
+      }))
+      newPostcards().then(data => dispatch(getPhotos(data)))
     } else {
+      // if local storage has no postcards or lengh in database !== localPostcards
 
-      console.log('from firestore')
-      // if local storage has no postcards or amt in database !== localPostcards
-
-      //delete local storage postcard directory and reload directory
+      //delete local storage postcard directory and make new directory
       await FileSystem.deleteAsync(dir)
       await FileSystem.makeDirectoryAsync(dir)
 
-      //download to directory -- replace URI with imageURI and id can be used as the name
+      //download to local storage / cache
       allPhotos.forEach(async postcardDB => {
-        await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id).then(() => {
-          console.log('finsh downloading')
-        }).catch(error => {
-          console.log(uri)
-          console.error(error)
+        await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
+          .then(() => {
+            console.log('finsh downloading')
+          }).catch(error => {
+            console.error(error)
         })
       })
-    }
 
-    dispatch(getPhotos(allPhotos))
+      dispatch(getPhotos(allPhotos))
+    }
 
   } catch (error) {
     alert(error);
