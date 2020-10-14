@@ -1,28 +1,28 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import Profile from "../Profile";
-import Mailbox from "../Mailbox";
-import Upload from "../CameraIP";
-import Discover from "../Discover";
-import EditProfile from "../EditProfile";
-
+import Profile from '../Profile';
+import Mailbox from '../Mailbox';
+import Upload from '../CameraIP';
+import Discover from '../Discover';
+import EditProfile from '../EditProfile';
+import PhotoEditor from '../PhotoEditor';
 
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
   headerStyle: {
-    backgroundColor: "#f6f6f6",
+    backgroundColor: '#f6f6f6',
   },
-  headerTintColor: "black",
-  headerBackTitle: "Back",
+  headerTintColor: 'black',
+  headerBackTitle: 'Back',
 };
 
 const ProfileStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name='Profile' component={Profile} />
+      <Stack.Screen name='EditProfile' component={EditProfile} />
     </Stack.Navigator>
   );
 };
@@ -30,7 +30,7 @@ const ProfileStackNavigator = () => {
 const MailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Mailbox" component={Mailbox} />
+      <Stack.Screen name='Mailbox' component={Mailbox} />
     </Stack.Navigator>
   );
 };
@@ -38,7 +38,8 @@ const MailStackNavigator = () => {
 const UploadStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Upload" component={Upload} />
+      <Stack.Screen name='Upload' component={Upload} />
+      <Stack.Screen name='PhotoEditor' component={PhotoEditor} />
     </Stack.Navigator>
   );
 };
@@ -46,7 +47,7 @@ const UploadStackNavigator = () => {
 const DiscoverStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Discover" component={Discover} />
+      <Stack.Screen name='Discover' component={Discover} />
     </Stack.Navigator>
   );
 };

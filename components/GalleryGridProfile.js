@@ -3,7 +3,12 @@ import { Dimensions, FlatList, Image, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import cameraicon from '../assets/cameraicon.png';
 
-export default function PhotoGrid({ photos, numColumns, onEndReached }) {
+export default function PhotoGrid({
+  photos,
+  numColumns,
+  onEndReached,
+  toggleModal,
+}) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
@@ -15,18 +20,23 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
-        <TouchableOpacity style={styles.container}>
-          <Image
+        <TouchableOpacity
+          style={styles.container}
+          onPress={() => {
+            toggleModal({ item });
+          }}
+        >
+          {/* <Image
             // key={item.id}
             style={styles.photo}
             source={{
               // width: size,
               uri: item,
             }}
-          />
+          /> */}
 
-          {/* <Image style={styles.icon} source={cameraicon} />
-          <Text>Photo URI: {item}</Text> */}
+          <Image style={styles.icon} source={cameraicon} />
+          <Text>Photo URI: {item}</Text>
         </TouchableOpacity>
       )}
     />

@@ -13,12 +13,23 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Modal,
+  TouchableHighlight,
 } from 'react-native';
 
 // const [state, dispatch] = useReducer(reducer, initialState);
 // const { photos, nextPage, loading, error } = state;
 
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+      photoURI: '',
+    };
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -26,6 +37,22 @@ class Profile extends Component {
       }
     });
   }
+
+  toggleModal = (item) => {
+    // console.log('current item from flat list', item.item);
+    let currentURI = item.item;
+    if (item) {
+      this.setState({
+        modalVisible: !this.state.modalVisible,
+        photoURI: currentURI,
+      });
+      console.log(this.state.photoURI);
+    } else {
+      this.setState({
+        modalVisible: !this.state.modalVisible,
+      });
+    }
+  };
 
   render() {
     const { navigate } = this.props.navigation;
@@ -47,16 +74,40 @@ class Profile extends Component {
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
         <View style={styles.gallery}>
-          <PhotoGrid photos={postcards} numColumns={1} />
+          <PhotoGrid
+            photos={postcards}
+            numColumns={1}
+            toggleModal={this.toggleModal}
+          />
         </View>
-        {/* <ScrollView vertical style={styles.gallery}> */}
-        {/* <Text>Gallery Scrolling</Text> */}
-        {/* postcards */}
-        {/* <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} /> */}
-        {/* </ScrollView> */}
+        <View style={styles.centeredView}>
+          <Modal
+            animationType='slide'
+            transparent={false}
+            visible={this.state.modalVisible}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                {/* <Text style={styles.modalText}>
+                  Current URI: {`${this.state.photoURI}`}{' '}
+                </Text> */}
+                <Image
+                  style={styles.photo}
+                  source={{
+                    uri: this.state.photoURI,
+                  }}
+                  resizeMode='contain'
+                />
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                  onPress={this.toggleModal}
+                >
+                  <Text style={styles.textStyle}>Close Postcard</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+        </View>
       </View>
     );
   }
@@ -115,6 +166,48 @@ const styles = StyleSheet.create({
   infoDesc: {
     fontSize: 13,
     paddingBottom: 18,
+  },
+  // centeredView: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   marginTop: 0,
+  // },
+  modalView: {
+    // margin: 20,
+    backgroundColor: 'white',
+    // borderRadius: 20,
+    // padding: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    // borderRadius: 20,
+    padding: 10,
+    // marginBottom: 200,
+    // elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  photo: {
+    width: '100%',
+    height: '95%',
   },
 });
 

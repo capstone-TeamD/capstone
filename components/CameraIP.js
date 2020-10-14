@@ -48,12 +48,12 @@ export function CameraIP(props) {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
     });
 
-    // console.log('image picked', result);
+    console.log('image picked', result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -61,9 +61,7 @@ export function CameraIP(props) {
   };
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
+    <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
       <Button title='Pick an image from camera roll' onPress={pickImage} />
       <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }}>
         {image === null ? (
@@ -72,7 +70,7 @@ export function CameraIP(props) {
           <View>
             <Image
               source={{ uri: image }}
-              style={{ width: 300, height: 300 }}
+              style={{ width: 400, height: 400 }}
             />
             <Button title='Upload' onPress={upload} />
           </View>
