@@ -44,16 +44,17 @@ class Fire {
           dateCreated: this.timestamp,
           imageURI: remoteUri,
         })
-        .then((ref) => {
+        .then((docRef) => {
           this.firestore
             .collection('users')
             .doc(currentUser.id)
             .update({
-              postcards: firebase.firestore.FieldValue.arrayUnion(remoteUri),
+              postcards: firebase.firestore.FieldValue.arrayUnion({imageId: docRef.id, imageURL: remoteUri}),
             })
             .then(function (ref) {
               console.log('New postcard added to user array!');
-              // console.log('final ref in addPhoto', ref);
+              // console.log('final ref in addPhoto', docRef.id);
+              //added field to db
               res(ref);
             })
             .catch(function (error) {
