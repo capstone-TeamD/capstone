@@ -59,9 +59,9 @@ export default function PhotoGrid({
 
           {/* <Image style={styles.icon} source={cameraicon} /> */}
           {/* <Text>Photo URI: {item.imageURL}</Text> */}
-          {/* <TouchableOpacity key={item.id + '1'} onPress={() => handleDelete(item.imageId, item.firebaseURL)}>
+          <TouchableOpacity onPress={() => handleDelete(item.imageId, item.firebaseURL)}>
             <Button title="Delete"></Button>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </TouchableOpacity>
       )}
     />

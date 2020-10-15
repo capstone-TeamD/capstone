@@ -162,20 +162,19 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
       await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + `profile//` + postcardDB.imageId)
         .then((data) => {
           console.log("finsh downloading")
-          postcardLinks.push({imageId: postcardDB.imageId, imageURL: data.uri, FirebaseURL: postcardDB.imageURL})
+          postcardLinks.unshift({imageId: postcardDB.imageId, imageURL: data.uri, FirebaseURL: postcardDB.imageURL})
         }).catch(error => {
           console.error(error)
       })
     })
-    // console.log('postcardLinks', postcardLinks)
     dispatch(getProfilePhotos(postcardLinks))
+    // console.log('postcardLinks', postcardLinks)
   }
 }
 
 const intialState = {
   photos: [],
   profile: [],
-  filteredPhotos: []
 }
 
 // REDUCER
@@ -184,8 +183,8 @@ export default function photo(state = intialState,  action) {
     case GET_ALL_PHOTOS:
       return {...state, photos: action.photos};
     case DELETE_PHOTO:
-      const filteredPhotos = state.filter((photo) => photo.id !== action.id);
-      return {...state, filteredPhotos};
+      const filteredPhotos = state.profile.filter((photo) => photo.id !== action.id);
+      return {...state, profile: filteredPhotos};
     case GET_PROFILE_PHOTOS:
       return {...state, profile: action.profile};
     default:
