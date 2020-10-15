@@ -1,13 +1,27 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, Text, View, RefreshControl } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import cameraicon from '../assets/cameraicon.png';
 
-export default function PhotoGrid({ photos, numColumns, onEndReached }) {
+export default function PhotoGrid({ photos, numColumns, onEndReached, checkUpdateDate, updateTimestamp}) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-  console.log('grid photos', photos)
+  // console.log('grid photos', photos)
+  const [refreshing, setRefreshing] = React.useState(false);
+  const wait = timeout => {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  };
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => {
+    console.log('refresh')
+    checkUpdateDate(updateTimestamp)
+    return setRefreshing(false)});
+  }, []);
+  // console.log(onRefresh)
   return (
     <FlatList
       data={photos}
@@ -29,6 +43,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
           <Text>Postcard created by: {`${item.username}`}</Text>
         </TouchableOpacity>
       )}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     />
   );
 }

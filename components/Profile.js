@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import cameraicon from '../assets/cameraicon.png';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import PhotoGrid from './GalleryGridProfile';
+import PhotoGrid from './PhotoGridProfile';
 import { connect } from 'react-redux';
 import user, { getUser } from './store/user';
 
@@ -29,7 +29,11 @@ class Profile extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
-
+    const currentMs = Date.now()
+    const currentDate = new Date(currentMs)
+    const currentTime = currentDate.toLocaleTimeString('en-GB')
+    const currentDay = currentDate.toLocaleDateString('en-GB')
+    
     return (
       <View style={styles.container}>
         <View style={styles.header}>
