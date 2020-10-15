@@ -13,14 +13,15 @@ class Discover extends Component {
   }
 
   render() {
-    console.log('all photos', this.props.allPhotos);
+    console.log(this.props.allPhotos)
+    // console.log('all photos', this.props.allPhotos);
     return <PhotoGrid numColumns={1} photos={this.props.allPhotos} />;
   }
 }
 
 const mapState = (state) => {
   return {
-    allPhotos: state.photo,
+    allPhotos: state.photo.photos,
   };
 };
 

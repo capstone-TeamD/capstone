@@ -1,5 +1,12 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text } from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import cameraicon from '../assets/cameraicon.png';
 
@@ -7,26 +14,28 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-
+  console.log('grid photos', photos);
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => {
+        return item.id;
+      }}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
-        <TouchableOpacity style={styles.container}>
-          {/* <Image
+        <TouchableOpacity key={item.id} style={styles.container}>
+          <Image
             key={item.id}
             style={styles.photo}
             source={{
               // width: size,
               uri: item.imageURI,
             }}
-          /> */}
+          />
 
-          <Image style={styles.icon} source={cameraicon} />
-          <Text>Postcard created by: {`${item.username}`}</Text>
+          {/* <Image style={styles.icon} source={cameraicon} /> */}
+          <Text>Postcard created by: {`${item.id}`}</Text>
         </TouchableOpacity>
       )}
     />
@@ -40,6 +49,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   photo: {
+    backgroundColor: 'black',
     height: 130,
   },
   icon: {
