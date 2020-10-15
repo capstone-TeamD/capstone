@@ -29,13 +29,14 @@ class Profile extends Component {
       if (user) {
        await this.props.getUser(user.uid)
       }
-      this.props.getProfilePhotos(this.props.user.postcards)
+      await this.props.getProfilePhotos(this.props.user.postcards)
     });
   }
 
-  handleDelete(id) {
-    console.log('handle delete')
-    this.props.deletePhoto(id);
+  async handleDelete(id, firebaseURL) {
+    await this.props.deletePhoto(id, this.props.user.id, firebaseURL);
+    await this.props.getUser(this.props.user.id)
+    await this.props.getProfilePhotos(this.props.user.postcards)
   }
 
   render() {
@@ -140,7 +141,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getUser: (id) => dispatch(getUser(id)),
-    deletePhoto: (id) => dispatch(deleteSinglePhoto(id)),
+    deletePhoto: (id, userId, firebaseURL) => dispatch(deleteSinglePhoto(id, userId, firebaseURL)),
     getProfilePhotos: (data) => dispatch(profilePhotos(data))
   };
 };

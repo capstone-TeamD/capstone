@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
+// import {getUser} from './user'
 
 // initialize app
 if (firebase.apps.length === 0) {
@@ -17,7 +18,7 @@ export const GET_PROFILE_PHOTOS = 'GET_PROFILE_PHOTOS';
 
 // ACTION CREATORS
 export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
-export const deletePhoto = (photo) => ({ type: DELETE_PHOTO, photo });
+export const deletePhoto = (id) => ({ type: DELETE_PHOTO, id });
 export const getProfilePhotos = (photos) => ({ type: GET_PROFILE_PHOTOS, profile: photos });
 
 // THUNK CREATORS
@@ -92,21 +93,32 @@ export const fetchPhotos = () => async (dispatch) => {
 
 
 // delete a photo in the user's gallery
-export const deleteSinglePhoto = (photo) => async (dispatch) => {
+export const deleteSinglePhoto = (id, userId, firebaseURL) => async (dispatch) => {
   try {
-    console.log("photo ID", photo.id)
+    console.log("photo ID", id)
     await db
-      .collection("photos")
-      .doc(photo.id)
+      .collection("postcards")
+      .doc(id)
       .delete()
-      .then(function () {
+      .then(async function () {
         console.log("Document successfully deleted!");
+
+        await db.collection("users")
+        .doc(userId)
+        .update({postcards: firebase.firestore.FieldValue.arrayRemove({
+          imageId: id,
+          imageURL: firebaseURL
+        })}).then(() => {console.log("deleted from user database")})
+        .catch(function (error) {
+          console.error("error removing image from user", error)
+        })
+        
       })
       .catch(function (error) {
         console.error("Error removing document: ", error);
       });
-      console.log("dispatch")
-      dispatch(deletePhoto(photo.id));
+      await dispatch(deletePhoto(id));
+
   } catch (error) {
     alert(error);
   }
@@ -128,6 +140,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   if (localPostcards.length === profilePhotosArr.length) {
     const newPostcards = async () => Promise.all(profilePhotosArr.map(async postcard => {
       const newURL =  await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`)
+      postcard.firebaseURL = postcard.imageURL
       postcard.imageURL = newURL.uri
       return postcard
     }))
@@ -144,15 +157,15 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
 
     profilePhotosArr.forEach(async postcardDB => {
       console.log(postcardDB)
-      const profileObj = await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + 'profile//' + postcardDB.imageId)
+      const profileObj = await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + `profile//` + postcardDB.imageId)
         .then(() => {
-          console.log('finsh downloading')
-          postcardLinks.push({imageId: postcardDB.imageId, imageURL: profileObj.uri})
+          console.log("finsh downloading")
+          // postcardLinks.push({imageId: postcardDB.imageId, imageURL: profileObj.uri, FirebaseURL: postcardDB.imageURL})
         }).catch(error => {
           console.error(error)
       })
+      postcardLinks.push({imageId: postcardDB.imageId, imageURL: profileObj.uri, firebaseURL: postcardDB.imageURL})
     })
-
     dispatch(getProfilePhotos(postcardLinks))
   }
 }
