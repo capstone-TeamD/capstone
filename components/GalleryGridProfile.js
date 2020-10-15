@@ -9,19 +9,19 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import cameraicon from "../assets/cameraicon.png";
-import { SwipeListView } from "react-native-swipe-list-view";
+// import { SwipeListView } from "react-native-swipe-list-view";
 
 // function for swipe delete
-function renderHiddenItem(photo) {
-  return (
-    <TouchableOpacity
-      styles={styles.deleteButton}
-      onSwipe={() => handleDelete(photo.id)}
-    >
-      <Text style={styles.deleteText} title="Delete"></Text>
-    </TouchableOpacity>
-  );
-}
+// function renderHiddenItem(photo) {
+//   return (
+//     <TouchableOpacity
+//       styles={styles.deleteButton}
+//       onSwipe={() => handleDelete(photo.id)}
+//     >
+//       <Text style={styles.deleteText} title="Delete"></Text>
+//     </TouchableOpacity>
+//   );
+// }
 
 export default function PhotoGrid({
   photos,
@@ -38,33 +38,33 @@ export default function PhotoGrid({
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={(item) => item.imageId}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
         <TouchableOpacity style={styles.container}>
           <Image
-            // key={item.id}
+            key={item.id}
             style={styles.photo}
             source={{
               // width: size,
-              uri: item,
+              uri: item.imageURL,
             }}
             />
-            <SwipeListView
+            {/* <SwipeListView
             renderHiddenItem={({ item }) => renderHiddenItem(item)}
             rightOpenValue={-75}
-          />
+          /> */}
           {/* <TouchableOpacity onSwipe={() => handleDelete(item.id)}>
                 <Button title="Delete"></Button>
               </TouchableOpacity>; */}
 
-          {/* <Image style={styles.icon} source={cameraicon} />
+          <Image style={styles.icon} source={cameraicon} />
           <Text>Photo URI: {item}</Text>
           <TouchableOpacity onPress={() => handleDelete(item.id)}>
             {console.log("photo", item)}
           <Button title="Delete"></Button>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </TouchableOpacity>
       )}
     />

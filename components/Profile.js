@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { profilePhotos } from './store/photo';
 
 class Profile extends Component {
   constructor(props) {
@@ -24,10 +25,11 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        this.props.getUser(user.uid);
+       await this.props.getUser(user.uid)
       }
+      this.props.getProfilePhotos(this.props.user.postcards)
     });
   }
 
@@ -56,7 +58,7 @@ class Profile extends Component {
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
         <View style={styles.gallery}>
-          <PhotoGrid photos={postcards} numColumns={1} handleDelete={this.handleDelete} />
+          <PhotoGrid photos={this.props.postcards} numColumns={1} handleDelete={this.handleDelete}/>
         </View>
       </View>
     );
@@ -131,13 +133,15 @@ const styles = StyleSheet.create({
 const mapState = (state) => {
   return {
     user: state.user,
+    postcards: state.photo
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
     getUser: (id) => dispatch(getUser(id)),
-    deletePhoto: (id) => dispatch(deleteSinglePhoto(id))
+    deletePhoto: (id) => dispatch(deleteSinglePhoto(id)),
+    getProfilePhotos: (data) => dispatch(profilePhotos(data))
   };
 };
 
