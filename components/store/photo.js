@@ -58,7 +58,7 @@ export const fetchPhotos = () => async (dispatch) => {
     
     if (localPostcards.length === allPhotos.length) {
       // if local storage has all postcards, take from local storage
-      console.log('from storage')
+      console.log('discover from storage', allPhotos)
       const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
         const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
         postcard.imageURI = newURL.uri
@@ -67,20 +67,20 @@ export const fetchPhotos = () => async (dispatch) => {
       newPostcards().then(data => dispatch(getPhotos(data)))
     } else {
       // if local storage has no postcards or lengh in database !== localPostcards
-      console.log('from database')
+      console.log('discover from database')
       //delete local storage postcard directory and make new directory
       await FileSystem.deleteAsync(dir)
       await FileSystem.makeDirectoryAsync(dir)
 
       // download to local storage / cache
-      // allPhotos.forEach(async postcardDB => {
-      //   await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
-      //     .then(() => {
-      //       console.log('finsh downloading')
-      //     }).catch(error => {
-      //       console.error(error)
-      //   })
-      // })
+      allPhotos.forEach(async postcardDB => {
+        await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
+          .then(() => {
+            console.log('finsh downloading')
+          }).catch(error => {
+            console.error(error)
+        })
+      })
       // allPhotos = []
 
       dispatch(getPhotos(allPhotos))
@@ -136,8 +136,10 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     await FileSystem.makeDirectoryAsync(profileDir)
   }
   const localPostcards = await FileSystem.readDirectoryAsync(profileDir)
+  // console.log('localPostcards', localPostcards)
 
   if (localPostcards.length === profilePhotosArr.length) {
+    console.log('profile from storage')
     const newPostcards = async () => Promise.all(profilePhotosArr.map(async postcard => {
       const newURL =  await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`)
       postcard.firebaseURL = postcard.imageURL
@@ -147,7 +149,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     newPostcards().then(data => dispatch(getProfilePhotos(data)))
   } else {
     // if local storage has no postcards or lengh in database !== localPostcards
-    console.log('from database')
+    console.log('profile from database')
     // delete local storage postcard directory and make new directory
     await FileSystem.deleteAsync(profileDir)
     await FileSystem.makeDirectoryAsync(profileDir)
@@ -157,29 +159,35 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
 
     profilePhotosArr.forEach(async postcardDB => {
       console.log(postcardDB)
-      const profileObj = await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + `profile//` + postcardDB.imageId)
-        .then(() => {
+      await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + `profile//` + postcardDB.imageId)
+        .then((data) => {
           console.log("finsh downloading")
-          // postcardLinks.push({imageId: postcardDB.imageId, imageURL: profileObj.uri, FirebaseURL: postcardDB.imageURL})
+          postcardLinks.push({imageId: postcardDB.imageId, imageURL: data.uri, FirebaseURL: postcardDB.imageURL})
         }).catch(error => {
           console.error(error)
       })
-      postcardLinks.push({imageId: postcardDB.imageId, imageURL: profileObj.uri, firebaseURL: postcardDB.imageURL})
     })
+    // console.log('postcardLinks', postcardLinks)
     dispatch(getProfilePhotos(postcardLinks))
   }
 }
 
+const intialState = {
+  photos: [],
+  profile: [],
+  filteredPhotos: []
+}
+
 // REDUCER
-export default function photo(state = {}, action) {
+export default function photo(state = intialState,  action) {
   switch (action.type) {
     case GET_ALL_PHOTOS:
-      return action.photos;
+      return {...state, photos: action.photos};
     case DELETE_PHOTO:
       const filteredPhotos = state.filter((photo) => photo.id !== action.id);
-      return filteredPhotos;
+      return {...state, filteredPhotos};
     case GET_PROFILE_PHOTOS:
-      return action.profile;
+      return {...state, profile: action.profile};
     default:
       return state;
   }

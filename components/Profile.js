@@ -42,6 +42,7 @@ class Profile extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
+    console.log(this.props.postcards)
 
     return (
       <View style={styles.container}>
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
 const mapState = (state) => {
   return {
     user: state.user,
-    postcards: state.photo
+    postcards: state.photo.profile
   };
 };
 

@@ -36,19 +36,19 @@ export default function PhotoGrid({
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item) => item.imageId}
+      keyExtractor={(item) => {return item.imageId}}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
         <TouchableOpacity style={styles.container}>
-          {/* <Image
-            key={item.id}
+          <Image
+            key={item.imageId}
             style={styles.photo}
             source={{
               // width: size,
               uri: item.imageURL,
-            }} */}
-            {/* /> */}
+            }}
+            />
             {/* <SwipeListView
             renderHiddenItem={({ item }) => renderHiddenItem(item)}
             rightOpenValue={-75}
@@ -57,11 +57,11 @@ export default function PhotoGrid({
                 <Button title="Delete"></Button>
               </TouchableOpacity>; */}
 
-          <Image style={styles.icon} source={cameraicon} />
-          <Text>Photo URI: {item.imageURL}</Text>
-          <TouchableOpacity onPress={() => handleDelete(item.imageId, item.firebaseURL)}>
-          <Button title="Delete"></Button>
-          </TouchableOpacity>
+          {/* <Image style={styles.icon} source={cameraicon} /> */}
+          {/* <Text>Photo URI: {item.imageURL}</Text> */}
+          {/* <TouchableOpacity key={item.id + '1'} onPress={() => handleDelete(item.imageId, item.firebaseURL)}>
+            <Button title="Delete"></Button>
+          </TouchableOpacity> */}
         </TouchableOpacity>
       )}
     />
