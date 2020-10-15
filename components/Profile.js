@@ -14,16 +14,15 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-
-// const [state, dispatch] = useReducer(reducer, initialState);
-// const { photos, nextPage, loading, error } = state;
+import { profilePhotos } from './store/photo';
 
 class Profile extends Component {
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        this.props.getUser(user.uid);
+       await this.props.getUser(user.uid)
       }
+      this.props.getProfilePhotos(this.props.user.postcards)
     });
   }
 
@@ -47,16 +46,8 @@ class Profile extends Component {
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
         <View style={styles.gallery}>
-          <PhotoGrid photos={postcards} numColumns={1} />
+          <PhotoGrid photos={this.props.postcards} numColumns={1} />
         </View>
-        {/* <ScrollView vertical style={styles.gallery}> */}
-        {/* <Text>Gallery Scrolling</Text> */}
-        {/* postcards */}
-        {/* <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} />
-          <Image style={styles.icon} source={cameraicon} /> */}
-        {/* </ScrollView> */}
       </View>
     );
   }
@@ -121,12 +112,14 @@ const styles = StyleSheet.create({
 const mapState = (state) => {
   return {
     user: state.user,
+    postcards: state.photo
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
     getUser: (id) => dispatch(getUser(id)),
+    getProfilePhotos: (data) => dispatch(profilePhotos(data))
   };
 };
 

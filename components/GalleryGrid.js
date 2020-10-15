@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import cameraicon from '../assets/cameraicon.png';
 
@@ -7,7 +7,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-
+  console.log('grid photos', photos)
   return (
     <FlatList
       data={photos}
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   photo: {
+    backgroundColor: 'black',
     height: 130,
   },
   icon: {

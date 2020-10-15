@@ -54,7 +54,6 @@ class Fire {
             .then(function (ref) {
               console.log('New postcard added to user array!');
               // console.log('final ref in addPhoto', docRef.id);
-              //added field to db
               res(ref);
             })
             .catch(function (error) {
