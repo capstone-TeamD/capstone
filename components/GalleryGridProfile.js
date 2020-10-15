@@ -1,12 +1,39 @@
-import React from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, Button } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import cameraicon from '../assets/cameraicon.png';
+import React from "react";
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  Button,
+} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import cameraicon from "../assets/cameraicon.png";
+import { SwipeListView } from "react-native-swipe-list-view";
 
-export default function PhotoGrid({ photos, numColumns, onEndReached, handleDelete }) {
-  const { width } = Dimensions.get('window');
+// function for swipe delete
+function renderHiddenItem(photo) {
+  return (
+    <TouchableOpacity
+      styles={styles.deleteButton}
+      onSwipe={() => handleDelete(photo.id)}
+    >
+      <Text style={styles.deleteText} title="Delete"></Text>
+    </TouchableOpacity>
+  );
+}
+
+export default function PhotoGrid({
+  photos,
+  numColumns,
+  onEndReached,
+  handleDelete,
+}) {
+  const { width } = Dimensions.get("window");
 
   const size = width / numColumns;
+
+  console.log(photos);
 
   return (
     <FlatList
@@ -16,20 +43,28 @@ export default function PhotoGrid({ photos, numColumns, onEndReached, handleDele
       onEndReached={onEndReached}
       renderItem={({ item }) => (
         <TouchableOpacity style={styles.container}>
-          {/* <Image
+          <Image
             // key={item.id}
             style={styles.photo}
             source={{
               // width: size,
               uri: item,
             }}
-          /> */}
+            />
+            <SwipeListView
+            renderHiddenItem={({ item }) => renderHiddenItem(item)}
+            rightOpenValue={-75}
+          />
+          {/* <TouchableOpacity onSwipe={() => handleDelete(item.id)}>
+                <Button title="Delete"></Button>
+              </TouchableOpacity>; */}
 
-          <Image style={styles.icon} source={cameraicon} />
+          {/* <Image style={styles.icon} source={cameraicon} />
           <Text>Photo URI: {item}</Text>
           <TouchableOpacity onPress={() => handleDelete(item.id)}>
+            {console.log("photo", item)}
           <Button title="Delete"></Button>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </TouchableOpacity>
       )}
     />
@@ -38,9 +73,9 @@ export default function PhotoGrid({ photos, numColumns, onEndReached, handleDele
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    justifyContent: "center",
     marginBottom: 7,
-    width: '100%',
+    width: "100%",
   },
   photo: {
     height: 130,
@@ -50,5 +85,18 @@ const styles = StyleSheet.create({
     height: 80,
     marginTop: 25,
     marginHorizontal: 30,
+  },
+  deleteButton: {
+    alignSelf: "flex-end",
+    width: 75,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
+    marginVertical: 3,
+  },
+  deleteText: {
+    fontSize: 12,
+    color: "white",
   },
 });

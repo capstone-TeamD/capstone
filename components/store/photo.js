@@ -53,7 +53,7 @@ export const fetchPhotos = () => async (dispatch) => {
 // delete a photo in the user's gallery
 export const deleteSinglePhoto = (photo) => async (dispatch) => {
   try {
-    console.log(photo.id)
+    console.log("photo ID", photo.id)
     await db
       .collection("photos")
       .doc(photo.id)

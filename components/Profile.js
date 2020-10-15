@@ -33,7 +33,7 @@ class Profile extends Component {
 
   handleDelete(id) {
     console.log('handle delete')
-    this.props.deletePhoto(dispatch(deleteSinglePhoto(id)));
+    this.props.deletePhoto(id);
   }
 
   render() {
