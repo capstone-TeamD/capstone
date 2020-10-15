@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import cameraicon from "../assets/cameraicon.png";
+import panda from "../assets/panda.jpg";
 import { connect } from "react-redux";
 import { updateUserProfile, getUser } from "./store/user";
 
@@ -49,7 +49,7 @@ class EditProfile extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image style={styles.icon} source={cameraicon} />
+          <Image style={styles.circleImage} source={panda} />
           <View>
             <Text style={styles.infoDesc}>Choose Photo</Text>
           </View>
@@ -75,17 +75,6 @@ class EditProfile extends Component {
               />
             </View>
           </View>
-          {/* <View style={styles.textInput}>
-            <View style={styles.rowLines}>
-              <Text>About</Text>
-              <TextInput
-                style={styles.inputBox}
-                value={this.state.id}
-                onChangeText={(about) => this.setState({ about })}
-                autoCapitalize="none"
-              />
-            </View>
-          </View> */}
           <TouchableOpacity style={styles.button} onPress={this.handleUpdate}>
             <Text style={styles.buttonText}>Update</Text>
           </TouchableOpacity>
@@ -98,7 +87,7 @@ class EditProfile extends Component {
               ])
             }
           >
-            <Text style={styles.buttonText}>Logout</Text>
+            <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -113,13 +102,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "stretch",
   },
-  icon: {
-    width: 80,
-    height: 80,
-    marginTop: 4,
-    marginBottom: 3,
-    marginHorizontal: 30,
-  },
   header: {
     flex: 0.4,
     justifyContent: "center",
@@ -127,10 +109,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "flex-start",
     backgroundColor: "#f6f6f6",
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 0.3,
   },
   infoDesc: {
     fontSize: 12,
+    color: "blue"
   },
   textInput: {
     margin: 13,
@@ -154,25 +137,35 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 60,
     marginBottom: -20,
-    paddingVertical: 4,
+    paddingVertical: 5,
     alignItems: "center",
-    // backgroundColor: "#BC8F8F",
     borderColor: "#BC8F8F",
+    backgroundColor: "#BC8F8F",
     borderWidth: 2,
     borderRadius: 6,
-    width: 90,
+    width: 110,
     alignSelf: "center",
   },
   buttonText: {
     fontSize: 12,
     fontWeight: "bold",
-    color: "#BC8F8F",
+    color: "#fff",
+  },
+  logoutText: {
+      color: "blue",
   },
   checkout: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40,
     borderBottomColor: "#585858",
+    color: "blue"
+  },
+  circleImage:{
+    height: 110,
+    width: 110,
+    borderRadius: 500,
+    marginBottom: 13,
   },
 });
 

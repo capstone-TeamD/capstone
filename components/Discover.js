@@ -21,7 +21,7 @@ class Discover extends Component {
 
 const mapState = (state) => {
   return {
-    allPhotos: state.photo,
+    allPhotos: state.photo.photos,
   };
 };
 
