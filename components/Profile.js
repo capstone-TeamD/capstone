@@ -29,10 +29,6 @@ class Profile extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
-    const currentMs = Date.now()
-    const currentDate = new Date(currentMs)
-    const currentTime = currentDate.toLocaleTimeString('en-GB')
-    const currentDay = currentDate.toLocaleDateString('en-GB')
     
     return (
       <View style={styles.container}>
