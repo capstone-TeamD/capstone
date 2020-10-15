@@ -11,17 +11,17 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.imageId}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
         <TouchableOpacity style={styles.container}>
           <Image
-            key={item.id}
+            key={item.imageId}
             style={styles.photo}
             source={{
               // width: size,
-              uri: item.imageURI,
+              // uri: item.imageURI,
             }}
           />
 

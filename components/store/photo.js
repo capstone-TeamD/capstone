@@ -55,7 +55,7 @@ export const fetchPhotos = () => async (dispatch) => {
     
     if (localPostcards.length === allPhotos.length) {
       // if local storage has all postcards, take from local storage
-      console.log('from storage')
+      console.log('discover from storage')
       const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
         const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
         postcard.imageURI = newURL.uri
@@ -64,7 +64,7 @@ export const fetchPhotos = () => async (dispatch) => {
       newPostcards().then(data => dispatch(getPhotos(data)))
     } else {
       // if local storage has no postcards or lengh in database !== localPostcards
-      console.log('from database')
+      console.log('discover from database')
       //delete local storage postcard directory and make new directory
       await FileSystem.deleteAsync(dir)
       await FileSystem.makeDirectoryAsync(dir)
@@ -78,9 +78,9 @@ export const fetchPhotos = () => async (dispatch) => {
       //       console.error(error)
       //   })
       // })
-      // allPhotos = []
+      // // allPhotos = []
 
-      dispatch(getPhotos(allPhotos))
+      // dispatch(getPhotos(allPhotos))
     }
 
   } catch (error) {
@@ -99,17 +99,19 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     await FileSystem.makeDirectoryAsync(profileDir)
   }
   const localPostcards = await FileSystem.readDirectoryAsync(profileDir)
-
+  // console.log('localPostcards', localPostcards)
+  console.log('profile from storage')
   if (localPostcards.length === profilePhotosArr.length) {
     const newPostcards = async () => Promise.all(profilePhotosArr.map(async postcard => {
       const newURL =  await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`)
+      postcard.firebaseURL = postcard.imageUrl
       postcard.imageURL = newURL.uri
       return postcard
     }))
     newPostcards().then(data => dispatch(getProfilePhotos(data)))
   } else {
     // if local storage has no postcards or lengh in database !== localPostcards
-    console.log('from database')
+    console.log('profile from database')
     // delete local storage postcard directory and make new directory
     await FileSystem.deleteAsync(profileDir)
     await FileSystem.makeDirectoryAsync(profileDir)
@@ -119,15 +121,16 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
 
     profilePhotosArr.forEach(async postcardDB => {
       console.log(postcardDB)
-      const profileObj = await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + 'profile//' + postcardDB.imageId)
-        .then(() => {
+      await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + 'profile//' + postcardDB.imageId)
+        .then((data) => {
           console.log('finsh downloading')
-          postcardLinks.push({imageId: postcardDB.imageId, imageURL: profileObj.uri})
+          postcardLinks.push({imageId: postcardDB.imageId, imageURL: data.uri, FirebaseURL: postcardDB.imageURL})
+          console.log('data', data)
         }).catch(error => {
           console.error(error)
       })
     })
-
+    // console.log('postcardLinks', postcardLinks)
     dispatch(getProfilePhotos(postcardLinks))
   }
 }

@@ -29,6 +29,7 @@ class Profile extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
+    console.log(this.props.postcards)
 
     return (
       <View style={styles.container}>

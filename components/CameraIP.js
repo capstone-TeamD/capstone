@@ -36,7 +36,7 @@ export function CameraIP(props) {
       .addPhoto(image, currentUser)
       .then(() => {
         setImage(null);
-        props.getAllPhotos();
+        // props.getAllPhotos();
         props.getUser(currentUser.id);
         props.getProfilePhotos(currentUser.postcards)
       })

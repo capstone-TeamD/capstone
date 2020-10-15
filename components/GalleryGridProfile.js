@@ -21,7 +21,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
             style={styles.photo}
             source={{
               // width: size,
-              uri: item.imageURL,
+              // uri: item.imageURL,
             }}
           />
 
