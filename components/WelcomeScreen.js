@@ -15,7 +15,7 @@ export default class WelcomeScreen extends Component {
     return (
       <ImageBackground
         style={styles.background}
-        //   source={require("../assets/dummy.photo.jpg")}
+          source={require("../assets/backgroundCS.jpg")}
       >
         <View style={styles.logoContainer}>
           {/* <Image style={styles.logo} source={require("../assets/logo.png")} /> */}
@@ -61,23 +61,44 @@ const styles = StyleSheet.create({
     padding: 100,
   },
   loginButton: {
-    width: "100%",
+    width: "80%",
     height: 70,
-    backgroundColor: "gold",
+    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 15,
+    opacity: 0.4,
+    borderRadius: 8,
+    shadowColor: "#000000",
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 1
+    }
   },
   registerButton: {
-    width: "100%",
+    width: "80%",
     height: 70,
-    backgroundColor: "#BC8F8F",
+    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 120,
+    opacity: 0.4,
+    borderRadius: 8,
+    shadowColor: "#000000",
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 1
+    }
   },
   buttonText: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#fff",
+    color: "black",
+    letterSpacing: 1,
   },
 });
 

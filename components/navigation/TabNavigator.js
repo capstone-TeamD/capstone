@@ -16,7 +16,7 @@ function BottomTabNavigator() {
     <Tab.Navigator
       initialRouteName="Profile"
       tabBarOptions={{
-        activeTintColor: "#BC8F8F",
+        activeTintColor: "black",
         showLabel: false,
       }}
     >
