@@ -14,7 +14,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { getProfilePhotos, profilePhotos } from './store/photo';
+import { profilePhotos } from './store/photo';
 
 class Profile extends Component {
   componentDidMount() {
@@ -29,8 +29,7 @@ class Profile extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
-    console.log('profilepage', this.props.postcards)
-    console.log(this.props.user)
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>

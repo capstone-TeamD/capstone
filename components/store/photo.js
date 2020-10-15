@@ -91,47 +91,43 @@ export const fetchPhotos = () => async (dispatch) => {
 //profile photo fetch
 export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   //in component did mount. use this.props.user.postcards array
-  //contain id and image URL
-
-  console.log('inprofilePhotos', profilePhotosArr)
 
   const profileDir = `${FileSystem.cacheDirectory}profile`;
-  const {exists} = await FileSystem.getInfoAsync(profileDir)
+  const {exists} = await FileSystem.getInfoAsync(profileDir);
+
   if (!exists) {
     await FileSystem.makeDirectoryAsync(profileDir)
   }
   const localPostcards = await FileSystem.readDirectoryAsync(profileDir)
 
-  console.log('localPostcards', localPostcards)
-  console.log('profilePhotosArr', profilePhotosArr)
   if (localPostcards.length === profilePhotosArr.length) {
     const newPostcards = async () => Promise.all(profilePhotosArr.map(async postcard => {
       const newURL =  await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`)
-      postcard.imageURI = newURL.uri
+      postcard.imageURL = newURL.uri
       return postcard
     }))
     newPostcards().then(data => dispatch(getProfilePhotos(data)))
   } else {
     // if local storage has no postcards or lengh in database !== localPostcards
-
+    console.log('from database')
     // delete local storage postcard directory and make new directory
     await FileSystem.deleteAsync(profileDir)
     await FileSystem.makeDirectoryAsync(profileDir)
 
     // download to local storage / cache
     const postcardLinks = []
-    console.log('profilePhotosArr', profilePhotosArr)
+
     profilePhotosArr.forEach(async postcardDB => {
       console.log(postcardDB)
       const profileObj = await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + 'profile//' + postcardDB.imageId)
         .then(() => {
           console.log('finsh downloading')
-          postcardLinks.push({imageid: postcardDB.imageId, imageURI: profileObj.uri})
+          postcardLinks.push({imageId: postcardDB.imageId, imageURL: profileObj.uri})
         }).catch(error => {
           console.error(error)
       })
     })
-    console.log('postcardLinks', postcardLinks)
+
     dispatch(getProfilePhotos(postcardLinks))
   }
 }
