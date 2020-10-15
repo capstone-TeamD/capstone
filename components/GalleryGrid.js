@@ -1,5 +1,12 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import cameraicon from '../assets/cameraicon.png';
 
@@ -7,15 +14,17 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-  console.log('grid photos', photos)
+  console.log('grid photos', photos);
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item) => {return item.id}}
+      keyExtractor={(item) => {
+        return item.id;
+      }}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
-        <TouchableOpacity  key={item.id} style={styles.container}>
+        <TouchableOpacity key={item.id} style={styles.container}>
           <Image
             key={item.id}
             style={styles.photo}
