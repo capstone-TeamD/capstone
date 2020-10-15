@@ -11,7 +11,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={(item) => item.imageId}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
@@ -21,7 +21,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
             style={styles.photo}
             source={{
               // width: size,
-              // uri: item,
+              uri: item.imageURI,
             }}
           />
 

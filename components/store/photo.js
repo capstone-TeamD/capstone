@@ -93,7 +93,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   //in component did mount. use this.props.user.postcards array
   //contain id and image URL
 
-  console.log('inprofilePhotos')
+  console.log('inprofilePhotos', profilePhotosArr)
 
   const profileDir = `${FileSystem.cacheDirectory}profile`;
   const {exists} = await FileSystem.getInfoAsync(profileDir)
@@ -103,7 +103,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   const localPostcards = await FileSystem.readDirectoryAsync(profileDir)
 
   console.log('localPostcards', localPostcards)
-
+  console.log('profilePhotosArr', profilePhotosArr)
   if (localPostcards.length === profilePhotosArr.length) {
     const newPostcards = async () => Promise.all(profilePhotosArr.map(async postcard => {
       const newURL =  await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`)
@@ -123,16 +123,16 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     console.log('profilePhotosArr', profilePhotosArr)
     profilePhotosArr.forEach(async postcardDB => {
       console.log(postcardDB)
-      const profileObj = await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'profile//' + postcardDB.id)
+      const profileObj = await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + 'profile//' + postcardDB.imageId)
         .then(() => {
           console.log('finsh downloading')
-          postcardLinks.push({imageid: postcardDB.id, imageURI: profileObj.uri})
+          postcardLinks.push({imageid: postcardDB.imageId, imageURI: profileObj.uri})
         }).catch(error => {
           console.error(error)
       })
     })
-
-    return dispatch(getProfilePhotos(postcardLinks))
+    console.log('postcardLinks', postcardLinks)
+    dispatch(getProfilePhotos(postcardLinks))
   }
 }
 

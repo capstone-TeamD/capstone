@@ -18,20 +18,19 @@ import { getProfilePhotos, profilePhotos } from './store/photo';
 
 class Profile extends Component {
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        this.props.getUser(user.uid);
-        this.props.getProfilePhotos(this.props.user.postcards)
+       await this.props.getUser(user.uid)
       }
+      this.props.getProfilePhotos(this.props.user.postcards)
     });
-    // console.log(this.props.user)
-    // this.props.getProfilePhotos(this.props.user.postcards)
   }
 
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
-    console.log('profile', this.props.postcards)
+    console.log('profilepage', this.props.postcards)
+    console.log(this.props.user)
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -48,7 +47,7 @@ class Profile extends Component {
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
         <View style={styles.gallery}>
-          <PhotoGrid photos={postcards} numColumns={1} />
+          <PhotoGrid photos={this.props.postcards} numColumns={1} />
         </View>
       </View>
     );
