@@ -25,11 +25,13 @@ export default function PhotoGrid({ photos, numColumns, onEndReached, checkUpdat
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item) => {return item.id}}
+      keyExtractor={(item) => {
+        return item.id;
+      }}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
-        <TouchableOpacity  key={item.id} style={styles.container}>
+        <TouchableOpacity key={item.id} style={styles.container}>
           <Image
             key={item.id}
             style={styles.photo}

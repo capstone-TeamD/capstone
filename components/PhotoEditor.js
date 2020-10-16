@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function Editor() {
   return (
@@ -12,8 +12,8 @@ export default function Editor() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

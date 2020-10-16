@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Dimensions,
   FlatList,
@@ -6,9 +6,9 @@ import {
   StyleSheet,
   Text,
   Button,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import cameraicon from "../assets/cameraicon.png";
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import cameraicon from '../assets/cameraicon.png';
 // import { SwipeListView } from "react-native-swipe-list-view";
 
 // function for swipe delete
@@ -27,20 +27,28 @@ export default function PhotoGrid({
   photos,
   numColumns,
   onEndReached,
+  toggleModal,
   handleDelete,
 }) {
-  const { width } = Dimensions.get("window");
+  const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
 
   return (
     <FlatList
       data={photos}
-      keyExtractor={(item) => {return item.imageId}}
+      keyExtractor={(item) => {
+        return item.imageId;
+      }}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity
+          style={styles.container}
+          onPress={() => {
+            toggleModal({ item });
+          }}
+        >
           <Image
             key={item.imageId}
             style={styles.photo}
@@ -48,8 +56,8 @@ export default function PhotoGrid({
               // width: size,
               uri: item.imageURL,
             }}
-            />
-            {/* <SwipeListView
+          />
+          {/* <SwipeListView
             renderHiddenItem={({ item }) => renderHiddenItem(item)}
             rightOpenValue={-75}
           /> */}
@@ -59,8 +67,10 @@ export default function PhotoGrid({
 
           {/* <Image style={styles.icon} source={cameraicon} /> */}
           {/* <Text>Photo URI: {item.imageURL}</Text> */}
-          <TouchableOpacity onPress={() => handleDelete(item.imageId, item.firebaseURL)}>
-            <Button title="Delete"></Button>
+          <TouchableOpacity
+            onPress={() => handleDelete(item.imageId, item.firebaseURL)}
+          >
+            <Button title='Delete'></Button>
           </TouchableOpacity>
         </TouchableOpacity>
       )}
@@ -70,9 +80,9 @@ export default function PhotoGrid({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
+    justifyContent: 'center',
     marginBottom: 7,
-    width: "100%",
+    width: '100%',
   },
   photo: {
     height: 130,
@@ -84,16 +94,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   deleteButton: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     width: 75,
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "red",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'red',
     marginVertical: 3,
   },
   deleteText: {
     fontSize: 12,
-    color: "white",
+    color: 'white',
   },
 });

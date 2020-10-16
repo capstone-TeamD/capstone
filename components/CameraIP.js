@@ -38,7 +38,7 @@ export function CameraIP(props) {
         setImage(null);
         // props.getAllPhotos();
         props.getUser(currentUser.id);
-        props.getProfilePhotos(currentUser.postcards)
+        props.getProfilePhotos(currentUser.postcards);
       })
       .catch((err) => {
         alert(err.message);
@@ -48,7 +48,7 @@ export function CameraIP(props) {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
     });
@@ -61,9 +61,7 @@ export function CameraIP(props) {
   };
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
+    <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
       <Button title='Pick an image from camera roll' onPress={pickImage} />
       <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }}>
         {image === null ? (
@@ -72,7 +70,7 @@ export function CameraIP(props) {
           <View>
             <Image
               source={{ uri: image }}
-              style={{ width: 300, height: 300 }}
+              style={{ width: 400, height: 400 }}
             />
             <Button title='Upload' onPress={upload} />
           </View>
@@ -85,7 +83,7 @@ export function CameraIP(props) {
 const mapState = (state) => {
   return {
     currentUser: state.user,
-    profilePostcard: state.photo
+    profilePostcard: state.photo,
   };
 };
 
@@ -93,7 +91,7 @@ const mapDispatch = (dispatch) => {
   return {
     getAllPhotos: () => dispatch(fetchPhotos()),
     getUser: (id) => dispatch(getUser(id)),
-    getProfilePhotos: (profileArr) => dispatch(profilePhotos(profileArr))
+    getProfilePhotos: (profileArr) => dispatch(profilePhotos(profileArr)),
   };
 };
 
