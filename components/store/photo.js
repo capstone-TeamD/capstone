@@ -73,17 +73,17 @@ export const fetchPhotos = () => async (dispatch) => {
       await FileSystem.makeDirectoryAsync(dir)
 
       // download to local storage / cache
-      allPhotos.forEach(async postcardDB => {
-        await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
-          .then(() => {
-            console.log('finsh downloading')
-          }).catch(error => {
-            console.error(error)
-        })
-      })
-      // allPhotos = []
+      // allPhotos.forEach(async postcardDB => {
+      //   await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
+      //     .then(() => {
+      //       console.log('finsh downloading')
+      //     }).catch(error => {
+      //       console.error(error)
+      //   })
+      // })
+      // // allPhotos = []
 
-      dispatch(getPhotos(allPhotos))
+      // dispatch(getPhotos(allPhotos))
     }
 
   } catch (error) {
@@ -124,15 +124,14 @@ export const deleteSinglePhoto = (id, userId, firebaseURL) => async (dispatch) =
   }
 };
 
-export const addPostcardLocalStorage = (postcardId, firebaseURL) => async (dispatch) => {
+export const addPostcardLocalStorage = async (postcardId, firebaseURL) => {
+  console.log(postcardId, firebaseURL)
   const profileDir = `${FileSystem.cacheDirectory}profile`;
-  await FileSystem.downloadAsync(firebaseURL, `${profileDir}/postcardId`)
-  const localPostcards = localStorageDirExist(profileDir)
-
+  await FileSystem.downloadAsync(firebaseURL, FileSystem.cacheDirectory + `profile//` + postcardId) 
 }
 
 //create function to check if local storage exist to make code DRY
-const localStorageDirExist = (dirName) => {
+const localStorageDirExist = async (dirName) => {
   const {exists} = await FileSystem.getInfoAsync(dirName);
   if (!exists) {
     await FileSystem.makeDirectoryAsync(dirName)
@@ -147,7 +146,8 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   //in component did mount. use this.props.user.postcards array
 
   const profileDir = `${FileSystem.cacheDirectory}profile`;
-  const localPostcards = localStorageDirExist(profileDir)
+
+  const localPostcards = await localStorageDirExist(profileDir)
 
   if (localPostcards.length === profilePhotosArr.length) {
     console.log('profile from storage')
@@ -169,6 +169,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     const postcardLinks = []
 
     profilePhotosArr.forEach(async postcardDB => {
+      console.log(postcardDB)
       await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + `profile//` + postcardDB.imageId)
         .then((data) => {
           console.log("finsh downloading")
