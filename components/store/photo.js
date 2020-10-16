@@ -124,9 +124,11 @@ export const deleteSinglePhoto = (id, userId, firebaseURL) => async (dispatch) =
   }
 };
 
+//add postcard  to local storage
 export const addPostcardLocalStorage = async (postcardId, firebaseURL) => {
   console.log(postcardId, firebaseURL)
   const profileDir = `${FileSystem.cacheDirectory}profile`;
+  localStorageDirExist(profileDir)
   await FileSystem.downloadAsync(firebaseURL, FileSystem.cacheDirectory + `profile//` + postcardId) 
 }
 
@@ -146,7 +148,6 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   //in component did mount. use this.props.user.postcards array
 
   const profileDir = `${FileSystem.cacheDirectory}profile`;
-
   const localPostcards = await localStorageDirExist(profileDir)
 
   if (localPostcards.length === profilePhotosArr.length) {
@@ -179,7 +180,6 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
       })
     })
     dispatch(getProfilePhotos(postcardLinks))
-    // console.log('postcardLinks', postcardLinks)
   }
 }
 
