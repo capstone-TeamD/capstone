@@ -35,6 +35,7 @@ class Discover extends Component {
 
   render() {
     console.log('all photos', this.props.allPhotos);
+    console.log('updateDate', this.props.updateTimestamp)
     return <PhotoGrid numColumns={1} photos={this.props.allPhotos} checkUpdateDate={this.props.checkUpdate} updateTimestamp={this.props.updateTimestamp}/>;
   }
 }

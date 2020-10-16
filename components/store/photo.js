@@ -55,7 +55,7 @@ export const fetchPhotos = () => async (dispatch) => {
     
     if (localPostcards.length === allPhotos.length) {
       // if local storage has all postcards, take from local storage
-      console.log('discover from storage', allPhotos)
+      console.log('discover from storage')
       const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
         const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
         postcard.imageURI = newURL.uri
@@ -94,7 +94,8 @@ const updateDateAction = (updateDate) => ({
 })
 
 export const fetchUpdate = (updateDate) => async (dispatch) => {
-  if (updateDate === undefined) {
+  console.log('fetchUpdate input', updateDate)
+  if (!updateDate.updateDate) {
     const currentMs = Date.now()
     const currentDateForm = new Date(currentMs)
     const currentTime = currentDateForm.toLocaleTimeString('en-GB')
@@ -163,7 +164,7 @@ export const fetchUpdate = (updateDate) => async (dispatch) => {
         loadFromCache(allPhotos,dir, updateDate )
       } else {
         console.log('here5')
-        dispatch(loadFromCache(allPhotos, dir))
+        dispatch(loadFromCache(allPhotos, dir, updateDate))
       }
     }
   }
@@ -201,12 +202,12 @@ const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
   loadFromCache(localPostcards, dir)
 }
 
-const loadFromCache = (localPostcards, dir) => async (dispatch) => {
-  console.log('localPostcards', localPostcards)
+const loadFromCache = (localPostcards, dir, updateDate) => async (dispatch) => {
+  console.log('loadFromCache')
   const newPostcards = async () => Promise.all(localPostcards.map(async postcard => {
-    console.log(postcard)
     const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
-    postcard.imageURL = newURL.uri
+    postcard.imageURI = newURL.uri
+    console.log(postcard)
     return postcard
   }))
   newPostcards().then(data => {
@@ -297,6 +298,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
 const intialState = {
   photos: [],
   profile: [],
+  updateDate: {}
 }
 
 // REDUCER
@@ -312,7 +314,7 @@ export default function photo(state = intialState,  action) {
     case UPDATE_DATE:
       return 'inreducer'
       // return action.updateDate;
-      return {...state, profile: action.profile};
+      return {...state, updateDate: action.updateDate};
     default:
       return state;
   }

@@ -35,7 +35,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached, checkUpdat
             style={styles.photo}
             source={{
               // width: size,
-              uri: item.imageURI,
+              // uri: item.imageURI,
             }}
           />
 
