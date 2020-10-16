@@ -14,7 +14,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-  console.log('grid photos', photos);
+
   return (
     <FlatList
       data={photos}

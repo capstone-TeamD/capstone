@@ -58,7 +58,7 @@ export const fetchPhotos = () => async (dispatch) => {
     
     if (localPostcards.length === allPhotos.length) {
       // if local storage has all postcards, take from local storage
-      console.log('discover from storage', allPhotos)
+      console.log('discover from storage')
       const newPostcards = async () => Promise.all(allPhotos.map(async postcard => {
         const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
         postcard.imageURI = newURL.uri
@@ -158,7 +158,6 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     const postcardLinks = []
 
     profilePhotosArr.forEach(async postcardDB => {
-      console.log(postcardDB)
       await FileSystem.downloadAsync(postcardDB.imageURL, FileSystem.cacheDirectory + `profile//` + postcardDB.imageId)
         .then((data) => {
           console.log("finsh downloading")
