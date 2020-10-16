@@ -131,6 +131,8 @@ export const fetchUpdate = (updateDate) => async (dispatch) => {
     });
 
   const dir = `${FileSystem.cacheDirectory}postcards`;
+  //names of postcards from the directory 
+  const localPostcards = await FileSystem.readDirectoryAsync(dir)
 
 
   console.log('updateDate', updateDate)
@@ -151,7 +153,7 @@ export const fetchUpdate = (updateDate) => async (dispatch) => {
       } else {
         // load from local storage
         console.log('here3')
-        loadFromCache(allPhotos, dir)
+        loadFromCache(localPostcards, dir)
       }
     } else {
       if (updateDate.updateTime.slice(0 , 2) < 7) {
