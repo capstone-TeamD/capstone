@@ -25,17 +25,17 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
       onEndReached={onEndReached}
       renderItem={({ item }) => (
         <TouchableOpacity key={item.id} style={styles.container}>
-          <Image
+          {/* <Image
             key={item.id}
             style={styles.photo}
             source={{
               // width: size,
               uri: item.imageURI,
             }}
-          />
+          /> */}
 
           {/* <Image style={styles.icon} source={cameraicon} /> */}
-          <Text>Postcard created by: {`${item.id}`}</Text>
+          <Text>Postcard created by: {`${item.imageURI}`}</Text>
         </TouchableOpacity>
       )}
     />

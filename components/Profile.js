@@ -56,6 +56,7 @@ class Profile extends Component {
     await this.props.deletePhoto(id, this.props.user.id, firebaseURL);
     await this.props.getUser(this.props.user.id);
     await this.props.getProfilePhotos(this.props.user.postcards);
+    console.log('updated postcards', this.props.postcards);
   }
 
   render() {
