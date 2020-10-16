@@ -38,7 +38,8 @@ export function CameraIP(props) {
         setImage(null);
         // props.getAllPhotos();
         props.getUser(currentUser.id);
-        props.getProfilePhotos(currentUser.postcards);
+        // props.getProfilePhotos(currentUser.postcards);
+        
       })
       .catch((err) => {
         alert(err.message);

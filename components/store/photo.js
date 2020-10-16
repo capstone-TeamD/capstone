@@ -124,19 +124,30 @@ export const deleteSinglePhoto = (id, userId, firebaseURL) => async (dispatch) =
   }
 };
 
+export const addPostcardLocalStorage = (postcardId, firebaseURL) => async (dispatch) => {
+  const profileDir = `${FileSystem.cacheDirectory}profile`;
+  await FileSystem.downloadAsync(firebaseURL, `${profileDir}/postcardId`)
+  const localPostcards = localStorageDirExist(profileDir)
+
+}
+
+//create function to check if local storage exist to make code DRY
+const localStorageDirExist = (dirName) => {
+  const {exists} = await FileSystem.getInfoAsync(dirName);
+  if (!exists) {
+    await FileSystem.makeDirectoryAsync(dirName)
+  }
+  return await FileSystem.readDirectoryAsync(dirName)
+
+}
 
 //profile photo fetch
 export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
+  console.log('profilePhotosArr', profilePhotosArr)
   //in component did mount. use this.props.user.postcards array
 
   const profileDir = `${FileSystem.cacheDirectory}profile`;
-  const {exists} = await FileSystem.getInfoAsync(profileDir);
-
-  if (!exists) {
-    await FileSystem.makeDirectoryAsync(profileDir)
-  }
-  const localPostcards = await FileSystem.readDirectoryAsync(profileDir)
-  // console.log('localPostcards', localPostcards)
+  const localPostcards = localStorageDirExist(profileDir)
 
   if (localPostcards.length === profilePhotosArr.length) {
     console.log('profile from storage')
