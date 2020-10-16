@@ -13,7 +13,8 @@ class Discover extends Component {
   }
 
   componentDidMount() {
-    this.props.getAllPhotos();
+    // this.props.getAllPhotos();
+    this.props.checkUpdateDate(this.props.updateTimestamp)
     // this.props.getUser();
   }
 

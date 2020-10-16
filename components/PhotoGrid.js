@@ -7,21 +7,6 @@ export default function PhotoGrid({ photos, numColumns, onEndReached, checkUpdat
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-  // console.log('grid photos', photos)
-  const [refreshing, setRefreshing] = React.useState(false);
-  const wait = timeout => {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  };
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => {
-    console.log('refresh')
-    checkUpdateDate(updateTimestamp)
-    return setRefreshing(false)});
-  }, []);
-  // console.log(onRefresh)
   return (
     <FlatList
       data={photos}
