@@ -5,7 +5,7 @@ import 'firebase/firestore';
 import PhotoGrid from './GalleryGridProfile';
 import { connect } from 'react-redux';
 import { getUser } from './store/user';
-import { deleteSinglePhoto } from './store/photo';
+import { deleteSinglePhoto, deleteTest } from './store/photo';
 
 import {
   View,
@@ -52,16 +52,21 @@ class Profile extends Component {
     }
   };
 
-  async handleDelete(id, firebaseURL) {
-    await this.props.deletePhoto(id, this.props.user.id, firebaseURL);
-    await this.props.getUser(this.props.user.id);
-    await this.props.getProfilePhotos(this.props.user.postcards);
-    console.log('updated postcards', this.props.postcards);
+  async handleDelete(imageId, firebaseURL, localURL) {
+    await this.props.deletePhoto(
+      imageId,
+      this.props.user.id,
+      firebaseURL,
+      localURL
+    );
   }
 
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
+
+    // console.log('all photos in profile render', this.props.postcards);
+    // console.log('user in profile render', this.props.user);
 
     return (
       <View style={styles.container}>
@@ -84,6 +89,7 @@ class Profile extends Component {
             numColumns={1}
             handleDelete={this.handleDelete}
             toggleModal={this.toggleModal}
+            deleteTestUpd={this.deleteTestUpd}
           />
         </View>
         <View style={styles.centeredView}>
@@ -226,8 +232,8 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getUser: (id) => dispatch(getUser(id)),
-    deletePhoto: (id, userId, firebaseURL) =>
-      dispatch(deleteSinglePhoto(id, userId, firebaseURL)),
+    deletePhoto: (imageId, userId, firebaseURL, localURL) =>
+      dispatch(deleteSinglePhoto(imageId, userId, firebaseURL, localURL)),
     getProfilePhotos: (data) => dispatch(profilePhotos(data)),
   };
 };

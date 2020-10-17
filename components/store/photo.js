@@ -61,7 +61,7 @@ export const fetchPhotos = () => async (dispatch) => {
 
     if (localPostcards.length === allPhotos.length) {
       // if local storage has all postcards, take from local storage
-      console.log('discover from storage', allPhotos);
+      console.log('discover photos loading from local storage', allPhotos);
       const newPostcards = async () =>
         Promise.all(
           allPhotos.map(async (postcard) => {
@@ -75,7 +75,7 @@ export const fetchPhotos = () => async (dispatch) => {
       newPostcards().then((data) => dispatch(getPhotos(data)));
     } else {
       // if local storage has no postcards or lengh in database !== localPostcards
-      console.log('discover from database');
+      console.log('discover photos loading from database');
       //delete local storage postcard directory and make new directory
       await FileSystem.deleteAsync(dir);
       await FileSystem.makeDirectoryAsync(dir);
@@ -87,7 +87,7 @@ export const fetchPhotos = () => async (dispatch) => {
           FileSystem.cacheDirectory + 'postcards//' + postcardDB.id
         )
           .then(() => {
-            console.log('finsh downloading');
+            console.log('discover photo downloaded from database');
           })
           .catch((error) => {
             console.error(error);
@@ -103,15 +103,15 @@ export const fetchPhotos = () => async (dispatch) => {
 };
 
 // delete a photo in the user's gallery
-export const deleteSinglePhoto = (id, userId, firebaseURL) => async (
+export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
   dispatch
 ) => {
   try {
-    console.log('photo url in delete', firebaseURL);
+    // console.log('photo url in delete', firebaseURL);
     const nameArr = firebaseURL.split('%')[1];
     const fileName = nameArr.split('.jpg')[0];
     const finalFile = fileName.slice(2);
-    console.log(finalFile);
+    // console.log(finalFile);
     const photoRef = firebase.storage().ref().child(`photos/${finalFile}.jpg`);
     await photoRef
       .delete()
@@ -134,10 +134,23 @@ export const deleteSinglePhoto = (id, userId, firebaseURL) => async (
                   imageURL: firebaseURL,
                 }),
               })
-              .then(() => {
+              .then(async () => {
                 console.log(
                   'Document successfully deleted from cloud firestore - user'
                 );
+                await FileSystem.deleteAsync(localURL)
+                  .then(function () {
+                    console.log(
+                      'Document successfully deleted from local storage'
+                    );
+                    dispatch(deletePhoto(id));
+                  })
+                  .catch(function (error) {
+                    console.error(
+                      'Error removing document from local storage: ',
+                      error
+                    );
+                  });
               })
               .catch(function (error) {
                 console.error(
@@ -177,7 +190,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   // console.log('localPostcards', localPostcards)
 
   if (localPostcards.length === profilePhotosArr.length) {
-    console.log('profile from storage');
+    console.log('profile photos loading from local storage');
     const newPostcards = async () =>
       Promise.all(
         profilePhotosArr.map(async (postcard) => {
@@ -192,7 +205,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     newPostcards().then((data) => dispatch(getProfilePhotos(data)));
   } else {
     // if local storage has no postcards or lengh in database !== localPostcards
-    console.log('profile from database');
+    console.log('profile photos loading from database');
     // delete local storage postcard directory and make new directory
     await FileSystem.deleteAsync(profileDir);
     await FileSystem.makeDirectoryAsync(profileDir);
@@ -201,13 +214,13 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     const postcardLinks = [];
 
     profilePhotosArr.forEach(async (postcardDB) => {
-      console.log(postcardDB);
+      // console.log(postcardDB);
       await FileSystem.downloadAsync(
         postcardDB.imageURL,
         FileSystem.cacheDirectory + `profile//` + postcardDB.imageId
       )
         .then((data) => {
-          console.log('finsh downloading');
+          console.log('profile photos finished downloading from database');
           postcardLinks.unshift({
             imageId: postcardDB.imageId,
             imageURL: data.uri,
@@ -235,7 +248,7 @@ export default function photo(state = intialState, action) {
       return { ...state, photos: action.photos };
     case DELETE_PHOTO:
       const filteredPhotos = state.profile.filter(
-        (photo) => photo.id !== action.id
+        (photo) => photo.imageId !== action.id
       );
       return { ...state, profile: filteredPhotos };
     case GET_PROFILE_PHOTOS:

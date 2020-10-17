@@ -14,7 +14,7 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-  console.log('grid photos', photos);
+  // console.log('grid photos', photos);
   return (
     <FlatList
       data={photos}
@@ -35,7 +35,9 @@ export default function PhotoGrid({ photos, numColumns, onEndReached }) {
           /> */}
 
           {/* <Image style={styles.icon} source={cameraicon} /> */}
-          <Text>Postcard created by: {`${item.imageURI}`}</Text>
+          <Text>Postcard ID: {`${item.id}`}</Text>
+          <Text>Postcard created by: {`${item.username}`}</Text>
+          <Text>Postcard is rendering from: {`${item.imageURI}`}</Text>
         </TouchableOpacity>
       )}
     />
