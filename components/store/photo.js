@@ -144,7 +144,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
       //more than one day has passed since update
       //update from database
       console.log('here1')
-      // fetchDatabase(allPhotos, dir)
+      dispatch(fetchDatabase(allPhotos, dir))
       dispatch(discoverUpdateFirestore(currentId, currentDate))
     } else {
       if (currentDate.currentDay === lastUpdate.currentDay) {
@@ -152,20 +152,20 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
           //last update was before 7AM
           // update from database
           console.log('here2')
-          // dispatch(fetchDatabase(allPhotos, dir))
+          dispatch(fetchDatabase(allPhotos, dir))
           dispatch(discoverUpdateFirestore(currentId, currentDate))
         } else {
           // load from local storage
           console.log('here3')
           dispatch(loadFromCache(localPostcards, dir))
-          // dispatch(discoverUpdateFirestore(currentId, lastUpdate))
+          dispatch(discoverUpdateFirestore(currentId, lastUpdate))
         }
       } else {
         if (lastUpdate.currentTime.slice(0 , 2) < 7) {
           //last update was before 7AM && currentDay is +1 from updateDate
           ///update from database
           console.log('here4')
-          // dispatch(fetchDatabase(allPhotos, dir))
+          dispatch(fetchDatabase(allPhotos, dir))
           dispatch(discoverUpdateFirestore(currentId, currentDate))
         } else {
           console.log('here5')
@@ -305,7 +305,7 @@ export const addPostcardLocalStorage = async (postcardId, firebaseURL) => {
     console.log(postcardId, firebaseURL)
     const profileDir = `${FileSystem.cacheDirectory}profile`;
     localStorageDirExist(profileDir)
-    await FileSystem.downloadAsync(firebaseURL, FileSystem.cacheDirectory + `profile//` + postcardId) 
+    await FileSystem.downloadAsync(firebaseURL, FileSystem.cacheDirectory + `profile//` + postcardId)
   } catch(err) {
     console.log(err)
   }
