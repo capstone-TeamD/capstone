@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import panda from '../assets/panda.jpg';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import PhotoGrid from './PhotoGridProfile';
+import PhotoGrid from './GalleryGridProfile';
 import { connect } from 'react-redux';
 import { getUser } from './store/user';
 import { deleteSinglePhoto } from './store/photo';
@@ -226,7 +226,7 @@ const mapDispatch = (dispatch) => {
   return {
     getUser: (id) => dispatch(getUser(id)),
     deletePhoto: (id, userId, firebaseURL) =>
-      dispatch(deleteSinglePhoto(id, userId, firebaseURL)),
+    dispatch(deleteSinglePhoto(id, userId, firebaseURL)),
     getProfilePhotos: (data) => dispatch(profilePhotos(data)),
   };
 };

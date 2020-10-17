@@ -20,11 +20,6 @@ export const GET_PROFILE_PHOTOS = 'GET_PROFILE_PHOTOS';
 export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
 export const deletePhoto = (id) => ({ type: DELETE_PHOTO, id });
 export const getProfilePhotos = (photos) => ({ type: GET_PROFILE_PHOTOS, profile: photos });
-const UPDATE_DATE = 'UPDATE_DATE';
-const updateDateAction = (updateDate) => ({
-  type: UPDATE_DATE,
-  updateDate
-})
 
 // THUNK CREATORS
 
@@ -92,156 +87,184 @@ export const fetchPhotos = () => async (dispatch) => {
   }
 };
 
+export const fetchUpdate = (currentId) => async (dispatch) => {
+  try {
+    const allPhotos = [];
+    let lastUpdate;
+    await db
+      .collection('postcards')
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const data = doc.data();
+          allPhotos.push({
+            id: doc.id,
+            username: data.creatorName,
+            dateCreated: data.dateCreated,
+            imageURI: data.imageURI,
+          });
+        });
+      });
 
-export const fetchUpdate = (updateDate) => async (dispatch) => {
-  console.log('fetchUpdate input', updateDate)
-  if (!updateDate.updateDate) {
+    const user = await db.collection('users').doc(currentId).get()
+    const userData = user.data()
+    lastUpdate = userData.discoverUpdate
+
+    //check if it needs to be updated
+    if (lastUpdate === undefined) {
+      //in lastupdate is undefined, then return update object
+      const currentMs = Date.now()
+      const currentDateForm = new Date(currentMs)
+      const currentTime = currentDateForm.toLocaleTimeString('en-GB')
+      const currentDay = currentDateForm.toLocaleDateString('end-GB')
+      updateDateObj = {
+        currentTime,
+        currentDay,
+        timeStamp: Date.now()
+        //timestamp^ is used to calculate is more than one day has passed
+      }
+      lastUpdate = updateDateObj
+    }
     const currentMs = Date.now()
     const currentDateForm = new Date(currentMs)
     const currentTime = currentDateForm.toLocaleTimeString('en-GB')
     const currentDay = currentDateForm.toLocaleDateString('end-GB')
-    updateDateObj = {
-      updateTime: currentTime,
-      updateDay: currentDay,
-      updatetimeStamp: Date.now()
-    }
-    updateDate = updateDateObj
-  }
-  const currentMs = Date.now()
-  const currentDateForm = new Date(currentMs)
-  const currentTime = currentDateForm.toLocaleTimeString('en-GB')
-  const currentDay = currentDateForm.toLocaleDateString('end-GB')
 
-  currentDate = { currentTime, currentDay}
+    currentDate = { currentTime, currentDay, timeStamp: Date.now()}
 
-  const allPhotos = [];
-  await db
-    .collection('postcards')
-    .get()
-    .then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        const data = doc.data();
-        allPhotos.push({
-          id: doc.id,
-          username: data.creatorName,
-          dateCreated: data.dateCreated,
-          imageURI: data.imageURI,
-        });
-      });
-    });
+    const dir = `${FileSystem.cacheDirectory}postcards`;
+    //names of postcards from the directory 
+    const localPostcards = await FileSystem.readDirectoryAsync(dir)
 
-  const dir = `${FileSystem.cacheDirectory}postcards`;
-  //names of postcards from the directory 
-  const localPostcards = await FileSystem.readDirectoryAsync(dir)
-
-
-  console.log('updateDate', updateDate)
-
-  console.log('timedif', currentMs - updateDate.updatetimeStamp)
-  if ((currentMs - updateDate.updatetimeStamp) > 86400000) {
-    //more than one day has passed since update
-    //update from database
-    console.log('here1')
-    fetchDatabase(allPhotos, dir, updateObj)
-  } else {
-    if (currentDate.currentDay === updateDate.currentDay) {
-      if (currentDate.currentTime.slice(0, 2) > 7 && updateDate.updateTime.slice(0 , 2) < 7) {
-        //last update was before 7AM
-        // update from database
-        console.log('here2')
-        dispatch(fetchDatabase(allPhotos, dir, updateObj))
-      } else {
-        // load from local storage
-        console.log('here3')
-        loadFromCache(localPostcards, dir)
-      }
+    if(currentMs - lastUpdate.timeStamp === 0){
+      console.log('new')
+      dispatch(fetchDatabase(allPhotos, dir))
+      dispatch(discoverUpdateFirestore(currentId, currentDate))
+    }else if ((currentMs - lastUpdate.timeStamp) > 86400000) {
+      //more than one day has passed since update
+      //update from database
+      console.log('here1')
+      // fetchDatabase(allPhotos, dir)
+      dispatch(discoverUpdateFirestore(currentId, currentDate))
     } else {
-      if (updateDate.updateTime.slice(0 , 2) < 7) {
-        //last update was before 7AM && currentDay is +1 from updateDate
-        ///update from database
-        console.log('here4')
-        dispatch(fetchDatabase(allPhotos, dir, updateObj))
+      if (currentDate.currentDay === lastUpdate.currentDay) {
+        if (currentDate.currentTime.slice(0, 2) > 7 && lastUpdate.currentTime.slice(0 , 2) < 7) {
+          //last update was before 7AM
+          // update from database
+          console.log('here2')
+          // dispatch(fetchDatabase(allPhotos, dir))
+          dispatch(discoverUpdateFirestore(currentId, currentDate))
+        } else {
+          // load from local storage
+          console.log('here3')
+          dispatch(loadFromCache(localPostcards, dir))
+          // dispatch(discoverUpdateFirestore(currentId, lastUpdate))
+        }
       } else {
-        console.log('here5')
-        dispatch(loadFromCache(allPhotos, dir, updateDate))
+        if (lastUpdate.currentTime.slice(0 , 2) < 7) {
+          //last update was before 7AM && currentDay is +1 from updateDate
+          ///update from database
+          console.log('here4')
+          // dispatch(fetchDatabase(allPhotos, dir))
+          dispatch(discoverUpdateFirestore(currentId, currentDate))
+        } else {
+          console.log('here5')
+          dispatch(loadFromCache(allPhotos, dir))
+          dispatch(discoverUpdateFirestore(currentId, lastUpdate))
+        }
       }
     }
+  } catch (err) {
+    console.log(err)
   }
-
 }
 
-//updates from database if dispatch is canceled
-const fetchDatabase = (allPhotos, dir, updateDateObj) => async (dispatch) => {
-  console.log('fetch from database')
-  //read what is listed in directory, if no directory exist then makedir
-  const {exists} = await FileSystem.getInfoAsync(dir)
-  if (!exists) {
+const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
+  try {
+    console.log('fetch from database')
+    //read what is listed in directory, if no directory exist then makedir
+    const {exists} = await FileSystem.getInfoAsync(dir)
+    if (!exists) {
+      await FileSystem.makeDirectoryAsync(dir)
+    }
+
+    console.log('from database')
+    //delete local storage postcard directory and make new directory
+    await FileSystem.deleteAsync(dir)
     await FileSystem.makeDirectoryAsync(dir)
-  }
-  // const localPostcards = await FileSystem.readDirectoryAsync(dir)
 
-  console.log('from database')
-  //delete local storage postcard directory and make new directory
-  await FileSystem.deleteAsync(dir)
-  await FileSystem.makeDirectoryAsync(dir)
-
-  const databaseLength = allPhotos.length
-  const randomFiveNums = (totalPostcardAmt) => {
-    const fiveNums = [];
-    while (fiveNums.length < 6) {
-      const num = Math.floor(Math.random() * Math.max(totalPostcardAmt))
-      if(!fiveNums.includes(num)){
-        fiveNums.push(num)
+    const databaseLength = allPhotos.length
+    const localPostcards = [];
+    const randomFiveNums = (totalPostcardAmt) => {
+      while (localPostcards.length < 1) {
+        const num = Math.floor(Math.random() * Math.max(totalPostcardAmt))
+        if(!localPostcards.includes(num)){
+          localPostcards.push(num)
+        }
       }
     }
-    // return Math.floor(Math.random() * Math.max(databaseLength))
-  }
-  
-  //create an array of the random numbers
-  const localPostcards = [...randomFiveNums(databaseLength)]
-  
-  //downloading from database to local storage
-  const postcardLinks = localPostcards.map(async postcardNum => {
-    const postcardDB = allPhotos[postcardNum]
-    await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
-      .then(() => {
-        console.log('finsh downloading')
-      }).catch(error => {
-        console.error(error)
+    
+    //create an array of the random numbers
+    randomFiveNums(databaseLength)
+    //downloading from database to local storage
+    const postcardLink = async () => Promise.all(localPostcards.map(async postcardNum => {
+      const postcardDB = allPhotos[postcardNum]
+      console.log(postcardDB)
+      await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.username + '-' + postcardDB.id)
+        .then(() => {
+          console.log('finsh downloading')
+        }).catch(error => {
+          console.error(error)
+      })
+      return ({imageId: postcardDB.id, username: postcardDB.username})
+    }))
+    postcardLink().then((data) => {
+      console.log('dispatch', data)
+      dispatch(loadFromCache(data, dir))
     })
-    // return {imageId: postcardDB.id, imageURL: newUrl.uri}
-    return {imageId: postcardDB.id}
-  })
-
-  // loadFromCache(postcardLinks, dir)
-  // // download to local storage / cache
-  // allPhotos.forEach(async postcardDB => {
-  //   const newUrl = await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
-  //     .then(() => {
-  //       console.log('postcardDB', postcardDB)
-  //       console.log('finsh downloading')
-  //     }).catch(error => {
-  //       console.error(error)
-  //   })
-  //   localPostcards.push({imageId: postcardDB.id, imageURL: newUrl.uri})
-  // })
-  // // return localPostcards
-  // dispatch(getPhotos(allPhotos))
-  loadFromCache(postcardLinks, dir, updateDateObj)
+  } catch (err) {
+  console.log(err)
+}
 }
 
-const loadFromCache = (localPostcards, dir, updateDate) => async (dispatch) => {
+const loadFromCache = (localPostcards, dir) => async (dispatch) => {
   console.log('loadFromCache')
-  const newPostcards = async () => Promise.all(localPostcards.map(async postcard => {
-    const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard.id}`)
-    postcard.imageURI = newURL.uri
-    console.log(postcard)
-    return postcard
-  }))
-  newPostcards().then(data => {
-    dispatch(getPhotos(data))
-    dispatch(updateDateAction(updateDate))
+  try {
+    const newPostcards = async () => Promise.all(localPostcards.map(async postcard => {
+      if (typeof postcard === 'string') {
+        //did not fetch from database
+        console.log('didnotcachefromfire')
+        const newURL =  await FileSystem.getInfoAsync(dir + `/${postcard}`)
+        const indexsplit = postcard.indexOf('-')
+        return {imageId: postcard.slice(indexsplit + 1), imageURI: newURL.uri, username: postcard.slice(0, indexsplit) }
+      } else {
+        console.log('afterdownloadfromfire')
+        const uri = postcard.username + '-' + postcard.imageId
+        const newURL =  await FileSystem.getInfoAsync(dir + `/${uri}`)
+        return {imageId: postcard.imageId, imageURI: newURL.uri, username: postcard.username }
+      }
+    }))
+    newPostcards().then((data) => {
+      dispatch(getPhotos(data))
   })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const discoverUpdateFirestore = async (userId, updateDate) => {
+  await db
+    .collection('users')
+    .doc(userId)
+    .update({
+      discoverUpdate: updateDate
+    }).then(function() {
+      console.log("Document successfully updated!");
+  })
+  .catch(function(error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error);
+  });
 }
 
 // delete a photo in the user's gallery
@@ -278,10 +301,14 @@ export const deleteSinglePhoto = (id, userId, firebaseURL) => async (dispatch) =
 
 //add postcard  to local storage
 export const addPostcardLocalStorage = async (postcardId, firebaseURL) => {
-  console.log(postcardId, firebaseURL)
-  const profileDir = `${FileSystem.cacheDirectory}profile`;
-  localStorageDirExist(profileDir)
-  await FileSystem.downloadAsync(firebaseURL, FileSystem.cacheDirectory + `profile//` + postcardId) 
+  try {
+    console.log(postcardId, firebaseURL)
+    const profileDir = `${FileSystem.cacheDirectory}profile`;
+    localStorageDirExist(profileDir)
+    await FileSystem.downloadAsync(firebaseURL, FileSystem.cacheDirectory + `profile//` + postcardId) 
+  } catch(err) {
+    console.log(err)
+  }
 }
 
 //create function to check if local storage exist to make code DRY
@@ -351,10 +378,10 @@ export default function photo(state = intialState,  action) {
       return {...state, profile: filteredPhotos};
     case GET_PROFILE_PHOTOS:
       return {...state, profile: action.profile};
-    case UPDATE_DATE:
-      console.log('inreducer')
+    // case UPDATE_DATE:
+    //   console.log('inreducer')
       // return action.updateDate;
-      return {...state, updateDate: action.updateDate};
+      // return {...state, updateDate: action.updateDate};
     default:
       return state;
   }
