@@ -6,6 +6,7 @@ import {
   Platform,
   SafeAreaView,
   Text,
+  StyleSheet
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Fire from './helperFunctions/Upload';
@@ -59,7 +60,7 @@ export function CameraIP(props) {
   };
 
   return (
-    <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
+    <SafeAreaView style={styles.container}>
       <Button title='Pick an image from camera roll' onPress={pickImage} />
       <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }}>
         {image === null ? (
@@ -77,6 +78,14 @@ export function CameraIP(props) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: "center",
+    width: '100%',
+    height: '100%'
+  }})
 
 const mapState = (state) => {
   return {

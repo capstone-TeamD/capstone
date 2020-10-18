@@ -78,11 +78,10 @@ export default function PhotoGrid({
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginBottom: 7,
     width: '100%',
   },
   photo: {
-    height: 130,
+    height: 140,
   },
   icon: {
     width: 80,

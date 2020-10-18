@@ -19,7 +19,7 @@ export default class WelcomeScreen extends Component {
       >
         <View style={styles.logoContainer}>
           {/* <Image style={styles.logo} source={require("../assets/logo.png")} /> */}
-          <Text>LOGO</Text>
+          <Text style={styles.title}>postbox</Text>
         </View>
         <TouchableOpacity style={styles.loginButton}>
           <Text
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 120,
-    opacity: 0.4,
+    opacity: 0.3,
     borderRadius: 8,
     shadowColor: "#000000",
     shadowOpacity: 0.5,
@@ -100,5 +100,18 @@ const styles = StyleSheet.create({
     color: "black",
     letterSpacing: 1,
   },
+  title: {
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "#CD5C5C",
+    marginTop: 15,
+    shadowColor: "#000000",
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 1
+    }
+  }
 });
 
