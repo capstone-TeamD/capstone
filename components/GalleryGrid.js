@@ -9,7 +9,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import cameraicon from '../assets/cameraicon.png';
 
 export default function PhotoGrid({
   photos,
@@ -36,12 +35,10 @@ export default function PhotoGrid({
             key={item.imageId}
             style={styles.photo}
             source={{
-              // width: size,
               uri: item.imageURI,
             }}
           />
 
-          {/* <Image style={styles.icon} source={cameraicon} /> */}
           <Text>Postcard created by: {`${item.username}`}</Text>
         </TouchableOpacity>
       )}

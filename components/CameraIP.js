@@ -8,9 +8,9 @@ import {
   Text,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Fire from './Fire';
+import Fire from './helperFunctions/Upload';
 import { connect } from 'react-redux';
-import { fetchPhotos, profilePhotos, addPhotoToProfile } from './store/photo';
+import { profilePhotos, addPhotoToProfile } from './store/photo';
 import { getUser } from './store/user';
 
 export function CameraIP(props) {
@@ -87,7 +87,6 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getAllPhotos: () => dispatch(fetchPhotos()),
     getUser: (id) => dispatch(getUser(id)),
     getProfilePhotos: (profileArr) => dispatch(profilePhotos(profileArr)),
     addPhotoToProfile: (newPhoto) => dispatch(addPhotoToProfile(newPhoto)),

@@ -5,7 +5,7 @@ import 'firebase/firestore';
 import PhotoGrid from './GalleryGridProfile';
 import { connect } from 'react-redux';
 import { getUser } from './store/user';
-import { deleteSinglePhoto, deleteTest } from './store/photo';
+import { deleteSinglePhoto, profilePhotos } from './store/photo';
 
 import {
   View,
@@ -16,8 +16,6 @@ import {
   Modal,
   TouchableHighlight,
 } from 'react-native';
-
-import { profilePhotos } from './store/photo';
 
 class Profile extends Component {
   constructor(props) {
@@ -64,9 +62,6 @@ class Profile extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { username, postcards, about } = this.props.user;
-
-    // console.log('all photos in profile render', this.props.postcards);
-    // console.log('user in profile render', this.props.user);
 
     return (
       <View style={styles.container}>

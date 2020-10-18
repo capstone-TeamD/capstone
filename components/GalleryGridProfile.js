@@ -8,8 +8,6 @@ import {
   Button,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import cameraicon from '../assets/cameraicon.png';
-import { deleteTest } from './store/photo';
 // import { SwipeListView } from "react-native-swipe-list-view";
 
 // function for swipe delete
@@ -54,7 +52,6 @@ export default function PhotoGrid({
             key={item.imageId}
             style={styles.photo}
             source={{
-              // width: size,
               uri: item.imageURL,
             }}
           />

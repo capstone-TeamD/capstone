@@ -7,10 +7,9 @@ import {
   SafeAreaView,
   RefreshControl,
 } from 'react-native';
-import { fetchPhotos, fetchUpdate } from './store/photo';
+import { fetchUpdate } from './store/photo';
 import { connect } from 'react-redux';
 import PhotoGrid from './GalleryGrid';
-import { getUser } from './store/user';
 
 class Discover extends Component {
   constructor() {
@@ -19,9 +18,7 @@ class Discover extends Component {
   }
 
   componentDidMount() {
-    // this.props.getAllPhotos();
     this.props.checkUpdate(this.props.currentUser);
-    // this.props.getUser();
   }
 
   pullRefresh() {
@@ -60,15 +57,12 @@ const mapState = (state) => {
   return {
     allPhotos: state.photo.photos,
     currentUser: state.user.id,
-    // updateTimestamp: state.photo.updateDate
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
-    getAllPhotos: () => dispatch(fetchPhotos()),
     checkUpdate: (userId) => dispatch(fetchUpdate(userId)),
-    // getUser: () => dispatch(getUser()),
   };
 };
 

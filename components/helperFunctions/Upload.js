@@ -1,7 +1,6 @@
-import { FileSystemSessionType } from 'expo-file-system';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { firebaseConfig } from '../firebaseConfig';
+import { firebaseConfig } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
 
 class Fire {
