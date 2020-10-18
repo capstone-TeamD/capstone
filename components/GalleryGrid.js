@@ -1,9 +1,23 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, View, RefreshControl } from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  RefreshControl,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import cameraicon from '../assets/cameraicon.png';
 
-export default function PhotoGrid({ photos, numColumns, onEndReached, checkUpdateDate, updateTimestamp, refreshing}) {
+export default function PhotoGrid({
+  photos,
+  numColumns,
+  onEndReached,
+  checkUpdateDate,
+  updateTimestamp,
+  refreshing,
+}) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
@@ -21,12 +35,10 @@ export default function PhotoGrid({ photos, numColumns, onEndReached, checkUpdat
             key={item.imageId}
             style={styles.photo}
             source={{
-              // width: size,
               uri: item.imageURI,
             }}
           />
 
-          {/* <Image style={styles.icon} source={cameraicon} /> */}
           <Text>Postcard created by: {`${item.username}`}</Text>
         </TouchableOpacity>
       )}

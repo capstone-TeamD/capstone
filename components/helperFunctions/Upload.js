@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { firebaseConfig } from '../firebaseConfig';
+import { firebaseConfig } from '../../firebaseConfig';
+import * as FileSystem from 'expo-file-system';
 
 class Fire {
   constructor() {
@@ -49,20 +50,39 @@ class Fire {
             .collection('users')
             .doc(currentUser.id)
             .update({
-              postcards: firebase.firestore.FieldValue.arrayUnion({imageId: docRef.id, imageURL: remoteUri}),
+              postcards: firebase.firestore.FieldValue.arrayUnion({
+                imageId: docRef.id,
+                imageURL: remoteUri,
+              }),
             })
-            .then(function (ref) {
+            .then(async function () {
               console.log('New postcard added to user array!');
-              // console.log('final ref in addPhoto', docRef.id);
-              res(ref);
+              await FileSystem.downloadAsync(
+                remoteUri,
+                FileSystem.cacheDirectory + 'profile//' + docRef.id
+              )
+                .then((data) => {
+                  console.log('New postcard added to local storage!');
+                  const newPostcard = {
+                    imageId: docRef.id,
+                    imageURL: data.uri,
+                    FirebaseURL: remoteUri,
+                  };
+                  res(newPostcard);
+                })
+                .catch((error) => {
+                  console.error('Error dispatching new photo: ', error);
+                });
             })
-            .catch(function (error) {
-              console.error('Error updating document: ', error);
+            .catch((error) => {
+              console.error('Error adding new photo to local storage: ', error);
             });
         })
-        .catch((err) => {
-          rej(err);
+        .catch(function (error) {
+          console.error('Error updating document: ', error);
         });
+    }).catch((err) => {
+      rej(err);
     });
   };
 

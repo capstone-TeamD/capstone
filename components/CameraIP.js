@@ -8,9 +8,9 @@ import {
   Text,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Fire from './Fire';
+import Fire from './helperFunctions/Upload';
 import { connect } from 'react-redux';
-import { fetchPhotos, profilePhotos,  addPostcardLocalStorage } from './store/photo';
+import { profilePhotos, addPhotoToProfile } from './store/photo';
 import { getUser } from './store/user';
 
 export function CameraIP(props) {
@@ -34,14 +34,9 @@ export function CameraIP(props) {
   const upload = () => {
     Fire.shared
       .addPhoto(image, currentUser)
-      .then(() => {
+      .then((newPostcard) => {
         setImage(null);
-        // props.getAllPhotos();
-        props.getUser(currentUser.id);
-        console.log(currentUser)
-        props.uploadLocalStorage(currentUser.postcards[0].imageId, currentUser.postcards[0].imageURL)
-        // props.getProfilePhotos(currentUser.postcards);
-        
+        props.addPhotoToProfile(newPostcard);
       })
       .catch((err) => {
         alert(err.message);
@@ -92,10 +87,9 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getAllPhotos: () => dispatch(fetchPhotos()),
     getUser: (id) => dispatch(getUser(id)),
     getProfilePhotos: (profileArr) => dispatch(profilePhotos(profileArr)),
-    uploadLocalStorage: (postcardId, firebaseURL) => dispatch(addPostcardLocalStorage(postcardId, firebaseURL))
+    addPhotoToProfile: (newPhoto) => dispatch(addPhotoToProfile(newPhoto)),
   };
 };
 
