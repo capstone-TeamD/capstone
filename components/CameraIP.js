@@ -10,7 +10,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import Fire from './Fire';
 import { connect } from 'react-redux';
-import { fetchPhotos, profilePhotos } from './store/photo';
+import { fetchPhotos, profilePhotos,  addPostcardLocalStorage } from './store/photo';
 import { getUser } from './store/user';
 
 export function CameraIP(props) {
@@ -38,7 +38,10 @@ export function CameraIP(props) {
         setImage(null);
         // props.getAllPhotos();
         props.getUser(currentUser.id);
-        props.getProfilePhotos(currentUser.postcards);
+        console.log(currentUser)
+        props.uploadLocalStorage(currentUser.postcards[0].imageId, currentUser.postcards[0].imageURL)
+        // props.getProfilePhotos(currentUser.postcards);
+        
       })
       .catch((err) => {
         alert(err.message);
@@ -92,6 +95,7 @@ const mapDispatch = (dispatch) => {
     getAllPhotos: () => dispatch(fetchPhotos()),
     getUser: (id) => dispatch(getUser(id)),
     getProfilePhotos: (profileArr) => dispatch(profilePhotos(profileArr)),
+    uploadLocalStorage: (postcardId, firebaseURL) => dispatch(addPostcardLocalStorage(postcardId, firebaseURL))
   };
 };
 
