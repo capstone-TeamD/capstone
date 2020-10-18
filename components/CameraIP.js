@@ -10,7 +10,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import Fire from './Fire';
 import { connect } from 'react-redux';
-import { fetchPhotos, profilePhotos } from './store/photo';
+import { fetchPhotos, profilePhotos, addPhotoToProfile } from './store/photo';
 import { getUser } from './store/user';
 
 export function CameraIP(props) {
@@ -34,11 +34,9 @@ export function CameraIP(props) {
   const upload = () => {
     Fire.shared
       .addPhoto(image, currentUser)
-      .then(() => {
+      .then((newPostcard) => {
         setImage(null);
-        // props.getAllPhotos();
-        props.getUser(currentUser.id);
-        props.getProfilePhotos(currentUser.postcards);
+        props.addPhotoToProfile(newPostcard);
       })
       .catch((err) => {
         alert(err.message);
@@ -92,6 +90,7 @@ const mapDispatch = (dispatch) => {
     getAllPhotos: () => dispatch(fetchPhotos()),
     getUser: (id) => dispatch(getUser(id)),
     getProfilePhotos: (profileArr) => dispatch(profilePhotos(profileArr)),
+    addPhotoToProfile: (newPhoto) => dispatch(addPhotoToProfile(newPhoto)),
   };
 };
 

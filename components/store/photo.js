@@ -15,6 +15,7 @@ const db = firebase.firestore();
 export const GET_ALL_PHOTOS = 'GET_ALL_PHOTOS';
 export const DELETE_PHOTO = 'DELETE_PHOTO';
 export const GET_PROFILE_PHOTOS = 'GET_PROFILE_PHOTOS';
+export const ADD_PHOTO = 'ADD_PHOTO';
 
 // ACTION CREATORS
 export const getPhotos = (photos) => ({ type: GET_ALL_PHOTOS, photos });
@@ -22,6 +23,10 @@ export const deletePhoto = (id) => ({ type: DELETE_PHOTO, id });
 export const getProfilePhotos = (photos) => ({
   type: GET_PROFILE_PHOTOS,
   profile: photos,
+});
+export const addPhotoToProfile = (newPhotoObj) => ({
+  type: ADD_PHOTO,
+  newPhotoObj,
 });
 
 // THUNK CREATORS
@@ -220,7 +225,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
         FileSystem.cacheDirectory + `profile//` + postcardDB.imageId
       )
         .then((data) => {
-          console.log('profile photos finished downloading from database');
+          console.log('profile photo finished downloading from database');
           postcardLinks.unshift({
             imageId: postcardDB.imageId,
             imageURL: data.uri,
@@ -253,6 +258,11 @@ export default function photo(state = intialState, action) {
       return { ...state, profile: filteredPhotos };
     case GET_PROFILE_PHOTOS:
       return { ...state, profile: action.profile };
+    case ADD_PHOTO:
+      const currentPhotos = [...state.profile];
+      currentPhotos.unshift(action.newPhotoObj);
+      console.log('got to addPhoto in reducer');
+      return { ...state, profile: currentPhotos };
     default:
       return state;
   }
