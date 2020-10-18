@@ -8,7 +8,6 @@ import {
   Button,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import cameraicon from '../assets/cameraicon.png';
 // import { SwipeListView } from "react-native-swipe-list-view";
 
 // function for swipe delete
@@ -53,22 +52,20 @@ export default function PhotoGrid({
             key={item.imageId}
             style={styles.photo}
             source={{
-              // width: size,
               uri: item.imageURL,
             }}
           />
+          {/* <Text>Postcard ID: {item.imageId}</Text>
+          <Text>Postcard is rendering from: {item.imageURL}</Text> */}
           {/* <SwipeListView
             renderHiddenItem={({ item }) => renderHiddenItem(item)}
             rightOpenValue={-75}
           /> */}
-          {/* <TouchableOpacity onSwipe={() => handleDelete(item.id)}>
-                <Button title="Delete"></Button>
-              </TouchableOpacity>; */}
 
-          {/* <Image style={styles.icon} source={cameraicon} /> */}
-          {/* <Text>Photo URI: {item.imageURL}</Text> */}
           <TouchableOpacity
-            onPress={() => handleDelete(item.imageId, item.firebaseURL)}
+            onPress={() =>
+              handleDelete(item.imageId, item.firebaseURL, item.imageURL)
+            }
           >
             <Button title='Delete'></Button>
           </TouchableOpacity>
