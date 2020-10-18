@@ -50,25 +50,21 @@ export default function PhotoGrid({
             toggleModal({ item });
           }}
         >
-          {/* <Image
+          <Image
             key={item.imageId}
             style={styles.photo}
             source={{
               // width: size,
               uri: item.imageURL,
             }}
-          /> */}
+          />
+          {/* <Text>Postcard ID: {item.imageId}</Text>
+          <Text>Postcard is rendering from: {item.imageURL}</Text> */}
           {/* <SwipeListView
             renderHiddenItem={({ item }) => renderHiddenItem(item)}
             rightOpenValue={-75}
           /> */}
-          {/* <TouchableOpacity onSwipe={() => handleDelete(item.id)}>
-                <Button title="Delete"></Button>
-              </TouchableOpacity>; */}
 
-          {/* <Image style={styles.icon} source={cameraicon} /> */}
-          <Text>Postcard ID: {item.imageId}</Text>
-          <Text>Postcard is rendering from: {item.imageURL}</Text>
           <TouchableOpacity
             onPress={() =>
               handleDelete(item.imageId, item.firebaseURL, item.imageURL)

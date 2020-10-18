@@ -40,11 +40,7 @@ export const fetchPhotos = () => async (dispatch) => {
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          // console.log(doc.id, ' => ', doc.data());
           const data = doc.data();
-          // console.log('postcard ID', doc.id);
-          // console.log('username', data.creatorName);
-          // console.log('photoURI', data.imageURI);
           allPhotos.push({
             id: doc.id,
             username: data.creatorName,
@@ -66,7 +62,7 @@ export const fetchPhotos = () => async (dispatch) => {
 
     if (localPostcards.length === allPhotos.length) {
       // if local storage has all postcards, take from local storage
-      console.log('discover photos loading from local storage', allPhotos);
+      console.log('discover from storage');
       const newPostcards = async () =>
         Promise.all(
           allPhotos.map(async (postcard) => {
@@ -84,27 +80,228 @@ export const fetchPhotos = () => async (dispatch) => {
       //delete local storage postcard directory and make new directory
       await FileSystem.deleteAsync(dir);
       await FileSystem.makeDirectoryAsync(dir);
-
       // download to local storage / cache
-      allPhotos.forEach(async (postcardDB) => {
-        await FileSystem.downloadAsync(
-          postcardDB.imageURI,
-          FileSystem.cacheDirectory + 'postcards//' + postcardDB.id
-        )
-          .then(() => {
-            console.log('discover photo downloaded from database');
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      });
-      // allPhotos = []
+      // allPhotos.forEach(async postcardDB => {
+      //   await FileSystem.downloadAsync(postcardDB.imageURI, FileSystem.cacheDirectory + 'postcards//' + postcardDB.id)
+      //     .then(() => {
+      //       console.log('finsh downloading')
+      //     }).catch(error => {
+      //       console.error(error)
+      //   })
+      // })
+      // // allPhotos = []
 
-      dispatch(getPhotos(allPhotos));
+      // dispatch(getPhotos(allPhotos))
     }
   } catch (error) {
     alert(error);
   }
+};
+
+export const fetchUpdate = (currentId) => async (dispatch) => {
+  try {
+    const allPhotos = [];
+    let lastUpdate;
+    await db
+      .collection('postcards')
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const data = doc.data();
+          allPhotos.push({
+            id: doc.id,
+            username: data.creatorName,
+            dateCreated: data.dateCreated,
+            imageURI: data.imageURI,
+          });
+        });
+      });
+
+    const user = await db.collection('users').doc(currentId).get();
+    const userData = user.data();
+    lastUpdate = userData.discoverUpdate;
+
+    //check if it needs to be updated
+    if (lastUpdate === undefined) {
+      //in lastupdate is undefined, then return update object
+      const currentMs = Date.now();
+      const currentDateForm = new Date(currentMs);
+      const currentTime = currentDateForm.toLocaleTimeString('en-GB');
+      const currentDay = currentDateForm.toLocaleDateString('end-GB');
+      updateDateObj = {
+        currentTime,
+        currentDay,
+        timeStamp: Date.now(),
+        //timestamp^ is used to calculate is more than one day has passed
+      };
+      lastUpdate = updateDateObj;
+    }
+    const currentMs = Date.now();
+    const currentDateForm = new Date(currentMs);
+    const currentTime = currentDateForm.toLocaleTimeString('en-GB');
+    const currentDay = currentDateForm.toLocaleDateString('end-GB');
+
+    currentDate = { currentTime, currentDay, timeStamp: Date.now() };
+
+    const dir = `${FileSystem.cacheDirectory}postcards`;
+    //names of postcards from the directory
+    const localPostcards = await FileSystem.readDirectoryAsync(dir);
+
+    if (currentMs - lastUpdate.timeStamp === 0) {
+      console.log('new');
+      dispatch(fetchDatabase(allPhotos, dir));
+      discoverUpdateFirestore(currentId, currentDate);
+    } else if (currentMs - lastUpdate.timeStamp > 86400000) {
+      //more than one day has passed since update
+      //update from database
+      console.log('here1');
+      dispatch(fetchDatabase(allPhotos, dir));
+      discoverUpdateFirestore(currentId, currentDate);
+    } else {
+      if (currentDate.currentDay === lastUpdate.currentDay) {
+        if (
+          currentDate.currentTime.slice(0, 2) >= 7 &&
+          lastUpdate.currentTime.slice(0, 2) < 7
+        ) {
+          //last update was before 7AM
+          // update from database
+          console.log('here2');
+          dispatch(fetchDatabase(allPhotos, dir));
+          discoverUpdateFirestore(currentId, currentDate);
+        } else {
+          // load from local storage
+          console.log('here3');
+          dispatch(loadFromCache(localPostcards, dir));
+          discoverUpdateFirestore(currentId, lastUpdate);
+        }
+      } else {
+        if (currentDate.currentTime.slice(0, 2) >= 7) {
+          //last update was before 7AM && currentDay is +1 from lastUpdate
+          ///update from database
+          console.log('here4');
+          dispatch(fetchDatabase(allPhotos, dir));
+          discoverUpdateFirestore(currentId, currentDate);
+        } else {
+          console.log('here5');
+          dispatch(loadFromCache(localPostcards, dir));
+          discoverUpdateFirestore(currentId, lastUpdate);
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
+  try {
+    console.log('fetch from database');
+    //read what is listed in directory, if no directory exist then makedir
+    const { exists } = await FileSystem.getInfoAsync(dir);
+    if (!exists) {
+      await FileSystem.makeDirectoryAsync(dir);
+    }
+
+    console.log('from database');
+    //delete local storage postcard directory and make new directory
+    await FileSystem.deleteAsync(dir);
+    await FileSystem.makeDirectoryAsync(dir);
+
+    const databaseLength = allPhotos.length;
+    const localPostcards = [];
+    const randomFiveNums = (totalPostcardAmt) => {
+      while (localPostcards.length < 1) {
+        const num = Math.floor(Math.random() * Math.max(totalPostcardAmt));
+        if (!localPostcards.includes(num)) {
+          localPostcards.push(num);
+        }
+      }
+    };
+
+    //create an array of the random numbers
+    randomFiveNums(databaseLength);
+    //downloading from database to local storage
+    const postcardLink = async () =>
+      Promise.all(
+        localPostcards.map(async (postcardNum) => {
+          const postcardDB = allPhotos[postcardNum];
+          console.log(postcardDB);
+          await FileSystem.downloadAsync(
+            postcardDB.imageURI,
+            FileSystem.cacheDirectory +
+              'postcards//' +
+              postcardDB.username +
+              '-' +
+              postcardDB.id
+          )
+            .then(() => {
+              console.log('finsh downloading');
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+          return { imageId: postcardDB.id, username: postcardDB.username };
+        })
+      );
+    postcardLink().then((data) => {
+      console.log('dispatch', data);
+      dispatch(loadFromCache(data, dir));
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const loadFromCache = (localPostcards, dir) => async (dispatch) => {
+  console.log('loadFromCache');
+  try {
+    const newPostcards = async () =>
+      Promise.all(
+        localPostcards.map(async (postcard) => {
+          if (typeof postcard === 'string') {
+            //did not fetch from database
+            console.log('didnotcachefromfire');
+            const newURL = await FileSystem.getInfoAsync(dir + `/${postcard}`);
+            const indexsplit = postcard.indexOf('-');
+            return {
+              imageId: postcard.slice(indexsplit + 1),
+              imageURI: newURL.uri,
+              username: postcard.slice(0, indexsplit),
+            };
+          } else {
+            console.log('afterdownloadfromfire');
+            const uri = postcard.username + '-' + postcard.imageId;
+            const newURL = await FileSystem.getInfoAsync(dir + `/${uri}`);
+            return {
+              imageId: postcard.imageId,
+              imageURI: newURL.uri,
+              username: postcard.username,
+            };
+          }
+        })
+      );
+    newPostcards().then((data) => {
+      dispatch(getPhotos(data));
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const discoverUpdateFirestore = async (userId, updateDate) => {
+  await db
+    .collection('users')
+    .doc(userId)
+    .update({
+      discoverUpdate: updateDate,
+    })
+    .then(function () {
+      console.log('Document successfully updated!');
+    })
+    .catch(function (error) {
+      // The document probably doesn't exist.
+      console.error('Error updating document: ', error);
+    });
 };
 
 // delete a photo in the user's gallery
@@ -181,18 +378,22 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
   }
 };
 
+//create function to check if local storage exist to make code DRY
+const localStorageDirExist = async (dirName) => {
+  const { exists } = await FileSystem.getInfoAsync(dirName);
+  if (!exists) {
+    await FileSystem.makeDirectoryAsync(dirName);
+  }
+  return await FileSystem.readDirectoryAsync(dirName);
+};
+
 //profile photo fetch
 export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
+  // console.log('profilePhotosArr', profilePhotosArr)
   //in component did mount. use this.props.user.postcards array
 
   const profileDir = `${FileSystem.cacheDirectory}profile`;
-  const { exists } = await FileSystem.getInfoAsync(profileDir);
-
-  if (!exists) {
-    await FileSystem.makeDirectoryAsync(profileDir);
-  }
-  const localPostcards = await FileSystem.readDirectoryAsync(profileDir);
-  // console.log('localPostcards', localPostcards)
+  const localPostcards = await localStorageDirExist(profileDir);
 
   if (localPostcards.length === profilePhotosArr.length) {
     console.log('profile photos loading from local storage');
@@ -225,7 +426,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
         FileSystem.cacheDirectory + `profile//` + postcardDB.imageId
       )
         .then((data) => {
-          console.log('profile photo finished downloading from database');
+          console.log('finsh downloading');
           postcardLinks.unshift({
             imageId: postcardDB.imageId,
             imageURL: data.uri,
@@ -237,7 +438,6 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
         });
     });
     dispatch(getProfilePhotos(postcardLinks));
-    // console.log('postcardLinks', postcardLinks)
   }
 };
 

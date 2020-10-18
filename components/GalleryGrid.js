@@ -6,40 +6,46 @@ import {
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import cameraicon from '../assets/cameraicon.png';
 
-export default function PhotoGrid({ photos, numColumns, onEndReached }) {
+export default function PhotoGrid({
+  photos,
+  numColumns,
+  onEndReached,
+  checkUpdateDate,
+  updateTimestamp,
+  refreshing,
+}) {
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
-  // console.log('grid photos', photos);
   return (
     <FlatList
       data={photos}
       keyExtractor={(item) => {
-        return item.id;
+        return item.imageId;
       }}
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
-        <TouchableOpacity key={item.id} style={styles.container}>
-          {/* <Image
-            key={item.id}
+        <TouchableOpacity key={item.imageId} style={styles.container}>
+          <Image
+            key={item.imageId}
             style={styles.photo}
             source={{
               // width: size,
               uri: item.imageURI,
             }}
-          /> */}
+          />
 
           {/* <Image style={styles.icon} source={cameraicon} /> */}
-          <Text>Postcard ID: {`${item.id}`}</Text>
           <Text>Postcard created by: {`${item.username}`}</Text>
-          <Text>Postcard is rendering from: {`${item.imageURI}`}</Text>
         </TouchableOpacity>
       )}
+      // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     />
   );
 }
