@@ -139,38 +139,38 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
     if(currentMs - lastUpdate.timeStamp === 0){
       console.log('new')
       dispatch(fetchDatabase(allPhotos, dir))
-      dispatch(discoverUpdateFirestore(currentId, currentDate))
+      discoverUpdateFirestore(currentId, currentDate)
     }else if ((currentMs - lastUpdate.timeStamp) > 86400000) {
       //more than one day has passed since update
       //update from database
       console.log('here1')
       dispatch(fetchDatabase(allPhotos, dir))
-      dispatch(discoverUpdateFirestore(currentId, currentDate))
+      discoverUpdateFirestore(currentId, currentDate)
     } else {
       if (currentDate.currentDay === lastUpdate.currentDay) {
-        if (currentDate.currentTime.slice(0, 2) > 7 && lastUpdate.currentTime.slice(0 , 2) < 7) {
+        if (currentDate.currentTime.slice(0, 2) >= 7 && lastUpdate.currentTime.slice(0 , 2) < 7) {
           //last update was before 7AM
           // update from database
           console.log('here2')
           dispatch(fetchDatabase(allPhotos, dir))
-          dispatch(discoverUpdateFirestore(currentId, currentDate))
+          discoverUpdateFirestore(currentId, currentDate)
         } else {
           // load from local storage
           console.log('here3')
           dispatch(loadFromCache(localPostcards, dir))
-          dispatch(discoverUpdateFirestore(currentId, lastUpdate))
+          discoverUpdateFirestore(currentId, lastUpdate)
         }
       } else {
-        if (lastUpdate.currentTime.slice(0 , 2) < 7) {
-          //last update was before 7AM && currentDay is +1 from updateDate
+        if (currentDate.currentTime.slice(0 , 2) >= 7) {
+          //last update was before 7AM && currentDay is +1 from lastUpdate
           ///update from database
           console.log('here4')
           dispatch(fetchDatabase(allPhotos, dir))
-          dispatch(discoverUpdateFirestore(currentId, currentDate))
+          discoverUpdateFirestore(currentId, currentDate)
         } else {
           console.log('here5')
-          dispatch(loadFromCache(allPhotos, dir))
-          dispatch(discoverUpdateFirestore(currentId, lastUpdate))
+          dispatch(loadFromCache(localPostcards, dir))
+          discoverUpdateFirestore(currentId, lastUpdate)
         }
       }
     }

@@ -28,7 +28,7 @@ class Discover extends Component {
       };
       setRefreshing(true);
       wait(2000).then(() => {
-      this.props.checkUpdate(this.props.currentUser)
+      // this.props.checkUpdate(this.props.currentUser)
       console.log('refresh')
       return setRefreshing(false)});
     }, []);
