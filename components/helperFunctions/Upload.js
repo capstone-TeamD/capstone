@@ -66,7 +66,7 @@ class Fire {
                   const newPostcard = {
                     imageId: docRef.id,
                     imageURL: data.uri,
-                    FirebaseURL: remoteUri,
+                    firebaseURL: remoteUri,
                   };
                   res(newPostcard);
                 })
