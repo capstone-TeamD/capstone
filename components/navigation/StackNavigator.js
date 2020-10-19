@@ -7,6 +7,7 @@ import Upload from '../CameraIP';
 import Discover from '../Discover';
 import EditProfile from '../EditProfile';
 import PhotoEditor from '../PhotoEditor';
+import Draggable from '../Draggable';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,7 @@ const MailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Mailbox' component={Mailbox} />
+      <Stack.Screen name='Draggable' component={Draggable} />
     </Stack.Navigator>
   );
 };
