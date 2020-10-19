@@ -1,3 +1,4 @@
+import { UserInterfaceIdiom } from 'expo-constants';
 import React from 'react';
 import {
   Dimensions,
@@ -15,9 +16,22 @@ export default function PhotoGrid({
   numColumns,
   onEndReached,
   checkUpdateDate,
-  updateTimestamp,
-  refreshing,
+  userId
 }) {
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    const wait = (timeout) => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+      });
+    };
+    setRefreshing(true);
+    wait(2000).then(() => {
+      checkUpdateDate(userId)
+      console.log('refresh');
+      return setRefreshing(false);
+    });
+  }, []);
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
@@ -44,7 +58,7 @@ export default function PhotoGrid({
           </View>
         </TouchableOpacity>
       )}
-      // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     />
   );
 }

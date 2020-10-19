@@ -115,6 +115,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
           discoverUpdateFirestore(currentId, currentDate);
         } else {
           console.log('here5');
+          console.log(localPostcards)
           dispatch(loadFromCache(localPostcards, dir));
           discoverUpdateFirestore(currentId, lastUpdate);
         }
