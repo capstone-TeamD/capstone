@@ -6,9 +6,11 @@ import {
   StyleSheet,
   Text,
   Button,
-  RefreshControl
+  RefreshControl,
+  View
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SwipeListView } from "react-native-swipe-list-view";
 
 
 export default function PhotoGrid({
@@ -36,7 +38,7 @@ export default function PhotoGrid({
   const size = width / numColumns;
 
   return (
-    <FlatList
+<SwipeListView 
       data={photos}
       keyExtractor={(item) => {
         return item.imageId;
@@ -44,37 +46,56 @@ export default function PhotoGrid({
       numColumns={numColumns}
       onEndReached={onEndReached}
       renderItem={({ item }) => (
-        <TouchableOpacity
-          style={styles.container}
-          onPress={() => {
-            toggleModal({ item });
+        // <TouchableOpacity
+        //   style={styles.container}
+        //   onClick={() => {
+        //     toggleModal({ item });
+        //   }}
+        // >
+        <Image
+          key={item.imageId}
+          style={styles.photo}
+          source={{
+            width: size,
+            uri: item.imageURL,
           }}
-        >
-          <Image
-            key={item.imageId}
-            style={styles.photo}
-            source={{
-              uri: item.imageURL,
-            }}
-          />
-          <TouchableOpacity
-            onPress={() =>
-              handleDelete(item.imageId, item.firebaseURL, item.imageURL)
-            }
-          >
-            <Text style={styles.buttonDelete}>Delete</Text>
-          </TouchableOpacity>
-        </TouchableOpacity>
+        />
+        // </TouchableOpacity>
       )}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      renderHiddenItem={({ item }) => (
+        <View>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() =>
+            handleDelete(item.imageId, item.firebaseURL, item.imageURL)
+          }
+          >
+          {console.log('here I am')}
+          <Text style={styles.deleteText}>Delete</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() =>
+            handleDelete(item.imageId, item.firebaseURL, item.imageURL)
+          }
+          >
+          {console.log('here I am')}
+          <Text style={styles.deleteText}>Share</Text>
+        </TouchableOpacity>
+          </View>
+        
+      )}
+      rightOpenValue={-225}
     />
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    width: '100%',
+    justifyContent: "center",
+    width: "100%",
+    marginBottom: 10,
   },
   photo: {
     height: 140,
@@ -85,10 +106,16 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginHorizontal: 30,
   },
-  buttonDelete: {
+  deleteButton: {
+    alignSelf: "flex-end",
+    width: 75,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
+  },
+  deleteText: {
     fontSize: 13,
-    alignSelf: "center",
-    color: "blue",
-    margin: 3,
-  }
+    color: "white",
+  },
 });
