@@ -18,20 +18,19 @@ class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        id: this.props.user.id || "",
+      id: this.props.user.id || "",
       username: this.props.user.username || "",
       about: this.props.user.about || "",
-      isLoggedIn: true,
+      photo: "",
     };
     this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   handleUpdate() {
-    
     const { username, about, id } = this.state;
 
     this.props.update(username, about, id);
-    this.props.getUser(id)
+    this.props.getUser(id);
     this.props.navigation.navigate("Profile");
   }
 
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
   },
   infoDesc: {
     fontSize: 12,
-    color: "blue"
+    color: "blue",
   },
   textInput: {
     margin: 13,
@@ -152,16 +151,16 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   logoutText: {
-      color: "blue",
+    color: "blue",
   },
   checkout: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40,
     borderBottomColor: "#585858",
-    color: "blue"
+    color: "blue",
   },
-  circleImage:{
+  circleImage: {
     height: 110,
     width: 110,
     borderRadius: 500,
@@ -177,8 +176,9 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    update: (username, about, id) => dispatch(updateUserProfile(username, about, id)),
-    getUser: (id) => dispatch(getUser(id))
+    update: (username, about, id) =>
+      dispatch(updateUserProfile(username, about, id)),
+    getUser: (id) => dispatch(getUser(id)),
   };
 };
 

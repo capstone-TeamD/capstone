@@ -9,19 +9,7 @@ import {
   RefreshControl
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// import { SwipeListView } from "react-native-swipe-list-view";
 
-// function for swipe delete
-// function renderHiddenItem(photo) {
-//   return (
-//     <TouchableOpacity
-//       styles={styles.deleteButton}
-//       onSwipe={() => handleDelete(photo.id)}
-//     >
-//       <Text style={styles.deleteText} title="Delete"></Text>
-//     </TouchableOpacity>
-//   );
-// }
 
 export default function PhotoGrid({
   photos,
@@ -69,19 +57,12 @@ export default function PhotoGrid({
               uri: item.imageURL,
             }}
           />
-          {/* <Text>Postcard ID: {item.imageId}</Text>
-          <Text>Postcard is rendering from: {item.imageURL}</Text> */}
-          {/* <SwipeListView
-            renderHiddenItem={({ item }) => renderHiddenItem(item)}
-            rightOpenValue={-75}
-          /> */}
-
           <TouchableOpacity
             onPress={() =>
               handleDelete(item.imageId, item.firebaseURL, item.imageURL)
             }
           >
-            <Button title='Delete'></Button>
+            <Text style={styles.buttonDelete}>Delete</Text>
           </TouchableOpacity>
         </TouchableOpacity>
       )}
@@ -104,17 +85,10 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginHorizontal: 30,
   },
-  deleteButton: {
-    alignSelf: 'flex-end',
-    width: 75,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'red',
-    marginVertical: 3,
-  },
-  deleteText: {
-    fontSize: 12,
-    color: 'white',
-  },
+  buttonDelete: {
+    fontSize: 13,
+    alignSelf: "center",
+    color: "blue",
+    margin: 3,
+  }
 });
