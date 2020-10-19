@@ -115,6 +115,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
           discoverUpdateFirestore(currentId, currentDate);
         } else {
           console.log('here5');
+          console.log(localPostcards)
           dispatch(loadFromCache(localPostcards, dir));
           discoverUpdateFirestore(currentId, lastUpdate);
         }
@@ -303,8 +304,6 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
       .catch(function (error) {
         console.error('Error removing document from firebase storage: ', error);
       });
-    console.log('got to the end of delete thunk');
-    await dispatch(deletePhoto(id));
   } catch (error) {
     alert(error);
   }

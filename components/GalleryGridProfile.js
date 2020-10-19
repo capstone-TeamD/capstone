@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   Button,
+  RefreshControl
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 // import { SwipeListView } from "react-native-swipe-list-view";
@@ -29,6 +30,19 @@ export default function PhotoGrid({
   toggleModal,
   handleDelete,
 }) {
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    const wait = (timeout) => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+      });
+    };
+    setRefreshing(true);
+    wait(2000).then(() => {
+      console.log('refresh');
+      return setRefreshing(false);
+    });
+  }, []);
   const { width } = Dimensions.get('window');
 
   const size = width / numColumns;
@@ -71,6 +85,7 @@ export default function PhotoGrid({
           </TouchableOpacity>
         </TouchableOpacity>
       )}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     />
   );
 }
