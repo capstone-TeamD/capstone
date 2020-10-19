@@ -66,7 +66,7 @@ export function CameraIP(props) {
         {image === null ? (
           <Text>No image has been selected.</Text>
         ) : (
-          <View>
+          <View style={styles.container}>
             <Image
               source={{ uri: image }}
               style={{ width: 400, height: 400 }}

@@ -18,7 +18,6 @@ export default class WelcomeScreen extends Component {
           source={require("../assets/backgroundCS.jpg")}
       >
         <View style={styles.logoContainer}>
-          {/* <Image style={styles.logo} source={require("../assets/logo.png")} /> */}
           <Text style={styles.title}>postbox</Text>
         </View>
         <TouchableOpacity style={styles.loginButton}>
