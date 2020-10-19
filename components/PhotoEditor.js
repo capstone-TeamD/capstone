@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useDimensions, useDeviceOrientation } from "@react-native-community/hooks"
 
-export default function Editor() {
+export default function PhotoEditor() {
   const {landscape} = useDeviceOrientation()
-  console.log(landscape)
+  // console.log(landscape)
 
   return (
     <View styles={styles.container}>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     height: "30%",
     // height: landscape ? "100%" : "30%"
   },
-  textBox: {
+  // textBox: {
     
-  }
+  // }
 });

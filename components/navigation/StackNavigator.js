@@ -6,7 +6,7 @@ import Mailbox from '../Mailbox';
 import Upload from '../CameraIP';
 import Discover from '../Discover';
 import EditProfile from '../EditProfile';
-import PhotoEditor from '../PhotoEditor';
+// import PhotoEditor from '../PhotoEditor';
 
 const Stack = createStackNavigator();
 
@@ -39,7 +39,7 @@ const UploadStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Upload' component={Upload} />
-      <Stack.Screen name='PhotoEditor' component={PhotoEditor} />
+      {/* <Stack.Screen name='PhotoEditor' component={PhotoEditor} /> */}
     </Stack.Navigator>
   );
 };
