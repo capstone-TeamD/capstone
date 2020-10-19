@@ -1,10 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useDimensions, useDeviceOrientation } from "@react-native-community/hooks"
 
 export default function Editor() {
+  const {landscape} = useDeviceOrientation()
+  console.log(landscape)
+
   return (
     <View styles={styles.container}>
-      <Text>Edit</Text>
+      <Text style={styles.textBox}>Edit</Text>
     </View>
   );
 }
@@ -12,8 +16,14 @@ export default function Editor() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'dodgerblue',
     alignItems: 'center',
     justifyContent: 'center',
+    width: "100%",
+    height: "30%",
+    // height: landscape ? "100%" : "30%"
   },
+  textBox: {
+    
+  }
 });

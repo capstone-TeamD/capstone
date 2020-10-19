@@ -18,6 +18,7 @@ export function CameraIP(props) {
   const [image, setImage] = useState(null);
 
   const currentUser = props.currentUser;
+  const {navigate} = props.navigation;
 
   useEffect(() => {
     (async () => {
@@ -61,18 +62,20 @@ export function CameraIP(props) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* <Button title='Photo Editor' onPress={() => navigate("PhotoEditor")}/> */}
       <Button title='Pick an image from camera roll' onPress={pickImage} />
       <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }}>
         {image === null ? (
           <Text>No image has been selected.</Text>
         ) : (
-          <View style={styles.container}>
-            <Image
-              source={{ uri: image }}
-              style={{ width: 400, height: 400 }}
-            />
-            <Button title='Upload' onPress={upload} />
-          </View>
+          <PhotoEditor upload={this.upload} image={this.state.imageURL}/>
+          // <View style={styles.container}>
+          //   <Image
+          //     source={{ uri: image }}
+          //     style={{ width: 400, height: 400 }}
+          //   />
+          //   <Button title='Upload' onPress={upload} />
+          // </View>
         )}
       </View>
     </SafeAreaView>
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: "center",
     width: '100%',
-    height: '100%'
+    height: '100%',
   }})
 
 const mapState = (state) => {
