@@ -41,7 +41,7 @@ const UploadStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Upload' component={Upload} />
-      <Stack.Screen name='PhotoEditor' component={PhotoEditor} />
+      {/* <Stack.Screen name='PhotoEditor' component={PhotoEditor} /> */}
     </Stack.Navigator>
   );
 };
