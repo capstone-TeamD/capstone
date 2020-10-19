@@ -1,4 +1,3 @@
-import { UserInterfaceIdiom } from 'expo-constants';
 import React from 'react';
 import {
   Dimensions,
