@@ -15,7 +15,7 @@ export default function PhotoGrid({
   photos,
   numColumns,
   onEndReached,
-  checkUpdate,
+  checkUpdateDate,
   userId
 }) {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -27,7 +27,7 @@ export default function PhotoGrid({
     };
     setRefreshing(true);
     wait(2000).then(() => {
-      checkUpdate(userId)
+      checkUpdateDate(userId)
       console.log('refresh');
       return setRefreshing(false);
     });
