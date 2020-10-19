@@ -304,8 +304,6 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
       .catch(function (error) {
         console.error('Error removing document from firebase storage: ', error);
       });
-    console.log('got to the end of delete thunk');
-    await dispatch(deletePhoto(id));
   } catch (error) {
     alert(error);
   }
