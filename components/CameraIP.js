@@ -62,33 +62,29 @@ export function CameraIP(props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <Button title='Photo Editor' onPress={() => navigate("PhotoEditor")}/> */}
+    <View style={styles.container}>
+
       {image === null ? (
-        <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }}>
+        <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }} >
           <Button title="Pick an image from camera roll" onPress={pickImage} />
           <Text>No image has been selected.</Text>
         </View>
       ) : (
         <PhotoEditor upload={upload} image={image} />
-        // <View style={styles.container}>
-        //   <Image
-        //     source={{ uri: image }}
-        //     style={{ width: 400, height: 400 }}
-        //   />
-        //   <Button title='Upload' onPress={upload} />
-        // </View>
+
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
     height: "100%",
+    // backgroundColor: "red", 
   },
 });
 
