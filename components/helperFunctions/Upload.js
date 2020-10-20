@@ -17,6 +17,7 @@ class Fire {
       const response = await fetch(uri);
       const file = await response.blob();
       let upload = firebase.storage().ref(path).put(file);
+      // console.log('upload', upload)
       upload.on(
         'state_changed',
         (snapshot) => {
@@ -34,7 +35,7 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri, currentUser, messageObj) => {
+  addPhoto = async (localUri, currentUser, messageObj = []) => {
     const remoteUri = await this.uploadPhotoAsync(localUri);
     return new Promise((res, rej) => {
       this.firestore

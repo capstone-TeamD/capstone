@@ -32,7 +32,7 @@ export default function PhotoView(props) {
       <View style={{position: 'absolute', width: width, height: height, resizeMode:'contain'}}>
       <Image source={{uri: imageURL }} style={{width: '100%', height: landscape ? '100%' : '43%'}}/>
       </View>
-      {
+      { textArr &&
         textArr.map((textObj, index) => {
           return (
           <TouchableOpacity 
