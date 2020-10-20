@@ -16,7 +16,8 @@ export default function PhotoGrid({
   onEndReached,
   toggleModal,
   handleDelete,
-  getProfilePostcards
+  getProfilePostcards,
+  navigate
 }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -28,7 +29,7 @@ export default function PhotoGrid({
     setRefreshing(true);
     wait(2000).then(() => {
       console.log('here')
-      getProfilePostcards(photos)
+      // getProfilePostcards(photos)
       console.log("refresh");
       return setRefreshing(false);
     });
@@ -74,10 +75,16 @@ export default function PhotoGrid({
           </TouchableOpacity>
           <TouchableOpacity
             style={{...styles.swipeButton, backgroundColor: "#B8B8B8"}}
-            onPress={() => toggleModal({ item })}
+            onPress={() => navigate("PhotoView", {imageId: item.imageId, imageURL: item.imageURL })}
           >
             <Image source={require("../assets/magnify-plus.png")} />
           </TouchableOpacity>
+          {/* <TouchableOpacity
+            style={{...styles.swipeButton, backgroundColor: "#B8B8B8"}}
+            onPress={() => toggleModal({ item })}
+          >
+            <Image source={require("../assets/magnify-plus.png")} />
+          </TouchableOpacity> */}
         </View>
       )}
       rightOpenValue={-225}

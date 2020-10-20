@@ -87,6 +87,7 @@ class Profile extends Component {
             handleDelete={this.handleDelete}
             toggleModal={this.toggleModal}
             getProfilePostcards={this.props.getProfilePhotos}
+            navigate={navigate}
           />
         </View>
         <View style={styles.centeredView}>
@@ -175,7 +176,8 @@ const styles = StyleSheet.create({
   infoDesc: {
     fontSize: 13,
     textAlign: "center",
-    lineHeight: 17
+    lineHeight: 17,
+    marginBottom: 4,
   },
   modalView: {
     backgroundColor: "white",
