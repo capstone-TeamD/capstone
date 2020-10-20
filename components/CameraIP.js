@@ -1,13 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Button, View, Platform, StyleSheet } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import Fire from './helperFunctions/Upload';
-import { connect } from 'react-redux';
-import { profilePhotos, addPhotoToProfile } from './store/photo';
-import { getUser } from './store/user';
-import PhotoEditor from './PhotoEditor';
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Image,
+  View,
+  Platform,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import Fire from "./helperFunctions/Upload";
+import { connect } from "react-redux";
+import { profilePhotos, addPhotoToProfile } from "./store/photo";
+import { getUser } from "./store/user";
+import PhotoEditor from "./PhotoEditor";
+import * as Permissions from "expo-permissions";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export function CameraIP(props) {
+
+function CameraIP(props) {
   const [image, setImage] = useState(null);
 
   const currentUser = props.currentUser;
@@ -53,11 +65,41 @@ export function CameraIP(props) {
     }
   };
 
+  const pickFromCamera = async () => {
+    const { granted } = await Permissions.askAsync(Permissions.CAMERA);
+    if (granted) {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log("image captured", result);
+
+      if (!result.cancelled) {
+        setImage(result.uri);
+      }
+    } else {
+      Alert.alert("you need to give up permission to work");
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       {image === null ? (
-        <View>
-          <Button title='Pick an image from camera roll' onPress={pickImage} />
+        <View style={{ marginHorizontal: 32, marginTop: 32, height: 150, justifyContent: "space-between" }}>
+          <TouchableOpacity style={{ alignItems: "center", marginTop: -40}} onPress={pickImage}>
+          <Image source={require("../assets/image-multiple-outline1.png")}  />
+           <Text style={{textAlign: "center", padding: 5}}>Pick an image from gallery</Text>
+          {/* <Button title="Pick an image from camera roll" onPress={pickImage} /> */}
+          </TouchableOpacity>
+          <TouchableOpacity style={{ alignItems: "center", marginTop: 10 }} onPress={pickFromCamera}>
+          <Image source={require("../assets/camera-wireless-outline.png")}  />
+          <Text style={{textAlign: "center", padding: 5}}>Take a photo</Text>
+          {/* <Button title="Camera" onPress={pickFromCamera} /> */}
+          </TouchableOpacity>
+          {/* <Text style={{textAlign: "center"}}>No image has been selected.</Text> */}
         </View>
       ) : (
         <PhotoEditor upload={upload} image={image} setImage={setImage} />
@@ -68,12 +110,11 @@ export function CameraIP(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    textAlign: 'center',
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
 });
 
