@@ -77,6 +77,7 @@ class EditProfile extends Component {
                 value={this.state.about}
                 onChangeText={(about) => this.setState({ about })}
                 autoCapitalize="none"
+                multiline={true}
               />
             </View>
           </View>
