@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   Button,
+  Dimensions
 } from 'react-native';
 
 import background from '../assets/whiteBG.jpg';
@@ -73,13 +74,18 @@ class PhotoEditor extends Component {
     const texts = this.state.textArray.map(obj => {
      return obj.message})
     // console.log('texts', texts)
-    
+
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
+    console.log('width, height', width, height)
+
     const { upload, image, setImage } = this.props;
 
     return (
       <View style={styles.container}>
         <ImageBackground source={background} style={styles.imageBackground}>
-          <Image source={{ uri: image }} style={styles.innerPhoto} />
+          {/* <Image source={{ uri: image }} style={{...styles.innerPhoto, width: width, height: height}}/> */}
+          <Image source={{ uri: image }} style={styles.innerPhoto}/>
           <Animated.View
             style={{
               transform: [

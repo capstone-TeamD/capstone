@@ -9,7 +9,7 @@ export default class Profile extends Component {
       <View style={styles.container}>
         <Text>Mailbox</Text>
         <TouchableOpacity>
-          <Text onPress={() => navigate('Draggable')}> Go To Test Page</Text>
+
         </TouchableOpacity>
       </View>
     );

@@ -7,7 +7,6 @@ import Upload from '../CameraIP';
 import Discover from '../Discover';
 import EditProfile from '../EditProfile';
 import PhotoEditor from '../PhotoEditor';
-import Draggable from '../Draggable';
 import PhotoView from '../PhotoView';
 
 const Stack = createStackNavigator();
