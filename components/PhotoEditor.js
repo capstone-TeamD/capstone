@@ -24,7 +24,9 @@ class PhotoEditor extends Component {
       xCoord: 0,
       yCoord: 0,
       addingTouchpoint: false,
+      textArray: []
     };
+    this.getText = this.getText.bind(this)
   }
 
   pan = new Animated.ValueXY();
@@ -54,7 +56,26 @@ class PhotoEditor extends Component {
     },
   });
 
+  getText() {
+    const messageObj = {
+      xCoord: this.state.xCoord,
+      yCoord: this.state.yCoord,
+      message: this.state.inputText
+    }
+    this.setState({
+      inputText: '',
+      textArray: [...this.state.textArray, messageObj]
+    })
+    //change opacity of button
+    console.log(styles.pointer.backgroundColor)
+    // styles.pointer.backgroundColor = 'white';
+  }
+
   render() {
+    const texts = this.state.textArray.map(obj => {
+     return obj.message})
+     console.log('texts', texts)
+     console.log('texts', texts)
     const {upload, image} = this.props
     console.log(this.state);
     return (
@@ -82,8 +103,14 @@ class PhotoEditor extends Component {
               autoCapitalize='none'
               onSubmitEditing={Keyboard.dismiss}
             />
-            <Button title='Submit' />
-            <Button title='Upload' onPress={upload} />
+            <Button 
+              title='Submit'
+              onPress={() => this.getText()}
+            />
+            <Button title='Upload' onPress={() => upload(this.state.textArray)} />
+            {
+              texts[0] ? texts.map((message) => <Text>{message}</Text>) : <Text>Add a touchpoint!</Text>
+            }
           </View>
         ) : (
           <ImageBackground source={background} style={styles.inputBackground} />
@@ -99,7 +126,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // justifyContent: 'center',
     alignSelf: "center",
-    backgroundColor: "blue"
+    // backgroundColor: "blue"
 
   },
   pointer: {

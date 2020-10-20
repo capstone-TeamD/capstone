@@ -82,7 +82,7 @@ class App extends Component {
               autoCapitalize='none'
               onSubmitEditing={Keyboard.dismiss}
             />
-            <Button title='Submit' />
+            <Button title='Submit'/>
           </View>
         ) : (
           <ImageBackground source={background} style={styles.inputBackground} />

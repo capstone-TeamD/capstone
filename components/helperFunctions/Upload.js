@@ -34,7 +34,7 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri, currentUser) => {
+  addPhoto = async (localUri, currentUser, messageObj) => {
     const remoteUri = await this.uploadPhotoAsync(localUri);
     return new Promise((res, rej) => {
       this.firestore
@@ -44,6 +44,7 @@ class Fire {
           creatorName: currentUser.username,
           dateCreated: this.timestamp,
           imageURI: remoteUri,
+          textArr: messageObj
         })
         .then((docRef) => {
           this.firestore
