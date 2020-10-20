@@ -72,7 +72,7 @@ class PhotoEditor extends Component {
   render() {
     const texts = this.state.textArray.map(obj => {
      return obj.message})
-    console.log('texts', texts)
+    // console.log('texts', texts)
     
     const { upload, image, setImage } = this.props;
 
