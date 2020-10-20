@@ -2,6 +2,8 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
+import React, { Component } from "react";
+import {ActivityIndicator} from 'react-native'
 
 class Fire {
   constructor() {
@@ -17,7 +19,6 @@ class Fire {
       const response = await fetch(uri);
       const file = await response.blob();
       let upload = firebase.storage().ref(path).put(file);
-      // console.log('upload', upload)
       upload.on(
         'state_changed',
         (snapshot) => {

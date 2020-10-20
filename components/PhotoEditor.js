@@ -9,7 +9,9 @@ import {
   Image,
   TextInput,
   Button,
-  Dimensions
+  Dimensions,
+  Modal,
+  ActivityIndicator
 } from 'react-native';
 
 import background from '../assets/whiteBG.jpg';
@@ -23,9 +25,11 @@ class PhotoEditor extends Component {
       xCoord: 0,
       yCoord: 0,
       addingTouchpoint: false,
-      textArray: []
+      textArray: [],
+      loading: false
     };
     this.getText = this.getText.bind(this)
+    this.uploadPostcard = this.uploadPostcard.bind(this)
   }
 
   pan = new Animated.ValueXY();
@@ -70,6 +74,12 @@ class PhotoEditor extends Component {
     // styles.pointer.backgroundColor = 'white';
   }
 
+  uploadPostcard(type) {
+    this.props.upload(this.state.textArray)
+    // console.log(state)
+    this.setState({loading: type})
+  }
+
   render() {
     const texts = this.state.textArray.map(obj => {
      return obj.message})
@@ -83,6 +93,19 @@ class PhotoEditor extends Component {
 
     return (
       <View style={styles.container}>
+        <Modal
+          transparent={true}
+          animationType={'none'}
+          visible={this.state.loading}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.activityIndicatorWrapper}>
+              <ActivityIndicator
+                animating={this.state.loading}
+                size='large' />
+            </View>
+          </View>
+        </Modal>
         <ImageBackground source={background} style={styles.imageBackground}>
           {/* <Image source={{ uri: image }} style={{...styles.innerPhoto, width: width, height: height}}/> */}
           <Image source={{ uri: image }} style={styles.innerPhoto}/>
@@ -117,7 +140,8 @@ class PhotoEditor extends Component {
             <Button
               style={styles.button}
               title='Upload Postcard'
-              onPress={() => upload(this.state.textArray)}
+              // onPress={() => upload(this.state.textArray)}
+              onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}
@@ -196,6 +220,22 @@ const styles = StyleSheet.create({
   text: {
     padding: 40,
   },
+  modalBackground: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    backgroundColor: '#00000040'
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: '#FFFFFF',
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  }
 });
 
 export default PhotoEditor;
