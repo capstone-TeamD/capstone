@@ -32,7 +32,6 @@ const MailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Mailbox' component={Mailbox} />
-      <Stack.Screen name='Draggable' component={Draggable} />
     </Stack.Navigator>
   );
 };
