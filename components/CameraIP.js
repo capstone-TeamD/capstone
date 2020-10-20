@@ -27,12 +27,12 @@ function CameraIP(props) {
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS !== "web") {
+      if (Platform.OS !== 'web') {
         const {
           status,
         } = await ImagePicker.requestCameraRollPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
         }
       }
     })();
@@ -58,7 +58,7 @@ function CameraIP(props) {
       quality: 1,
     });
 
-    console.log("image picked", result);
+    console.log('image picked', result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -102,7 +102,7 @@ function CameraIP(props) {
           {/* <Text style={{textAlign: "center"}}>No image has been selected.</Text> */}
         </View>
       ) : (
-        <PhotoEditor upload={upload} image={image} />
+        <PhotoEditor upload={upload} image={image} setImage={setImage} />
       )}
     </View>
   );
@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: "100%",
-    // backgroundColor: "red",
   },
 });
 
