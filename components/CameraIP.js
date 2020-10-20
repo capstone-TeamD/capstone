@@ -38,9 +38,9 @@ function CameraIP(props) {
     })();
   }, []);
 
-  const upload = () => {
+  const upload = (messageObj) => {
     Fire.shared
-      .addPhoto(image, currentUser)
+      .addPhoto(image, currentUser, messageObj)
       .then((newPostcard) => {
         setImage(null);
         props.addPhotoToProfile(newPostcard);
@@ -92,14 +92,11 @@ function CameraIP(props) {
           <TouchableOpacity style={{ alignItems: "center", marginTop: -40}} onPress={pickImage}>
           <Image source={require("../assets/image-multiple-outline1.png")}  />
            <Text style={{textAlign: "center", padding: 5}}>Pick an image from gallery</Text>
-          {/* <Button title="Pick an image from camera roll" onPress={pickImage} /> */}
           </TouchableOpacity>
           <TouchableOpacity style={{ alignItems: "center", marginTop: 10 }} onPress={pickFromCamera}>
           <Image source={require("../assets/camera-wireless-outline.png")}  />
           <Text style={{textAlign: "center", padding: 5}}>Take a photo</Text>
-          {/* <Button title="Camera" onPress={pickFromCamera} /> */}
           </TouchableOpacity>
-          {/* <Text style={{textAlign: "center"}}>No image has been selected.</Text> */}
         </View>
       ) : (
         <PhotoEditor upload={upload} image={image} setImage={setImage} />

@@ -86,7 +86,7 @@ class Profile extends Component {
             numColumns={1}
             handleDelete={this.handleDelete}
             toggleModal={this.toggleModal}
-            deleteTestUpd={this.deleteTestUpd}
+            getProfilePostcards={this.props.getProfilePhotos}
           />
         </View>
         <View style={styles.centeredView}>

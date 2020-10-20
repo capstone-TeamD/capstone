@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SwipeListView } from "react-native-swipe-list-view";
+import photo from "./store/photo";
 
 export default function PhotoGrid({
   photos,
@@ -15,6 +16,7 @@ export default function PhotoGrid({
   onEndReached,
   toggleModal,
   handleDelete,
+  getProfilePostcards
 }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -25,6 +27,8 @@ export default function PhotoGrid({
     };
     setRefreshing(true);
     wait(2000).then(() => {
+      console.log('here')
+      getProfilePostcards(photos)
       console.log("refresh");
       return setRefreshing(false);
     });
@@ -51,6 +55,7 @@ export default function PhotoGrid({
           }}
         />
       )}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       renderHiddenItem={({ item }) => (
         <View style={styles.container}>
           <TouchableOpacity

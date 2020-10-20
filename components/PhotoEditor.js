@@ -22,7 +22,9 @@ class PhotoEditor extends Component {
       xCoord: 0,
       yCoord: 0,
       addingTouchpoint: false,
+      textArray: []
     };
+    this.getText = this.getText.bind(this)
   }
 
   pan = new Animated.ValueXY();
@@ -52,7 +54,26 @@ class PhotoEditor extends Component {
     },
   });
 
+  getText() {
+    const messageObj = {
+      xCoord: this.state.xCoord,
+      yCoord: this.state.yCoord,
+      message: this.state.inputText
+    }
+    this.setState({
+      inputText: '',
+      textArray: [...this.state.textArray, messageObj]
+    })
+    //change opacity of button
+    console.log(styles.pointer.backgroundColor)
+    // styles.pointer.backgroundColor = 'white';
+  }
+
   render() {
+    const texts = this.state.textArray.map(obj => {
+     return obj.message})
+    // console.log('texts', texts)
+    
     const { upload, image, setImage } = this.props;
 
     return (
@@ -82,17 +103,24 @@ class PhotoEditor extends Component {
               enablesReturnKeyAutomatically={true}
               style={styles.textInput}
             />
-            <Button style={styles.button} title='Save Changes' />
+            <Button 
+              style={styles.button}
+              onPress={() => this.getText()}
+              title='Save Changes'
+            />
             <Button
               style={styles.button}
               title='Upload Postcard'
-              onPress={upload}
+              onPress={() => upload(this.state.textArray)}
             />
             <Button
               style={styles.button}
               title='Cancel'
               onPress={() => setImage(null)}
             />
+            {
+              texts[0] ? texts.map((message) => <Text>{message}</Text>) : <Text>No messages saved! Move the touchpoint to add a message/audio</Text>
+            }
           </View>
         ) : (
           <ImageBackground source={background} style={styles.inputBackground}>
