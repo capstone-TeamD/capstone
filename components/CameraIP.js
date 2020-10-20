@@ -1,19 +1,11 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Image,
-  View,
-  Platform,
-  SafeAreaView,
-  Text,
-  StyleSheet,
-} from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import Fire from "./helperFunctions/Upload";
-import { connect } from "react-redux";
-import { profilePhotos, addPhotoToProfile } from "./store/photo";
-import { getUser } from "./store/user";
-import PhotoEditor from "./PhotoEditor";
+import React, { useState, useEffect } from 'react';
+import { Button, View, Platform, StyleSheet } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import Fire from './helperFunctions/Upload';
+import { connect } from 'react-redux';
+import { profilePhotos, addPhotoToProfile } from './store/photo';
+import { getUser } from './store/user';
+import PhotoEditor from './PhotoEditor';
 
 export function CameraIP(props) {
   const [image, setImage] = useState(null);
@@ -23,12 +15,12 @@ export function CameraIP(props) {
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS !== "web") {
+      if (Platform.OS !== 'web') {
         const {
           status,
         } = await ImagePicker.requestCameraRollPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
         }
       }
     })();
@@ -54,7 +46,7 @@ export function CameraIP(props) {
       quality: 1,
     });
 
-    console.log("image picked", result);
+    console.log('image picked', result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -63,15 +55,12 @@ export function CameraIP(props) {
 
   return (
     <View style={styles.container}>
-
       {image === null ? (
-        <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }} >
-          <Button title="Pick an image from camera roll" onPress={pickImage} />
-          <Text>No image has been selected.</Text>
+        <View>
+          <Button title='Pick an image from camera roll' onPress={pickImage} />
         </View>
       ) : (
-        <PhotoEditor upload={upload} image={image} />
-
+        <PhotoEditor upload={upload} image={image} setImage={setImage} />
       )}
     </View>
   );
@@ -79,12 +68,12 @@ export function CameraIP(props) {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-    // backgroundColor: "red", 
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    textAlign: 'center',
   },
 });
 
