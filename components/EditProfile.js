@@ -26,6 +26,12 @@ class EditProfile extends Component {
     this.handleUpdate = this.handleUpdate.bind(this);
   }
 
+  selected(selected) {
+    this.setState({
+      selectedItem: selected,
+    });
+  }
+
   handleUpdate() {
     const { username, about, id } = this.state;
 
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 17,
     width: 255,
     borderColor: "#d3d3d3",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     borderBottomWidth: 1,
     paddingBottom: 2,
   },

@@ -32,7 +32,6 @@ const MailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Mailbox' component={Mailbox} />
-      <Stack.Screen name='Draggable' component={Draggable} />
     </Stack.Navigator>
   );
 };
@@ -40,7 +39,7 @@ const MailStackNavigator = () => {
 const UploadStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name='Upload' component={Upload} />
+      <Stack.Screen name='Create Postcard' component={Upload} />
       {/* <Stack.Screen name='PhotoEditor' component={PhotoEditor} /> */}
     </Stack.Navigator>
   );

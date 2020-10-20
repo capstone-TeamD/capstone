@@ -8,11 +8,9 @@ import {
   ImageBackground,
   Image,
   TextInput,
-  Keyboard,
   Button,
 } from 'react-native';
 
-import testPhoto from '../assets/testPhoto.jpg';
 import background from '../assets/whiteBG.jpg';
 
 class PhotoEditor extends Component {
@@ -38,10 +36,10 @@ class PhotoEditor extends Component {
         y: this.pan.y._value,
       });
     },
-    onPanResponderMove: Animated.event([
-      null,
-      { dx: this.pan.x, dy: this.pan.y },
-    ]),
+    onPanResponderMove: Animated.event(
+      [null, { dx: this.pan.x, dy: this.pan.y }],
+      { useNativeDriver: false }
+    ),
     onPanResponderRelease: () => {
       this.pan.flattenOffset();
       if (this.pan.x._value > 0) {
@@ -74,14 +72,14 @@ class PhotoEditor extends Component {
   render() {
     const texts = this.state.textArray.map(obj => {
      return obj.message})
-     console.log('texts', texts)
-     console.log('texts', texts)
-    const {upload, image} = this.props
-    console.log(this.state);
+    console.log('texts', texts)
+    
+    const { upload, image, setImage } = this.props;
+
     return (
       <View style={styles.container}>
         <ImageBackground source={background} style={styles.imageBackground}>
-          <Image source={{uri: image}} style={styles.innerPhoto} />
+          <Image source={{ uri: image }} style={styles.innerPhoto} />
           <Animated.View
             style={{
               transform: [
@@ -99,21 +97,48 @@ class PhotoEditor extends Component {
             <TextInput
               value={this.state.inputText}
               onChangeText={(inputText) => this.setState({ inputText })}
-              placeholder='Text input'
+              placeholder='Enter text'
               autoCapitalize='none'
-              onSubmitEditing={Keyboard.dismiss}
+              multiline={true}
+              enablesReturnKeyAutomatically={true}
+              style={styles.textInput}
             />
             <Button 
-              title='Submit'
+              style={styles.button}
               onPress={() => this.getText()}
+              title='Save Changes'
             />
-            <Button title='Upload' onPress={() => upload(this.state.textArray)} />
+            <Button
+              style={styles.button}
+              title='Upload Postcard'
+              onPress={() => upload(this.state.textArray)}
+            />
+            <Button
+              style={styles.button}
+              title='Cancel'
+              onPress={() => setImage(null)}
+            />
             {
-              texts[0] ? texts.map((message) => <Text>{message}</Text>) : <Text>Add a touchpoint!</Text>
+              texts[0] ? texts.map((message) => <Text>{message}</Text>) : <Text>No messages saved! Move the touchpoint to add a message/audio</Text>
             }
           </View>
         ) : (
-          <ImageBackground source={background} style={styles.inputBackground} />
+          <ImageBackground source={background} style={styles.inputBackground}>
+            <Text style={styles.text}>
+              Drag and drop the pointer to select a location to add a touchpoint
+              to your postcard, or click the upload button below to send as is.
+            </Text>
+            <Button
+              style={styles.button}
+              title='Upload Postcard'
+              onPress={upload}
+            />
+            <Button
+              style={styles.button}
+              title='Cancel'
+              onPress={() => setImage(null)}
+            />
+          </ImageBackground>
         )}
       </View>
     );
@@ -122,12 +147,10 @@ class PhotoEditor extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    alignSelf: "center",
-    // backgroundColor: "blue"
-
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
   },
   pointer: {
     height: 15,
@@ -136,32 +159,36 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   imageBackground: {
-    // marginTop: 20,
     width: '100%',
-    // height: 225,
     flex: 1,
-    // resizeMode: 'contain',
-    // justifyContent: 'center',
   },
   inputBox: {
     flex: 1,
-    width: '100%',
+    width: '90%',
     fontSize: 15,
-    borderColor: '#d3d3d3',
-    borderWidth: 1,
     textAlign: 'center',
+  },
+  textInput: {
+    height: '30%',
+    borderWidth: 1,
+    margin: 10,
+    padding: 10,
+  },
+  button: {
+    flex: 1,
   },
   innerPhoto: {
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
     position: 'absolute',
-    borderWidth: 1,
   },
   inputBackground: {
     flex: 1,
     width: '100%',
-    borderWidth: 1,
+  },
+  text: {
+    padding: 40,
   },
 });
 
