@@ -12,7 +12,6 @@ import {
   Button,
 } from 'react-native';
 
-import testPhoto from '../assets/testPhoto.jpg';
 import background from '../assets/whiteBG.jpg';
 
 class PhotoEditor extends Component {
@@ -95,12 +94,8 @@ class PhotoEditor extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     alignSelf: "center",
     backgroundColor: "blue"
-
   },
   pointer: {
     height: 15,
