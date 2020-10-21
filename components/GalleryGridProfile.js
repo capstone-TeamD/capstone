@@ -28,13 +28,13 @@ export default function PhotoGrid({
     };
     setRefreshing(true);
     wait(2000).then(() => {
-      console.log('here')
       // getProfilePostcards(photos)
       console.log("refresh");
       return setRefreshing(false);
     });
   }, []);
 
+  console.log("photos", photos)
   const { width } = Dimensions.get("window");
   const size = width / numColumns;
 
@@ -75,7 +75,7 @@ export default function PhotoGrid({
           </TouchableOpacity>
           <TouchableOpacity
             style={{...styles.swipeButton, backgroundColor: "#B8B8B8"}}
-            onPress={() => navigate("PhotoView", {imageId: item.imageId, imageURL: item.imageURL })}
+            onPress={() => navigate("Postcard View", {imageId: item.imageId, imageURL: item.imageURL })}
           >
             <Image source={require("../assets/magnify-plus.png")} />
           </TouchableOpacity>

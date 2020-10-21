@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import panda from "../assets/panda.jpg";
 import { connect } from "react-redux";
 import { updateUserProfile, getUser } from "./store/user";
 
@@ -54,7 +53,7 @@ class EditProfile extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image style={styles.circleImage} source={panda} />
+          <Image style={styles.circleImage} source={require("../assets/nip.jpg")} />
           <View>
             <Text style={styles.infoDesc}>Choose Photo</Text>
           </View>
@@ -136,7 +135,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 17,
     width: 255,
     borderColor: "#d3d3d3",
-    // fontWeight: "bold",
     borderBottomWidth: 1,
     paddingBottom: 2,
   },
