@@ -12,7 +12,6 @@ import {
   Dimensions,
   Modal,
   Keyboard,
-  ActivityIndicator
 } from 'react-native';
 import background from '../assets/whiteBG.jpg';
 import { Loader } from './Loader';
@@ -91,19 +90,6 @@ class PhotoEditor extends Component {
     return (
       <View style={styles.container}>
         <Loader loader={this.state.loading} />
-        {/* <Modal
-          transparent={true}
-          animationType={'none'}
-          visible={this.state.loading}
-        >
-          <View style={styles.modalBackground}>
-            <View style={styles.activityIndicatorWrapper}>
-              <ActivityIndicator
-                animating={this.state.loading}
-                size='large' />
-            </View>
-          </View>
-        </Modal> */}
         <ImageBackground source={background} style={styles.imageBackground}>
           <Image source={{ uri: image }} style={styles.innerPhoto} />
           <Animated.View
@@ -145,7 +131,7 @@ class PhotoEditor extends Component {
             <Button
               style={styles.button}
               title="Upload Postcard"
-              onPress={() => upload(this.state.textArray)}
+              onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}

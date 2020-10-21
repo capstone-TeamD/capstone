@@ -16,7 +16,7 @@ class Discover extends Component {
     this.props.checkUpdate(this.props.currentUser);
   }
 
-  render() {
+  render() {    
     console.log('all photos', this.props.allPhotos);
     return (
       <PhotoGrid

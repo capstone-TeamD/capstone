@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
-export default function TouchLabels({ touchActive, setActive, textArr }) {
 
+export default function TouchLabels({ touchActive, setActive, textArr }) {
 
   return (
     <View>

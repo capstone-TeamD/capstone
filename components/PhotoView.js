@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pointer: {
-    height: 18,
-    width: 18,
+    height: 20,
+    width: 20,
     backgroundColor: "white",
     borderRadius: 10,
     borderColor: "black",
