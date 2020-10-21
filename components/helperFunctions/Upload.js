@@ -36,8 +36,9 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri, currentUser, messageObj = []) => {
+  addPhoto = async (localUri, currentUser, messageObj = []) => { 
     const remoteUri = await this.uploadPhotoAsync(localUri);
+    //audioupload function that needs the uri
     return new Promise((res, rej) => {
       this.firestore
         .collection('postcards')
