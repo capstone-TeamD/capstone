@@ -43,8 +43,11 @@ class Login extends Component {
       loading: true
     })
     this.props.loginUser(email, password);
-    console.log('loading', this.state.loading)
     this.props.navigation.navigate("Profile");
+    this.setState({
+      loading: false
+    })
+    //TODO: change the state for loading to the redux store
   }
 
   render() {

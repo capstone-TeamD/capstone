@@ -344,8 +344,9 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     // if local storage has no postcards or lengh in database !== localPostcards
     console.log('profile photos loading from database');
     // delete local storage postcard directory and make new directory
-    await FileSystem.deleteAsync(profileDir);
-    await FileSystem.makeDirectoryAsync(profileDir);
+    localStorageDirExist(profileDir)
+    // await FileSystem.deleteAsync(profileDir);
+    // await FileSystem.makeDirectoryAsync(profileDir);
 
     // download to local storage / cache
     const postcardLinks = [];

@@ -32,10 +32,10 @@ class Signup extends Component {
       loading: true
     })
     this.props.signup(email, password, username)
+    this.props.navigation.navigate('Profile')
     this.setState({
       loading: false
     })
-    this.props.navigation.navigate('Profile')
   }
 
   render() {
