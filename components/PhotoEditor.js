@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Animated,
   View,
@@ -9,23 +9,24 @@ import {
   Image,
   TextInput,
   Button,
-  Dimensions
-} from 'react-native';
+  Dimensions,
+  Keyboard,
+} from "react-native";
 
-import background from '../assets/whiteBG.jpg';
+import background from "../assets/whiteBG.jpg";
 
 class PhotoEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputText: '',
+      inputText: "",
       isActive: false,
       xCoord: 0,
       yCoord: 0,
       addingTouchpoint: false,
-      textArray: []
+      textArray: [],
     };
-    this.getText = this.getText.bind(this)
+    this.getText = this.getText.bind(this);
   }
 
   pan = new Animated.ValueXY();
@@ -44,8 +45,8 @@ class PhotoEditor extends Component {
     onPanResponderRelease: () => {
       this.pan.flattenOffset();
       if (this.pan.x._value > 0) {
-        console.log('x', this.pan.x);
-        console.log('y', this.pan.y);
+        console.log("x", this.pan.x);
+        console.log("y", this.pan.y);
         this.setState({
           isActive: true,
           xCoord: this.pan.x._value,
@@ -59,33 +60,29 @@ class PhotoEditor extends Component {
     const messageObj = {
       xCoord: this.state.xCoord,
       yCoord: this.state.yCoord,
-      message: this.state.inputText
-    }
+      message: this.state.inputText,
+    };
     this.setState({
-      inputText: '',
-      textArray: [...this.state.textArray, messageObj]
-    })
-    //change opacity of button
-    console.log(styles.pointer.backgroundColor)
-    // styles.pointer.backgroundColor = 'white';
+      inputText: "",
+      textArray: [...this.state.textArray, messageObj],
+    });
   }
 
   render() {
-    const texts = this.state.textArray.map(obj => {
-     return obj.message})
-    // console.log('texts', texts)
+    const texts = this.state.textArray.map((obj) => {
+      return obj.message;
+    });
 
-    const width = Dimensions.get('window').width;
-    const height = Dimensions.get('window').height;
-    console.log('width, height', width, height)
+    const width = Dimensions.get("window").width;
+    const height = Dimensions.get("window").height;
+    console.log("width, height", width, height);
 
     const { upload, image, setImage } = this.props;
 
     return (
       <View style={styles.container}>
         <ImageBackground source={background} style={styles.imageBackground}>
-          {/* <Image source={{ uri: image }} style={{...styles.innerPhoto, width: width, height: height}}/> */}
-          <Image source={{ uri: image }} style={styles.innerPhoto}/>
+          <Image source={{ uri: image }} style={styles.innerPhoto} />
           <Animated.View
             style={{
               transform: [
@@ -95,7 +92,9 @@ class PhotoEditor extends Component {
             }}
             {...this.panResponder.panHandlers}
           >
-            <View style={styles.pointer} />
+            <View>
+              <Image source={require("../assets/cursor1.png")} />
+            </View>
           </Animated.View>
         </ImageBackground>
         {this.state.isActive ? (
@@ -103,30 +102,44 @@ class PhotoEditor extends Component {
             <TextInput
               value={this.state.inputText}
               onChangeText={(inputText) => this.setState({ inputText })}
-              placeholder='Enter text'
-              autoCapitalize='none'
+              placeholder="Enter text"
+              autoCapitalize="none"
               multiline={true}
               enablesReturnKeyAutomatically={true}
               style={styles.textInput}
-            />
-            <Button 
-              style={styles.button}
-              onPress={() => this.getText()}
-              title='Save Changes'
+              returnKeyType="done"
+              maxLength = {25}
+              blurOnSubmit={true}
+              onSubmitEditing={() => {
+                Keyboard.dismiss();
+              }}
             />
             <Button
               style={styles.button}
-              title='Upload Postcard'
+              onPress={() => this.getText()}
+              title="Save Touchpoint"
+            />
+            <Button
+              style={styles.button}
+              title="Upload Postcard"
               onPress={() => upload(this.state.textArray)}
             />
             <Button
               style={styles.button}
-              title='Cancel'
+              title="Cancel"
               onPress={() => setImage(null)}
             />
-            {
-              texts[0] ? texts.map((message) => <Text>{message}</Text>) : <Text>No messages saved! Move the touchpoint to add a message/audio</Text>
-            }
+            {texts[0] ? (
+              texts.map((message, index) => 
+              <View style={styles.textContainer} key={index}>
+              <Text style={styles.textSaved}>{message}</Text>
+              </View>
+              )
+            ) : (
+              <Text style={styles.text} >
+                No messages saved! Move the touchpoint to add a message/audio
+              </Text>
+            )}
           </View>
         ) : (
           <ImageBackground source={background} style={styles.inputBackground}>
@@ -136,12 +149,12 @@ class PhotoEditor extends Component {
             </Text>
             <Button
               style={styles.button}
-              title='Upload Postcard'
+              title="Upload Postcard"
               onPress={upload}
             />
             <Button
               style={styles.button}
-              title='Cancel'
+              title="Cancel"
               onPress={() => setImage(null)}
             />
           </ImageBackground>
@@ -153,49 +166,72 @@ class PhotoEditor extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
   },
   pointer: {
-    height: 15,
-    width: 15,
-    backgroundColor: 'red',
-    borderRadius: 5,
+    height: 18,
+    width: 18,
+    backgroundColor: "white",
+    borderRadius: 10,
+    borderColor: "black",
+    borderWidth: 3,
   },
   imageBackground: {
-    width: '100%',
+    width: "100%",
     flex: 1,
   },
   inputBox: {
     flex: 1,
-    width: '90%',
-    fontSize: 15,
-    textAlign: 'center',
+    width: "100%",
+    fontSize: 14,
+    textAlign: "center",
+    backgroundColor: "#fff",
   },
   textInput: {
-    height: '30%',
+    width: "70%",
+    height: "15%",
+    alignSelf: "center",
     borderWidth: 1,
+    borderRadius: 5,
     margin: 10,
-    padding: 10,
+    padding: 14,
+    borderColor: "#585858",
+    backgroundColor: "#F5F5F5",
+    shadowColor: "#000000",
+    shadowOpacity: .7,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: -1,
+      width: -1,
+    },
   },
   button: {
     flex: 1,
   },
   innerPhoto: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-    position: 'absolute',
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    position: "absolute",
   },
   inputBackground: {
     flex: 1,
-    width: '100%',
+    width: "100%",
+    backgroundColor: "#fff",
   },
   text: {
-    padding: 40,
+    padding: 35,
+    textAlign: "center",
   },
+  textContainer: {
+    marginTop: 15,
+  },  
+  textSaved: {
+    textAlign: "center",
+  }
 });
 
 export default PhotoEditor;

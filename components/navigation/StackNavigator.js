@@ -24,7 +24,7 @@ const ProfileStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Profile' component={Profile} />
       <Stack.Screen name='EditProfile' component={EditProfile} />
-      <Stack.Screen name='PhotoView' component={PhotoView} />
+      <Stack.Screen name='Postcard View' component={PhotoView} />
     </Stack.Navigator>
   );
 };
