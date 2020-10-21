@@ -4,20 +4,32 @@
 // get the contents of the file and turn it into a blob formet to upload
 // upload in audio folder
 
-/* 
-const audioUpload = async (this.recording.getURI()) => {
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { Platform } from 'react-native';
+import { firebaseConfig } from '../../firebaseConfig';
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const db = firebase.firestore();
+
+export const audioUpload = async (uri) => {
   //if recording is the name of the class object for recording start and stop
-  const uri = this.recording.getURI()
   //may need to use readFileSystem(uri) ? depends on what that uri is and it it matches the getURI() output
   console.log('uri', uri)
-  return newPromise(async (res.rej)=> {
+  return new Promise(async (res, rej) => {
     const response = await fetch(uri)
     const file = await response.blob();
-    const path = `audio/$(Date.now()).mp3' || `audio/$(Date.now()).m4a'
-    //mp3 and m4a are dependent on different devies iphone - 4/andriod - 3
-    let upload = firebase.storage.ref(path).put(file)
+    let format = 'mp3' //android platform
+    // if (Platform.OS !== 'andriod') {
+    //   format = 'm4a'//ios platform
+    // }
+    const path = `audio/${Date.now()}.${format}`
+    let upload = firebase.storage().ref(path).put(file)
     upload.on(
-      state_changed',
+      'state_changed',
         (snapshot) => {
           console.log('Audio is uploading...');
         },
@@ -30,7 +42,6 @@ const audioUpload = async (this.recording.getURI()) => {
         })
   })
 }
-*/
 
 //On Upload, the firebaseURL has to be uploaded to the firestore audio field
 // in the addphoto upload.js file add a field

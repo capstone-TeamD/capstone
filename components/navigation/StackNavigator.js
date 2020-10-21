@@ -8,7 +8,7 @@ import Discover from '../Discover';
 import EditProfile from '../EditProfile';
 import PhotoEditor from '../PhotoEditor';
 import PhotoView from '../PhotoView';
-import Audio_Recorder from '../Audio_Recorder';
+import AudioRecorder from '../AudioRecorder';
 
 const Stack = createStackNavigator();
 
@@ -34,7 +34,7 @@ const MailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Mailbox' component={Mailbox} />
-      <Stack.Screen name='Audio Recorder' component={Audio_Recorder} />
+      <Stack.Screen name='Audio Recorder' component={AudioRecorder} />
     </Stack.Navigator>
   );
 };

@@ -9,6 +9,7 @@ import {
 import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
+import {audioUpload} from './helperFunctions/audio'
 
 const { width, height } = Dimensions.get("window");
 const recording = new Audio.Recording();
@@ -16,6 +17,10 @@ const recording = new Audio.Recording();
 export default class Audio_Recorder extends Component {
   constructor() {
     super();
+    this.state={
+      audioURI: ''
+    }
+
     this.askMicPermissions = this.askMicPermissions.bind(this);
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
@@ -61,8 +66,11 @@ export default class Audio_Recorder extends Component {
     }
     const uri = recording.getURI()
     console.log("uri", uri)
-    const info = await FileSystem.getInfoAsync(uri);
-    console.log("info", info)
+    this.setState({
+      audioURI: uri
+    })
+    // const info = await FileSystem.getInfoAsync(uri);
+    // console.log("info", info)
   };
 
 
@@ -80,7 +88,7 @@ export default class Audio_Recorder extends Component {
         <TouchableOpacity onPress={this.stopRecording}>
           <Text>Stop</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => audioUpload(this.state.audioURI)}>
           <Text>Upload</Text>
         </TouchableOpacity>
       </View>
