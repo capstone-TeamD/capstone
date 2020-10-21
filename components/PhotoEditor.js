@@ -26,7 +26,9 @@ class PhotoEditor extends Component {
       yCoord: 0,
       addingTouchpoint: false,
       textArray: [],
-      loading: false
+      loading: false,
+      audioURI: '',
+      audioObj: []
     };
     this.getText = this.getText.bind(this)
     this.uploadPostcard = this.uploadPostcard.bind(this)
