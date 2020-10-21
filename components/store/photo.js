@@ -77,7 +77,8 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
 
     const dir = `${FileSystem.cacheDirectory}postcards`;
     //names of postcards from the directory
-    const localPostcards = await FileSystem.readDirectoryAsync(dir);
+    const localPostcards = await localStorageDirExist(dir)
+    // const localPostcards = await FileSystem.readDirectoryAsync(dir);
 
     if (currentMs - lastUpdate.timeStamp === 0) {
       console.log('new');
