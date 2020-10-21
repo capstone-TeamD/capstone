@@ -90,7 +90,7 @@ class Profile extends Component {
             navigate={navigate}
           />
         </View>
-        <View style={styles.centeredView}>
+        {/* <View style={styles.centeredView}>
           <Modal
             animationType="slide"
             transparent={false}
@@ -115,7 +115,7 @@ class Profile extends Component {
               </View>
             </View>
           </Modal>
-        </View>
+        </View> */}
       </View>
     );
   }
@@ -179,20 +179,20 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     marginBottom: 4,
   },
-  modalView: {
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  // modalView: {
+  //   backgroundColor: "white",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
   textStyle: {
     color: "black",
     fontWeight: "bold",
     textAlign: "center",
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
+  // modalText: {
+  //   marginBottom: 15,
+  //   textAlign: "center",
+  // },
   circleImage: {
     height: 110,
     width: 110,
