@@ -9,7 +9,9 @@ import {
   Image,
   TextInput,
   Button,
-  Dimensions
+  Dimensions,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import background from '../assets/whiteBG.jpg';
@@ -23,9 +25,9 @@ class PhotoEditor extends Component {
       xCoord: 0,
       yCoord: 0,
       addingTouchpoint: false,
-      textArray: []
+      textArray: [],
     };
-    this.getText = this.getText.bind(this)
+    this.getText = this.getText.bind(this);
   }
 
   pan = new Animated.ValueXY();
@@ -59,25 +61,26 @@ class PhotoEditor extends Component {
     const messageObj = {
       xCoord: this.state.xCoord,
       yCoord: this.state.yCoord,
-      message: this.state.inputText
-    }
+      message: this.state.inputText,
+    };
     this.setState({
       inputText: '',
-      textArray: [...this.state.textArray, messageObj]
-    })
+      textArray: [...this.state.textArray, messageObj],
+    });
     //change opacity of button
-    console.log(styles.pointer.backgroundColor)
+    console.log(styles.pointer.backgroundColor);
     // styles.pointer.backgroundColor = 'white';
   }
 
   render() {
-    const texts = this.state.textArray.map(obj => {
-     return obj.message})
+    const texts = this.state.textArray.map((obj) => {
+      return obj.message;
+    });
     // console.log('texts', texts)
 
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
-    console.log('width, height', width, height)
+    console.log('width, height', width, height);
 
     const { upload, image, setImage } = this.props;
 
@@ -85,7 +88,7 @@ class PhotoEditor extends Component {
       <View style={styles.container}>
         <ImageBackground source={background} style={styles.imageBackground}>
           {/* <Image source={{ uri: image }} style={{...styles.innerPhoto, width: width, height: height}}/> */}
-          <Image source={{ uri: image }} style={styles.innerPhoto}/>
+          <Image source={{ uri: image }} style={styles.innerPhoto} />
           <Animated.View
             style={{
               transform: [
@@ -106,10 +109,15 @@ class PhotoEditor extends Component {
               placeholder='Enter text'
               autoCapitalize='none'
               multiline={true}
-              enablesReturnKeyAutomatically={true}
               style={styles.textInput}
+              returnKeyType='done'
+              blurOnSubmit={true}
+              onSubmitEditing={() => {
+                Keyboard.dismiss();
+              }}
             />
-            <Button 
+
+            <Button
               style={styles.button}
               onPress={() => this.getText()}
               title='Save Changes'
@@ -124,9 +132,13 @@ class PhotoEditor extends Component {
               title='Cancel'
               onPress={() => setImage(null)}
             />
-            {
-              texts[0] ? texts.map((message) => <Text>{message}</Text>) : <Text>No messages saved! Move the touchpoint to add a message/audio</Text>
-            }
+            {texts[0] ? (
+              texts.map((message, index) => <Text key={index}>{message}</Text>)
+            ) : (
+              <Text>
+                No messages saved! Move the touchpoint to add a message/audio
+              </Text>
+            )}
           </View>
         ) : (
           <ImageBackground source={background} style={styles.inputBackground}>
