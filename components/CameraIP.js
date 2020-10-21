@@ -44,6 +44,7 @@ function CameraIP(props) {
       .then((newPostcard) => {
         setImage(null);
         props.addPhotoToProfile(newPostcard);
+        navigate("Profile")
       })
       .catch((err) => {
         alert(err.message);

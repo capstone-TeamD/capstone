@@ -44,7 +44,7 @@ class Fire {
           creatorName: currentUser.username,
           dateCreated: this.timestamp,
           imageURI: remoteUri,
-          textArr: messageObj
+          textArr: messageObj || null
         })
         .then((docRef) => {
           this.firestore
