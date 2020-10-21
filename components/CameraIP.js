@@ -43,7 +43,6 @@ function CameraIP(props) {
     Fire.shared
       .addPhoto(image, currentUser, messageObj)
       .then((newPostcard) => {
-        //set state to loading false
         setImage(null);
         props.addPhotoToProfile(newPostcard);
       })

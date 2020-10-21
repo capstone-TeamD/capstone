@@ -13,8 +13,8 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native';
-
 import background from '../assets/whiteBG.jpg';
+import { Loader } from './Loader';
 
 class PhotoEditor extends Component {
   constructor(props) {
@@ -76,7 +76,6 @@ class PhotoEditor extends Component {
 
   uploadPostcard(type) {
     this.props.upload(this.state.textArray)
-    // console.log(state)
     this.setState({loading: type})
   }
 
@@ -93,7 +92,8 @@ class PhotoEditor extends Component {
 
     return (
       <View style={styles.container}>
-        <Modal
+        <Loader loader={this.state.loading} />
+        {/* <Modal
           transparent={true}
           animationType={'none'}
           visible={this.state.loading}
@@ -105,7 +105,7 @@ class PhotoEditor extends Component {
                 size='large' />
             </View>
           </View>
-        </Modal>
+        </Modal> */}
         <ImageBackground source={background} style={styles.imageBackground}>
           {/* <Image source={{ uri: image }} style={{...styles.innerPhoto, width: width, height: height}}/> */}
           <Image source={{ uri: image }} style={styles.innerPhoto}/>
@@ -140,7 +140,6 @@ class PhotoEditor extends Component {
             <Button
               style={styles.button}
               title='Upload Postcard'
-              // onPress={() => upload(this.state.textArray)}
               onPress={() => this.uploadPostcard(true)}
             />
             <Button
@@ -219,22 +218,6 @@ const styles = StyleSheet.create({
   },
   text: {
     padding: 40,
-  },
-  modalBackground: {
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    backgroundColor: '#00000040'
-  },
-  activityIndicatorWrapper: {
-    backgroundColor: '#FFFFFF',
-    height: 100,
-    width: 100,
-    borderRadius: 10,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around',
   }
 });
 

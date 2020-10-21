@@ -11,6 +11,7 @@ import "firebase/firestore";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { loginUser, getUser } from "./store/user";
+import { Loader } from "./Loader";
 
 
 class Login extends Component {
@@ -19,6 +20,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      loading: false,
     };
     this.handleLogin = this.handleLogin.bind(this);
   }
@@ -37,13 +39,18 @@ class Login extends Component {
   handleLogin() {
     const { email, password } = this.state;
 
+    this.setState({
+      loading: true
+    })
     this.props.loginUser(email, password);
+    console.log('loading', this.state.loading)
     this.props.navigation.navigate("Profile");
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <Loader loader={this.state.loading} />
         <TextInput
           style={styles.inputBox}
           value={this.state.email}

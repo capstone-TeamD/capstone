@@ -10,6 +10,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { connect } from 'react-redux'
 import { signupUser } from './store/user'
+import { Loader } from './Loader'
 
 
 class Signup extends Component {
@@ -19,6 +20,7 @@ class Signup extends Component {
       username: "",
       email: "",
       password: "",
+      loading: false
     }
     this.handleSignUp = this.handleSignUp.bind(this)
   }
@@ -26,7 +28,13 @@ class Signup extends Component {
   handleSignUp() {
     const { email, password, username } = this.state
 
+    this.setState({
+      loading: true
+    })
     this.props.signup(email, password, username)
+    this.setState({
+      loading: false
+    })
     this.props.navigation.navigate('Profile')
   }
 
@@ -34,6 +42,7 @@ class Signup extends Component {
 
     return (
       <View style={styles.container}>
+        <Loader loader={this.state.loading} />
         <TextInput
           style={styles.inputBox}
           value={this.state.username}
