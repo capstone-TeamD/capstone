@@ -2,6 +2,8 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
+import React, { Component } from "react";
+import {ActivityIndicator} from 'react-native'
 
 class Fire {
   constructor() {
@@ -34,7 +36,7 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri, currentUser, messageObj) => {
+  addPhoto = async (localUri, currentUser, messageObj = []) => {
     const remoteUri = await this.uploadPhotoAsync(localUri);
     return new Promise((res, rej) => {
       this.firestore
@@ -44,7 +46,7 @@ class Fire {
           creatorName: currentUser.username,
           dateCreated: this.timestamp,
           imageURI: remoteUri,
-          textArr: messageObj
+          textArr: messageObj || null
         })
         .then((docRef) => {
           this.firestore

@@ -32,7 +32,7 @@ export default function PhotoGrid({
     });
   }, []);
   const { width } = Dimensions.get('window');
-
+  console.log('photos', photos);
   const size = width / numColumns;
   return (
     <FlatList
