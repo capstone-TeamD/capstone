@@ -10,10 +10,12 @@ import {
   TextInput,
   Button,
   Dimensions,
+  Modal,
   Keyboard,
-} from "react-native";
-
-import background from "../assets/whiteBG.jpg";
+  ActivityIndicator
+} from 'react-native';
+import background from '../assets/whiteBG.jpg';
+import { Loader } from './Loader';
 
 class PhotoEditor extends Component {
   constructor(props) {
@@ -25,8 +27,10 @@ class PhotoEditor extends Component {
       yCoord: 0,
       addingTouchpoint: false,
       textArray: [],
+      loading: false
     };
-    this.getText = this.getText.bind(this);
+    this.getText = this.getText.bind(this)
+    this.uploadPostcard = this.uploadPostcard.bind(this)
   }
 
   pan = new Animated.ValueXY();
@@ -68,6 +72,11 @@ class PhotoEditor extends Component {
     });
   }
 
+  uploadPostcard(type) {
+    this.props.upload(this.state.textArray)
+    this.setState({loading: type})
+  }
+
   render() {
     const texts = this.state.textArray.map((obj) => {
       return obj.message;
@@ -81,6 +90,20 @@ class PhotoEditor extends Component {
 
     return (
       <View style={styles.container}>
+        <Loader loader={this.state.loading} />
+        {/* <Modal
+          transparent={true}
+          animationType={'none'}
+          visible={this.state.loading}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.activityIndicatorWrapper}>
+              <ActivityIndicator
+                animating={this.state.loading}
+                size='large' />
+            </View>
+          </View>
+        </Modal> */}
         <ImageBackground source={background} style={styles.imageBackground}>
           <Image source={{ uri: image }} style={styles.innerPhoto} />
           <Animated.View

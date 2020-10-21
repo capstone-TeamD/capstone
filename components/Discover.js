@@ -22,7 +22,7 @@ class Discover extends Component {
       <PhotoGrid
         numColumns={1}
         photos={this.props.allPhotos}
-        checkUpdateDate={() => this.props.checkUpdate}
+        checkUpdateDate={(id) => this.props.checkUpdate(id)}
         userId={this.props.currentUser}
       />
     );

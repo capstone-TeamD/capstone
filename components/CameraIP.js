@@ -38,7 +38,8 @@ function CameraIP(props) {
     })();
   }, []);
 
-  const upload = (messageObj) => {
+  const upload = (messageObj = []) => {
+    // console.log('messageObj', messageObj )
     Fire.shared
       .addPhoto(image, currentUser, messageObj)
       .then((newPostcard) => {

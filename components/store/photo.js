@@ -77,7 +77,8 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
 
     const dir = `${FileSystem.cacheDirectory}postcards`;
     //names of postcards from the directory
-    const localPostcards = await FileSystem.readDirectoryAsync(dir);
+    const localPostcards = await localStorageDirExist(dir)
+    // const localPostcards = await FileSystem.readDirectoryAsync(dir);
 
     if (currentMs - lastUpdate.timeStamp === 0) {
       console.log('new');
@@ -344,8 +345,9 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     // if local storage has no postcards or lengh in database !== localPostcards
     console.log('profile photos loading from database');
     // delete local storage postcard directory and make new directory
-    await FileSystem.deleteAsync(profileDir);
-    await FileSystem.makeDirectoryAsync(profileDir);
+    localStorageDirExist(profileDir)
+    // await FileSystem.deleteAsync(profileDir);
+    // await FileSystem.makeDirectoryAsync(profileDir);
 
     // download to local storage / cache
     const postcardLinks = [];
