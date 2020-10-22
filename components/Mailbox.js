@@ -11,9 +11,6 @@ export default class Profile extends Component {
     return (
       <View style={styles.container}>
         <Text>Mailbox</Text>
-        <TouchableOpacity>
-          <Button title="recorder" onPress={() => navigate("Audio Recorder")}/>
-        </TouchableOpacity>
       </View>
     );
   }

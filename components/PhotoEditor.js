@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Animated,
   View,
   StyleSheet,
   PanResponder,
@@ -12,9 +11,13 @@ import {
   Dimensions,
   Modal,
   Keyboard,
-} from 'react-native';
-import background from '../assets/whiteBG.jpg';
-import { Loader } from './Loader';
+  Animated,
+} from "react-native";
+import background from "../assets/whiteBG.jpg";
+import { Loader } from "./Loader";
+import ButtonOptions from "./ButtonOptions";
+import TextBox from "./TextBox";
+import AudioRecorder from "./AudioRecorder"
 
 class PhotoEditor extends Component {
   constructor(props) {
@@ -27,11 +30,14 @@ class PhotoEditor extends Component {
       addingTouchpoint: false,
       textArray: [],
       loading: false,
-      audioURI: '',
-      audioObj: []
+      audioURI: "",
+      audioObj: [],
+      textActive: false,
+      audioActive: false,
     };
-    this.getText = this.getText.bind(this)
-    this.uploadPostcard = this.uploadPostcard.bind(this)
+    this.getText = this.getText.bind(this);
+    this.uploadPostcard = this.uploadPostcard.bind(this);
+    this.showButton = this.showButton.bind(this);
   }
 
   pan = new Animated.ValueXY();
@@ -74,8 +80,23 @@ class PhotoEditor extends Component {
   }
 
   uploadPostcard(type) {
-    this.props.upload(this.state.textArray)
-    this.setState({loading: type})
+    this.props.upload(this.state.textArray);
+    this.setState({ loading: type });
+  }
+
+  showButton(type) {
+    if (type === "text") {
+      this.setState({
+        textActive: true,
+        audioActive: false,
+      });
+    }
+    if (type === "audio") {
+      this.setState({
+        textActive: false,
+        audioActive: true,
+      });
+    }
   }
 
   render() {
@@ -85,7 +106,6 @@ class PhotoEditor extends Component {
 
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
-    console.log("width, height", width, height);
 
     const { upload, image, setImage } = this.props;
 
@@ -93,7 +113,7 @@ class PhotoEditor extends Component {
       <View style={styles.container}>
         <Loader loader={this.state.loading} />
         <ImageBackground source={background} style={styles.imageBackground}>
-          <Image source={{ uri: image }} style={styles.innerPhoto} />
+          <Image source={{ uri: image }} style={{ ...styles.innerPhoto }} />
           <Animated.View
             style={{
               transform: [
@@ -110,44 +130,19 @@ class PhotoEditor extends Component {
         </ImageBackground>
         {this.state.isActive ? (
           <View style={styles.inputBox}>
-            <TextInput
-              value={this.state.inputText}
-              onChangeText={(inputText) => this.setState({ inputText })}
-              placeholder="Enter text"
-              autoCapitalize="none"
-              multiline={true}
-              enablesReturnKeyAutomatically={true}
-              style={styles.textInput}
-              returnKeyType="done"
-              maxLength = {25}
-              blurOnSubmit={true}
-              onSubmitEditing={() => {
-                Keyboard.dismiss();
-              }}
-            />
-            <Button
-              style={styles.button}
-              onPress={() => this.getText()}
-              title="Save Touchpoint"
-            />
-            <Button
-              style={styles.button}
-              title="Upload Postcard"
-              onPress={() => this.uploadPostcard(true)}
-            />
-            <Button
-              style={styles.button}
-              title="Cancel"
-              onPress={() => setImage(null)}
-            />
+
+            {this.state.textActive && <TextBox />}
+            {this.state.audioActive && <AudioRecorder />}
+
+
             {texts[0] ? (
-              texts.map((message, index) => 
-              <View style={styles.textContainer} key={index}>
-              <Text style={styles.textSaved}>{message}</Text>
-              </View>
-              )
+              texts.map((message, index) => (
+                <View style={styles.textContainer} key={index}>
+                  <Text style={styles.textSaved}>{message}</Text>
+                </View>
+              ))
             ) : (
-              <Text style={styles.text} >
+              <Text style={styles.text}>
                 No messages saved! Move the touchpoint to add a message/audio
               </Text>
             )}
@@ -161,7 +156,7 @@ class PhotoEditor extends Component {
             <Button
               style={styles.button}
               title="Upload Postcard"
-              onPress={upload}
+              onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}
@@ -170,6 +165,12 @@ class PhotoEditor extends Component {
             />
           </ImageBackground>
         )}
+        <ButtonOptions
+          buttonActive={this.state.isActive}
+          showButton={this.showButton}
+          textActive={this.state.textActive}
+          audioActive={this.state.audioActive}
+        />
       </View>
     );
   }
@@ -181,6 +182,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     height: "100%",
+    flex: 1,
+    marginBottom: -50,
   },
   pointer: {
     height: 18,
@@ -192,7 +195,7 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     width: "100%",
-    flex: 1,
+    flex: 0.6,
   },
   inputBox: {
     flex: 1,
@@ -212,7 +215,7 @@ const styles = StyleSheet.create({
     borderColor: "#585858",
     backgroundColor: "#F5F5F5",
     shadowColor: "#000000",
-    shadowOpacity: .7,
+    shadowOpacity: 0.7,
     shadowRadius: 1,
     shadowOffset: {
       height: -1,
@@ -225,13 +228,15 @@ const styles = StyleSheet.create({
   innerPhoto: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain",
+    resizeMode: "stretch",
     position: "absolute",
   },
   inputBackground: {
     flex: 1,
     width: "100%",
     backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     padding: 35,
@@ -239,10 +244,10 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginTop: 15,
-  },  
+  },
   textSaved: {
     textAlign: "center",
-  }
+  },
 });
 
 export default PhotoEditor;
