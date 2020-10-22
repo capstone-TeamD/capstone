@@ -144,7 +144,7 @@ class PhotoEditor extends Component {
             <Button
               style={styles.button}
               title='Upload Postcard'
-              onPress={() => upload(this.state.textArray)}
+              onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}

@@ -58,6 +58,7 @@ export const signupUser = (email, password, username) => async (dispatch) => {
         password: password,
         username: username,
         postcards: [],
+        mailbox: [],
       };
     }
 

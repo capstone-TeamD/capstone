@@ -33,6 +33,7 @@ const MailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Mailbox' component={Mailbox} />
+      <Stack.Screen name='Postcard View' component={PhotoView} />
     </Stack.Navigator>
   );
 };

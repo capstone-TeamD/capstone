@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import {
   Dimensions,
   Image,
   StyleSheet,
   RefreshControl,
   View,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { SwipeListView } from "react-native-swipe-list-view";
-import photo from "./store/photo";
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SwipeListView } from 'react-native-swipe-list-view';
+import photo from './store/photo';
 
 export default function PhotoGrid({
   photos,
@@ -17,7 +17,7 @@ export default function PhotoGrid({
   toggleModal,
   handleDelete,
   getProfilePostcards,
-  navigate
+  navigate,
 }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -29,13 +29,13 @@ export default function PhotoGrid({
     setRefreshing(true);
     wait(2000).then(() => {
       // getProfilePostcards(photos)
-      console.log("refresh");
+      console.log('refresh');
       return setRefreshing(false);
     });
   }, []);
 
-  console.log("photos", photos)
-  const { width } = Dimensions.get("window");
+  // console.log('photos', photos);
+  const { width } = Dimensions.get('window');
   const size = width / numColumns;
 
   return (
@@ -56,28 +56,35 @@ export default function PhotoGrid({
           }}
         />
       )}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
       renderHiddenItem={({ item }) => (
         <View style={styles.container}>
           <TouchableOpacity
-            style={{...styles.swipeButton, backgroundColor: "red"}}
+            style={{ ...styles.swipeButton, backgroundColor: 'red' }}
             onPress={() =>
               handleDelete(item.imageId, item.firebaseURL, item.imageURL)
             }
           >
-            <Image source={require("../assets/delete.png")} />
+            <Image source={require('../assets/delete.png')} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{...styles.swipeButton, backgroundColor: "#FFA500"}}
-            onPress={() => alert("hello")}
+            style={{ ...styles.swipeButton, backgroundColor: '#FFA500' }}
+            onPress={() => toggleModal(item.imageId)}
           >
-            <Image source={require("../assets/share.png")} />
+            <Image source={require('../assets/share.png')} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{...styles.swipeButton, backgroundColor: "#B8B8B8"}}
-            onPress={() => navigate("Postcard View", {imageId: item.imageId, imageURL: item.imageURL })}
+            style={{ ...styles.swipeButton, backgroundColor: '#B8B8B8' }}
+            onPress={() =>
+              navigate('Postcard View', {
+                imageId: item.imageId,
+                imageURL: item.imageURL,
+              })
+            }
           >
-            <Image source={require("../assets/magnify-plus.png")} />
+            <Image source={require('../assets/magnify-plus.png')} />
           </TouchableOpacity>
           {/* <TouchableOpacity
             style={{...styles.swipeButton, backgroundColor: "#B8B8B8"}}
@@ -94,9 +101,9 @@ export default function PhotoGrid({
 
 const styles = StyleSheet.create({
   container: {
-    overflow: "hidden",
-    display: "flex",
-    flexDirection: "row-reverse",
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'row-reverse',
   },
   photo: {
     height: 140,
@@ -110,10 +117,10 @@ const styles = StyleSheet.create({
   },
   swipeButton: {
     width: 75,
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFA500",
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFA500',
     marginBottom: -3,
   },
 });

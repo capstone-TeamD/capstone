@@ -14,7 +14,7 @@ export default function PhotoView(props) {
   const [touchActive, setActive] = useState(false);
 
   useEffect(() => {
-    console.log('useEffect');
+    // console.log('useEffect');
     funcText(imageId);
   }, []);
 
@@ -25,7 +25,7 @@ export default function PhotoView(props) {
 
   const { width, height } = useDimensions().window;
 
-  console.log('width, height', width, height);
+  // console.log('width, height', width, height);
 
   return (
     <View style={styles.container}>
@@ -53,7 +53,7 @@ export default function PhotoView(props) {
                 left: textObj.xCoord,
               }}
             >
-              {console.log('inside of body', touchActive)}
+              {/* {console.log('inside of body', touchActive)} */}
               <Button title='p' onPress={() => setActive(true)} />
             </View>
           );

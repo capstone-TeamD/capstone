@@ -77,7 +77,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
 
     const dir = `${FileSystem.cacheDirectory}postcards`;
     //names of postcards from the directory
-    const localPostcards = await localStorageDirExist(dir)
+    const localPostcards = await localStorageDirExist(dir);
     // const localPostcards = await FileSystem.readDirectoryAsync(dir);
 
     if (currentMs - lastUpdate.timeStamp === 0) {
@@ -116,7 +116,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
           discoverUpdateFirestore(currentId, currentDate);
         } else {
           console.log('here5');
-          console.log(localPostcards)
+          console.log(localPostcards);
           dispatch(loadFromCache(localPostcards, dir));
           discoverUpdateFirestore(currentId, lastUpdate);
         }
@@ -311,7 +311,7 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
 };
 
 //create function to check if local storage exist to make code DRY
-const localStorageDirExist = async (dirName) => {
+export const localStorageDirExist = async (dirName) => {
   const { exists } = await FileSystem.getInfoAsync(dirName);
   if (!exists) {
     await FileSystem.makeDirectoryAsync(dirName);
@@ -345,9 +345,9 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     // if local storage has no postcards or lengh in database !== localPostcards
     console.log('profile photos loading from database');
     // delete local storage postcard directory and make new directory
-    localStorageDirExist(profileDir)
-    // await FileSystem.deleteAsync(profileDir);
-    // await FileSystem.makeDirectoryAsync(profileDir);
+    localStorageDirExist(profileDir);
+    await FileSystem.deleteAsync(profileDir);
+    await FileSystem.makeDirectoryAsync(profileDir);
 
     // download to local storage / cache
     const postcardLinks = [];
