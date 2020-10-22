@@ -51,6 +51,7 @@ const DiscoverStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name='Discover' component={Discover} />
+      <Stack.Screen name='Postcard View' component={PhotoView} />
     </Stack.Navigator>
   );
 };

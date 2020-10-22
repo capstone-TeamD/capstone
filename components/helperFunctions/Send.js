@@ -16,28 +16,37 @@ export const mailPostcard = (
   recipientEmail,
   messageText
 ) => {
-  db.collection('users')
-    .where('email', '==', recipientEmail)
-    .get()
-    .then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        // console.log(doc.id, ' => ', doc.data());
-        db.collection('users')
-          .doc(doc.id)
-          .update({
-            mailbox: firebase.firestore.FieldValue.arrayUnion({
-              postcardId: postcardId,
-              senderUsername: senderUsername,
-              messageText: messageText,
-              sentDate: Date.now(),
-            }),
-          });
-        console.log('Postcard sent!');
+  return new Promise((res, rej) => {
+    db.collection('users')
+      .where('email', '==', recipientEmail)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          // console.log(doc.id, ' => ', doc.data());
+          db.collection('users')
+            .doc(doc.id)
+            .update({
+              mailbox: firebase.firestore.FieldValue.arrayUnion({
+                postcardId: postcardId,
+                senderUsername: senderUsername,
+                messageText: messageText,
+                sentDate: Date.now(),
+              }),
+            })
+            .then(() => {
+              console.log('Postcard sent!');
+              res('sent');
+            })
+            .catch((error) => {
+              console.error('Error updating documents', error);
+              res('fail');
+            });
+        });
+      })
+      .catch(function (error) {
+        console.error('Error getting documents: ', error);
       });
-    })
-    .catch(function (error) {
-      console.log('Error getting documents: ', error);
-    });
+  });
 };
 
 export const viewPostcard = (postcardId) => {
@@ -48,7 +57,6 @@ export const viewPostcard = (postcardId) => {
       .then(async (doc) => {
         const postcard = doc.data();
         const remoteUri = postcard.imageURI;
-        console.log('remoteUri', remoteUri);
         const dirName = `${FileSystem.cacheDirectory}messages/`;
         await localStorageDirExist(dirName);
         await FileSystem.downloadAsync(
@@ -57,7 +65,6 @@ export const viewPostcard = (postcardId) => {
         )
           .then((data) => {
             console.log('New postcard message added to local storage!');
-            console.log('the local path is: ', data.uri);
             res(data.uri);
           })
           .catch((error) => {

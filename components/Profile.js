@@ -18,6 +18,7 @@ import {
   TextInput,
   Button,
   Keyboard,
+  Alert,
 } from 'react-native';
 import { mailPostcard } from './helperFunctions/Send';
 
@@ -33,6 +34,7 @@ class Profile extends Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.sendPostcard = this.sendPostard.bind(this);
+    this.createSentAlert = this.createSentAlert.bind(this);
   }
 
   componentDidMount() {
@@ -69,12 +71,52 @@ class Profile extends Component {
     );
   }
 
-  sendPostard(recipientEmail, messageText) {
+  async sendPostard(recipientEmail, messageText) {
     const postcardId = this.state.imageId;
     const senderUsername = this.props.user.username;
     // console.log(postcardId, senderId, recipientEmail, messageText);
-    mailPostcard(postcardId, senderUsername, recipientEmail, messageText);
-    this.setState({ messageText: '', recipient: '', modalVisible: false });
+    await mailPostcard(
+      postcardId,
+      senderUsername,
+      recipientEmail,
+      messageText
+    ).then((response) => {
+      console.log('response after mailing', response);
+      if (response === 'sent') {
+        this.createSentAlert();
+      } else {
+        this.invalidEmailAlert();
+      }
+    });
+  }
+
+  createSentAlert() {
+    Alert.alert(
+      'Success!',
+      'Your postcard has been sent.',
+      [
+        {
+          text: 'OK',
+          onPress: () =>
+            this.setState({ message: '', recipient: '', modalVisible: false }),
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  invalidEmailAlert() {
+    Alert.alert(
+      'Sorry!',
+      "You've entered an invalid email address. Please try again.",
+      [
+        {
+          text: 'OK',
+          onPress: () => console.log('OK Pressed'),
+        },
+      ],
+      { cancelable: false }
+    );
   }
 
   render() {
