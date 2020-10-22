@@ -42,8 +42,8 @@ class Fire {
     const remoteUri = await this.uploadPhotoAsync(localUri);
     // audioupload function that needs the uri
     console.log('audioObj', audioObj)
-    let audioFirebaseUri;
-    if (audioObj) {
+    let audioFirebaseUri = '';
+    if (audioObj.length) {
       audioFirebaseUri = await audioUpload(audioObj[0].audioLink)
       audioObj[0].audioLink = audioFirebaseUri
     }
@@ -72,16 +72,18 @@ class Fire {
             .then(async function () {
               console.log('New postcard added to user array!');
               //download audio file to local storage
-              const audioDir = `${FileSystem.cacheDirectory}audio`
-              await localStorageDirExist(audioDir)
-              await FileSystem.downloadAsync(audioFirebaseUri,
-                FileSystem.cacheDirectory + 'audio//' + docRef.id)
-                .then(() => {
-                  console.log('Audio added to local storage!');
-                })
-                .catch((error) => {
-                  console.error('Error dispatching new photo: ', error);
-                });
+              if (audioObj.length) {
+                const audioDir = `${FileSystem.cacheDirectory}audio`
+                await localStorageDirExist(audioDir)
+                await FileSystem.downloadAsync(audioFirebaseUri,
+                  FileSystem.cacheDirectory + 'audio//' + docRef.id)
+                  .then(() => {
+                    console.log('Audio added to local storage!');
+                  })
+                  .catch((error) => {
+                    console.error('Error dispatching new photo: ', error);
+                  });
+              }
               await FileSystem.downloadAsync(
                 remoteUri,
                 FileSystem.cacheDirectory + 'profile//' + docRef.id
