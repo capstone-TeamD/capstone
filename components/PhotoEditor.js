@@ -14,6 +14,7 @@ import {
   Keyboard,
 } from 'react-native';
 import background from '../assets/whiteBG.jpg';
+import AudioRecorder from "./AudioRecorder";
 import { Loader } from './Loader';
 
 class PhotoEditor extends Component {
@@ -28,7 +29,7 @@ class PhotoEditor extends Component {
       textArray: [],
       loading: false,
       audioURI: '',
-      audioObj: []
+      audioArray: []
     };
     this.getText = this.getText.bind(this)
     this.uploadPostcard = this.uploadPostcard.bind(this)
@@ -73,9 +74,22 @@ class PhotoEditor extends Component {
     });
   }
 
+  getAudio(audioURI) {
+    const audioObj = {
+      xCoord: this.state.xCoord,
+      yCoord: this.state.yCoord,
+      audioLink: audioURI
+    }
+    this.setState({
+      audioArray: [...this.state.audioArray, audioObj],
+    });
+  }
+
   uploadPostcard(type) {
-    this.props.upload(this.state.textArray)
-    this.setState({loading: type})
+    // this.props.upload(this.state.textArray)
+    console.log('uploadpostcard', this.state.textArray, this.state.audioArray)
+    this.props.upload(this.state.textArray, this.state.audioArray)
+    this.setState({loading: false})
   }
 
   render() {
@@ -88,7 +102,7 @@ class PhotoEditor extends Component {
     console.log("width, height", width, height);
 
     const { upload, image, setImage } = this.props;
-
+    console.log('state', this.state)
     return (
       <View style={styles.container}>
         <Loader loader={this.state.loading} />
@@ -110,7 +124,13 @@ class PhotoEditor extends Component {
         </ImageBackground>
         {this.state.isActive ? (
           <View style={styles.inputBox}>
-            <TextInput
+            <AudioRecorder getAudio={(audioURI) => this.getAudio(audioURI)}/>
+            <Button
+              style={styles.button}
+              title="Upload Postcard"
+              onPress={() => this.uploadPostcard(true)}
+            />
+            {/* <TextInput
               value={this.state.inputText}
               onChangeText={(inputText) => this.setState({ inputText })}
               placeholder="Enter text"
@@ -144,13 +164,13 @@ class PhotoEditor extends Component {
               texts.map((message, index) => 
               <View style={styles.textContainer} key={index}>
               <Text style={styles.textSaved}>{message}</Text>
-              </View>
+            </View>
               )
             ) : (
               <Text style={styles.text} >
                 No messages saved! Move the touchpoint to add a message/audio
               </Text>
-            )}
+            )} */}
           </View>
         ) : (
           <ImageBackground source={background} style={styles.inputBackground}>
@@ -161,7 +181,7 @@ class PhotoEditor extends Component {
             <Button
               style={styles.button}
               title="Upload Postcard"
-              onPress={upload}
+              onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}

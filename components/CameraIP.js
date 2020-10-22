@@ -38,10 +38,11 @@ function CameraIP(props) {
     })();
   }, []);
 
-  const upload = (messageObj = []) => {
-    // console.log('messageObj', messageObj )
+  const upload = (messageObj, audioObj) => {
+    console.log('upload func', messageObj, audioObj )
     Fire.shared
-      .addPhoto(image, currentUser, messageObj)
+      .addPhoto(image, currentUser, messageObj, audioObj)
+      // .addPhoto(image, currentUser, messageObj)
       .then((newPostcard) => {
         setImage(null);
         props.addPhotoToProfile(newPostcard);

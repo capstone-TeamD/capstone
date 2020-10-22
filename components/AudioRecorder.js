@@ -14,8 +14,8 @@ import {audioUpload} from './helperFunctions/audio'
 const { width, height } = Dimensions.get("window");
 const recording = new Audio.Recording();
 
-export default class Audio_Recorder extends Component {
-  constructor() {
+export default class AudioRecorder extends Component {
+  constructor(props) {
     super();
     this.state={
       audioURI: ''
@@ -24,6 +24,7 @@ export default class Audio_Recorder extends Component {
     this.askMicPermissions = this.askMicPermissions.bind(this);
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
+    this.playbackRecording = this.playbackRecording.bind(this)
   }
 
   askMicPermissions = async () => {
@@ -44,7 +45,10 @@ export default class Audio_Recorder extends Component {
 
   startRecording = async () => {
     try {
-      console.log("recording started");
+      recording._isDoneRecording = false
+      recording.options = null
+      recording.uri = null
+      console.log("recording started", recording);
       await Audio.setAudioModeAsync({allowsRecordingIOS: true, playsInSilentModeIOS: true})
       await recording.prepareToRecordAsync(
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
@@ -54,7 +58,6 @@ export default class Audio_Recorder extends Component {
       // You are now recording!
     } catch (error) {
         console.warn(error)
-      // An error occurred!
     }
   };
 
@@ -69,9 +72,21 @@ export default class Audio_Recorder extends Component {
     this.setState({
       audioURI: uri
     })
-    // const info = await FileSystem.getInfoAsync(uri);
-    // console.log("info", info)
   };
+
+  playbackRecording = async () => {
+    try {
+      const soundObject = await Audio.Sound.createAsync(
+        { uri: this.state.audioURI },
+        { shouldPlay: true }
+      )
+      // Your sound is playing!
+      console.log('playing music')
+      await soundObject.unloadAsync();
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
 
   render() {
@@ -82,15 +97,24 @@ export default class Audio_Recorder extends Component {
         <TouchableOpacity onPress={this.askMicPermissions}>
           <Text>Recorder</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={this.startRecording}>
           <Text>Start</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={this.stopRecording}>
           <Text>Stop</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => audioUpload(this.state.audioURI)}>
-          <Text>Upload</Text>
+
+        <TouchableOpacity onPress={this.playbackRecording}>
+          <Text>Replay</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.getAudio(this.state.audioURI)}>
+          <Text>Save Audio</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={() => audioUpload(this.state.audioURI)}>
+        <Text>Upload</Text>
+        </TouchableOpacity> */}
       </View>
     );
   }

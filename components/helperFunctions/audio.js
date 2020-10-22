@@ -22,11 +22,7 @@ export const audioUpload = async (uri) => {
   return new Promise(async (res, rej) => {
     const response = await fetch(uri)
     const file = await response.blob();
-    let format = 'mp3' //android platform
-    // if (Platform.OS !== 'andriod') {
-    //   format = 'm4a'//ios platform
-    // }
-    const path = `audio/${Date.now()}.${format}`
+    const path = `audio/${Date.now()}.mp3`
     let upload = firebase.storage().ref(path).put(file)
     upload.on(
       'state_changed',
@@ -66,3 +62,4 @@ FileSytem.downloadAsync(firebaseURL, dir + postcardId)
 
 
 //listen to the audio thorugh the expo api docs
+//profile audio 
