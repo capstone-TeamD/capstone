@@ -5,28 +5,30 @@ import {
   useDimensions,
 } from "@react-native-community/hooks";
 import { touchpointText } from "./helperFunctions/touchpoints";
-import  TouchLabels from "./TouchLabels";
+import TouchLabels from "./TouchLabels"
+
 
 export default function PhotoView(props) {
   const { landscape } = useDeviceOrientation();
   const { imageId, imageURL } = props.route.params;
   const [textArr, setTextArr] = useState([]);
   const [touchActive, setActive] = useState(false);
-
+  
   useEffect(() => {
     console.log("useEffect");
     funcText(imageId);
   }, []);
-
+  
   const funcText = async (imageId) => {
     const answer = await touchpointText(imageId);
     setTextArr(answer);
   };
-
+  
   const { width, height } = useDimensions().window;
-
+  
   console.log("width, height", width, height);
 
+  
   return (
     <View style={styles.container}>
       <View
@@ -39,7 +41,7 @@ export default function PhotoView(props) {
       >
         <Image
           source={{ uri: imageURL }}
-          style={{ width: "100%", height: landscape ? "100%" : "43%" }}
+          style={{ width: "100%", height: landscape ? "100%" : "30%" }}
         />
       </View>
       {textArr && !touchActive ? (

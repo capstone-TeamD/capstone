@@ -26,7 +26,7 @@ function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
-              name="face"
+              name="account-outline"
               color={color}
               size={26}
             />
@@ -38,7 +38,7 @@ function BottomTabNavigator() {
         component={MailStackNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="mailbox" color={color} size={26} />
+            <MaterialCommunityIcons name="mailbox-outline" color={color} size={26} />
           ),
         }}
       />
@@ -47,7 +47,7 @@ function BottomTabNavigator() {
         component={UploadStackNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="camera" color={color} size={26} />
+            <MaterialCommunityIcons name="camera-outline" color={color} size={26} />
           ),
         }}
       />
