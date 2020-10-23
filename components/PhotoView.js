@@ -4,30 +4,37 @@ import {
   useDeviceOrientation,
   useDimensions,
 } from "@react-native-community/hooks";
-import { touchpointText } from "./helperFunctions/touchpoints";
-import TouchLabels from "./TouchLabels"
-
+import { touchpointText, touchpointAudio } from "./helperFunctions/touchpoints";
+import  TouchLabels from "./TouchLabels";
 
 export default function PhotoView(props) {
   const { landscape } = useDeviceOrientation();
   const { imageId, imageURL } = props.route.params;
   const [textArr, setTextArr] = useState([]);
+  const [audioArr, setAudioArr] = useState([]);
   const [touchActive, setActive] = useState(false);
   
   useEffect(() => {
     console.log("useEffect");
     funcText(imageId);
+    funcAudio(imageId)
   }, []);
   
   const funcText = async (imageId) => {
-    const answer = await touchpointText(imageId);
-    setTextArr(answer);
+    const msgs = await touchpointText(imageId);
+    setTextArr(msgs);
   };
-  
+
+  //function to take the audio url from local storage and have it ready to play
+  const funcAudio = async (imageId) => {
+    const aud = await touchpointAudio(imageId)
+    setAudioArr(aud)
+  }
+
   const { width, height } = useDimensions().window;
   
   console.log("width, height", width, height);
-
+  console.log('audioArr', audioArr)
   
   return (
     <View style={styles.container}>

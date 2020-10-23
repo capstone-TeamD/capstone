@@ -2,8 +2,8 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
-import React, { Component } from "react";
-import {ActivityIndicator} from 'react-native'
+import {audioUpload} from './audio'
+import {localStorageDirExist} from '../store/photo'
 
 class Fire {
   constructor() {
@@ -36,9 +36,17 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri, currentUser, messageObj = []) => { 
+  addPhoto = async (localUri, currentUser, messageObj, audioObj) => {
+    console.log('addPhoto func', messageObj, audioObj)
+  // addPhoto = async (localUri, currentUser, messageObj = [])=> { 
     const remoteUri = await this.uploadPhotoAsync(localUri);
-    //audioupload function that needs the uri
+    // audioupload function that needs the uri
+    console.log('audioObj', audioObj)
+    let audioFirebaseUri = '';
+    if (audioObj.length) {
+      audioFirebaseUri = await audioUpload(audioObj[0].audioLink)
+      audioObj[0].audioLink = audioFirebaseUri
+    }
     return new Promise((res, rej) => {
       this.firestore
         .collection('postcards')
@@ -47,7 +55,8 @@ class Fire {
           creatorName: currentUser.username,
           dateCreated: this.timestamp,
           imageURI: remoteUri,
-          textArr: messageObj || null
+          textArr: messageObj, 
+          audioArr: audioObj //added audio obj to firestore
         })
         .then((docRef) => {
           this.firestore
@@ -57,16 +66,31 @@ class Fire {
               postcards: firebase.firestore.FieldValue.arrayUnion({
                 imageId: docRef.id,
                 imageURL: remoteUri,
+                audioURL: audioFirebaseUri //added the audioURL to postcard firestore
               }),
             })
             .then(async function () {
               console.log('New postcard added to user array!');
+              //download audio file to local storage
+              if (audioObj.length) {
+                const audioDir = `${FileSystem.cacheDirectory}audio`
+                await localStorageDirExist(audioDir)
+                await FileSystem.downloadAsync(audioFirebaseUri,
+                  FileSystem.cacheDirectory + 'audio//' + docRef.id)
+                  .then(() => {
+                    console.log('Audio added to local storage!');
+                  })
+                  .catch((error) => {
+                    console.error('Error dispatching new photo: ', error);
+                  });
+              }
               await FileSystem.downloadAsync(
                 remoteUri,
                 FileSystem.cacheDirectory + 'profile//' + docRef.id
               )
                 .then((data) => {
                   console.log('New postcard added to local storage!');
+                  //do not need to add audio uri to newpostcard because that is info to render for the profile flatlist
                   const newPostcard = {
                     imageId: docRef.id,
                     imageURL: data.uri,

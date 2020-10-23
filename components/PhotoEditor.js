@@ -29,8 +29,8 @@ class PhotoEditor extends Component {
       addingTouchpoint: false,
       textArray: [],
       loading: false,
-      audioURI: "",
-      audioObj: [],
+      audioURI: '',
+      audioArray: [],
       textActive: false,
       audioActive: false,
     };
@@ -79,9 +79,21 @@ class PhotoEditor extends Component {
     });
   }
 
+  getAudio(audioURI) {
+    const audioObj = {
+      xCoord: this.state.xCoord,
+      yCoord: this.state.yCoord,
+      audioLink: audioURI
+    }
+    this.setState({
+      audioArray: [...this.state.audioArray, audioObj],
+    });
+  }
+
   uploadPostcard(type) {
-    this.props.upload(this.state.textArray);
-    this.setState({ loading: type });
+    // console.log('uploadpostcard', this.state.textArray, this.state.audioArray)
+    this.props.upload(this.state.textArray, this.state.audioArray)
+    this.setState({loading: false})
   }
 
   showButton(type) {
@@ -114,7 +126,7 @@ class PhotoEditor extends Component {
     const height = Dimensions.get("window").height;
 
     const { upload, image, setImage } = this.props;
-
+    console.log('state', this.state)
     return (
       <View style={styles.container}>
         <Loader loader={this.state.loading} />
@@ -136,6 +148,7 @@ class PhotoEditor extends Component {
         </ImageBackground>
         {this.state.isActive ? (
           <View style={styles.inputBox}>
+
             {this.state.textActive && (
               <TextBox
                 onChangeText={this.onChangeText}
@@ -143,7 +156,8 @@ class PhotoEditor extends Component {
                 getText={this.getText}
               />
             )}
-            {this.state.audioActive && <AudioRecorder />}
+
+            {this.state.audioActive && <AudioRecorder getAudio={this.getAudio}/>}
 
             <Button
               style={styles.button}
