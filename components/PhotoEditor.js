@@ -94,7 +94,7 @@ class PhotoEditor extends Component {
   uploadPostcard(type) {
     // console.log('uploadpostcard', this.state.textArray, this.state.audioArray)
     this.props.upload(this.state.textArray, this.state.audioArray);
-    this.setState({ loading: false });
+    this.setState({ loading: type });
   }
 
   showButton(type) {

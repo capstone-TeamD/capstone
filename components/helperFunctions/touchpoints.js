@@ -15,13 +15,14 @@ export const touchpointText = async (postcardId) => {
     .doc(postcardId)
     .get()
     .then(async (doc) => {
-      data = doc.data()
-      console.log('insideFunc', data.textArr)
+      data = doc.data();
+      // console.log('insideFunc', data.textArr)
       // return data.textArr
       // console.log('fetchedData', doc.data())
-    }).catch(error => console.error(error))
-   return data.textArr
-}
+    })
+    .catch((error) => console.error(error));
+  return data.textArr;
+};
 
 export const touchpointAudio = async (postcardId) => {
   let data;
@@ -30,10 +31,11 @@ export const touchpointAudio = async (postcardId) => {
     .doc(postcardId)
     .get()
     .then(async (doc) => {
-      data = doc.data()
-      console.log('insideFunc', data.audioArr)
+      data = doc.data();
+      // console.log('insideFunc', data.audioArr)
       // return data.textArr
       // console.log('fetchedData', doc.data())
-    }).catch(error => console.error(error))
-   return data.audioArr
-}
+    })
+    .catch((error) => console.error(error));
+  return data.audioArr;
+};

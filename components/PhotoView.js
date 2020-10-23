@@ -35,7 +35,7 @@ export default function PhotoView(props) {
   const playAudio = async () => {
     const recording = new Audio.Recording();
     try {
-      console.log('audioURL', audioURL);
+      // console.log('audioURL', audioURL);
       const soundObject = await Audio.Sound.createAsync(
         { uri: audioURL },
         { shouldPlay: true }
@@ -49,8 +49,8 @@ export default function PhotoView(props) {
 
   const { width, height } = useDimensions().window;
 
-  console.log('width, height', width, height);
-  console.log('props', props.route.params);
+  // console.log('width, height', width, height);
+  // console.log('props', props.route.params);
 
   return (
     <View style={styles.container}>
@@ -91,17 +91,17 @@ export default function PhotoView(props) {
         />
       )}
       <>
-        {audioArr ? (
+        {audioArr[0] ? (
           <View
             style={{
               ...styles.pointer,
-              top: audioArr.yCoord,
-              left: audioArr.xCoord,
+              top: audioArr[0].yCoord,
+              left: audioArr[0].xCoord,
             }}
           >
             <Button title='p' onPress={() => playAudio()} />
           </View>
-        ) : null }
+        ) : null}
       </>
     </View>
   );

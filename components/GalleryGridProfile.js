@@ -34,7 +34,7 @@ export default function PhotoGrid({
     });
   }, []);
 
-  console.log('photos in profile', photos);
+  // console.log('photos in profile', photos);
   const { width } = Dimensions.get('window');
   const size = width / numColumns;
 

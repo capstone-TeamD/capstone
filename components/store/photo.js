@@ -281,10 +281,10 @@ export const deleteSinglePhoto = (
             const deleteObj = {
               imageId: id,
               imageURL: firebaseURL,
-              audioURL: ''
-            }
+              audioURL: '',
+            };
             if (firebaseAudioURL) {
-              deleteObj.audioURL = firebaseAudioURL
+              deleteObj.audioURL = firebaseAudioURL;
             }
             await db
               .collection('users')
@@ -352,11 +352,11 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     const newPostcards = async () =>
       Promise.all(
         profilePhotosArr.map(async (postcard) => {
-          console.log('postcard', postcard);
+          // console.log('postcard', postcard);
           const newURL = await FileSystem.getInfoAsync(
             profileDir + `/${postcard.imageId}`
           );
-          console.log('newURL', newURL);
+          // console.log('newURL', newURL);
           const audio = await FileSystem.getInfoAsync(
             `${FileSystem.cacheDirectory}audio` +
               `/${postcard.imageId}` +
