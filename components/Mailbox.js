@@ -17,10 +17,16 @@ function Mailbox(props) {
 
   const openPostcard = async (postcardId, navigate) => {
     await viewPostcard(postcardId)
-      .then((localUrl) => {
+      .then((responseObj) => {
+        let imageToRender = responseObj.mbImageLink;
+        let audioToRender = '';
+        if (responseObj.mbAudioLink) {
+          audioToRender = responseObj.mbAudioLink;
+        }
         navigate('Postcard View', {
           imageId: postcardId,
-          imageURL: localUrl,
+          imageURL: imageToRender,
+          audioURL: audioToRender,
         });
       })
       .catch((err) => {
@@ -85,6 +91,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     padding: 5,
+    backgroundColor: 'white',
   },
   separation: {
     padding: 5,

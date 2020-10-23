@@ -65,7 +65,13 @@ export const viewPostcard = (postcardId) => {
         )
           .then((data) => {
             console.log('New postcard message added to local storage!');
-            res(data.uri);
+            if (postcard.audioArr.length) {
+              let audio = postcard.audioArr[0];
+              console.log('audio obj in viewPostcard', audio);
+              res({ mbImageLink: data.uri, mbAudioLink: audio.audioLink });
+            } else {
+              res({ mbImageLink: data.uri });
+            }
           })
           .catch((error) => {
             console.error(
@@ -73,6 +79,27 @@ export const viewPostcard = (postcardId) => {
               error
             );
           });
+      })
+      .catch((error) => {
+        console.error('Error retrieving postcard info: ', error);
+      });
+  });
+};
+
+export const viewDiscoverPostcard = (postcardId) => {
+  return new Promise((res, rej) => {
+    db.collection('postcards')
+      .doc(postcardId)
+      .get()
+      .then(async (doc) => {
+        const postcard = doc.data();
+        if (postcard.audioArr.length) {
+          let audio = postcard.audioArr[0];
+          console.log('audio obj in viewPostcard', audio);
+          res(audio.audioLink);
+        } else {
+          res('no audio');
+        }
       })
       .catch((error) => {
         console.error('Error retrieving postcard info: ', error);
