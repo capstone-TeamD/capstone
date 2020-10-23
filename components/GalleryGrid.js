@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { viewDiscoverPostcard } from './helperFunctions/Send';
 
 export default function PhotoGrid({
   photos,
@@ -36,6 +37,20 @@ export default function PhotoGrid({
   // console.log('photos', photos);
   const navigation = useNavigation();
 
+  const openDiscoverPostcard = async (imageId, imageURI) => {
+    await viewDiscoverPostcard(imageId).then((result) => {
+      let audioToRender = '';
+      if (result !== 'no audio') {
+        audioToRender = result;
+      }
+      navigation.navigate('Postcard View', {
+        imageId: imageId,
+        imageURL: imageURI,
+        audioURL: audioToRender,
+      });
+    });
+  };
+
   return (
     <FlatList
       data={photos}
@@ -48,12 +63,7 @@ export default function PhotoGrid({
         <TouchableOpacity
           key={item.id}
           style={styles.container}
-          onPress={() =>
-            navigation.navigate('Postcard View', {
-              imageId: item.imageId,
-              imageURL: item.imageURI,
-            })
-          }
+          onPress={() => openDiscoverPostcard(item.imageId, item.imageURI)}
         >
           <View style={styles.photoContainer}>
             <Image

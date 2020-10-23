@@ -91,17 +91,17 @@ export default function PhotoView(props) {
         />
       )}
       <>
-        {audioArr ? (
+        {audioArr[0] ? (
           <View
             style={{
               ...styles.pointer,
-              top: audioArr.yCoord,
-              left: audioArr.xCoord,
+              top: audioArr[0].yCoord,
+              left: audioArr[0].xCoord,
             }}
           >
             <Button title='p' onPress={() => playAudio()} />
           </View>
-        ) : null }
+        ) : null}
       </>
     </View>
   );
