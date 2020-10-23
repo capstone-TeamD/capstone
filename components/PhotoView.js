@@ -91,7 +91,7 @@ export default function PhotoView(props) {
         />
       )}
       <>
-        {audioArr && (
+        {audioArr ? (
           <View
             style={{
               ...styles.pointer,
@@ -101,7 +101,7 @@ export default function PhotoView(props) {
           >
             <Button title='p' onPress={() => playAudio()} />
           </View>
-        )}
+        ) : null }
       </>
     </View>
   );
