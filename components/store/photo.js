@@ -335,9 +335,15 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     const newPostcards = async () =>
       Promise.all(
         profilePhotosArr.map(async (postcard) => {
-          const newURL = await FileSystem.getInfoAsync(
-            profileDir + `/${postcard.imageId}`
+          console.log('postcard', postcard)
+          const newURL = await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`);
+          console.log('newURL', newURL)
+          const audio = await FileSystem.getInfoAsync(
+            `${FileSystem.cacheDirectory}audio` + `/${postcard.imageId}` + '.mp3'
           );
+          if (audio.exists) {
+            postcard.audioLink = audio.uri
+          }
           postcard.firebaseURL = postcard.imageURL;
           postcard.imageURL = newURL.uri;
           return postcard;
@@ -348,7 +354,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     // if local storage has no postcards or lengh in database !== localPostcards
     console.log('profile photos loading from database');
     // delete local storage postcard directory and make new directory
-    localStorageDirExist(profileDir)
+    // localStorageDirExist(profileDir)
     await FileSystem.deleteAsync(profileDir);
     await FileSystem.makeDirectoryAsync(profileDir);
 
@@ -357,9 +363,16 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
 
     profilePhotosArr.forEach(async (postcardDB) => {
       // console.log(postcardDB);
+      let audioURL = '';
+      if(postcardDB.audioURL) {
+        const newAudioURL = await FileSystem.downloadAsync(
+          postcardDB.audioURL, FileSystem.cacheDirectory + 'audio/' + postcardDB.imageId + '.mp3'
+        )
+        audioURL = newAudioURL.uri
+      }
       await FileSystem.downloadAsync(
         postcardDB.imageURL,
-        FileSystem.cacheDirectory + `profile//` + postcardDB.imageId
+        FileSystem.cacheDirectory + `profile/` + postcardDB.imageId
       )
         .then((data) => {
           console.log('finsh downloading');
@@ -367,6 +380,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
             imageId: postcardDB.imageId,
             imageURL: data.uri,
             FirebaseURL: postcardDB.imageURL,
+            audioURL: audioURL
           });
         })
         .catch((error) => {

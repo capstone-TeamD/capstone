@@ -80,6 +80,7 @@ class PhotoEditor extends Component {
   }
 
   getAudio(audioURI) {
+    // console.log(this.state)
     const audioObj = {
       xCoord: this.state.xCoord,
       yCoord: this.state.yCoord,
@@ -157,7 +158,7 @@ class PhotoEditor extends Component {
               />
             )}
 
-            {this.state.audioActive && <AudioRecorder getAudio={this.getAudio}/>}
+            {this.state.audioActive && <AudioRecorder getAudio={(audioURI) => this.getAudio(audioURI)}/>}
 
             <Button
               style={styles.button}
