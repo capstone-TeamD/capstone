@@ -77,7 +77,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
 
     const dir = `${FileSystem.cacheDirectory}postcards`;
     //names of postcards from the directory
-    const localPostcards = await localStorageDirExist(dir)
+    const localPostcards = await localStorageDirExist(dir);
     // const localPostcards = await FileSystem.readDirectoryAsync(dir);
 
     if (currentMs - lastUpdate.timeStamp === 0) {
@@ -116,7 +116,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
           discoverUpdateFirestore(currentId, currentDate);
         } else {
           console.log('here5');
-          console.log(localPostcards)
+          console.log(localPostcards);
           dispatch(loadFromCache(localPostcards, dir));
           discoverUpdateFirestore(currentId, lastUpdate);
         }
@@ -239,17 +239,23 @@ const discoverUpdateFirestore = async (userId, updateDate) => {
 };
 
 // delete a photo in the user's gallery
-export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
-  dispatch
-) => {
+export const deleteSinglePhoto = (
+  id,
+  userId,
+  firebaseURL,
+  localURL,
+  firebaseAudioURL
+) => async (dispatch) => {
   try {
-    console.log(firebaseURL)
-    // console.log('photo url in delete', firebaseURL);
+    // console.log(firebaseURL);
+    console.log('firebase audio url in deleteSinglePhoto', firebaseAudioURL);
     const nameArr = firebaseURL.split('%')[1];
     const fileName = nameArr.split('.jpg')[0];
     const finalFile = fileName.slice(2);
     // console.log(finalFile);
     const photoRef = firebase.storage().ref().child(`photos/${finalFile}.jpg`);
+    // TO DO: need to verify that photo file name is the same as audio file name during upload
+    // const audioRef = firebase.storage().ref().child(`audio/${finalFile}.mp3`);
     await photoRef
       .delete()
       .then(async function () {
@@ -262,11 +268,22 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
             console.log(
               'Document successfully deleted from cloud firestore - postcards'
             );
+            console.log(
+              'userId',
+              userId,
+              'id',
+              id,
+              'imageURL',
+              firebaseURL,
+              'audioURL RIGHT ABOVE FUNCTION',
+              firebaseAudioURL
+            );
             await db
               .collection('users')
               .doc(userId)
               .update({
                 postcards: firebase.firestore.FieldValue.arrayRemove({
+                  audioURL: firebaseAudioURL,
                   imageId: id,
                   imageURL: firebaseURL,
                 }),
@@ -315,7 +332,7 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
 export const localStorageDirExist = async (dirName) => {
   const { exists } = await FileSystem.getInfoAsync(dirName);
   if (!exists) {
-    console.log('makeDir')
+    console.log('makeDir');
     await FileSystem.makeDirectoryAsync(dirName);
   }
   return await FileSystem.readDirectoryAsync(dirName);
@@ -323,26 +340,27 @@ export const localStorageDirExist = async (dirName) => {
 
 //profile photo fetch
 export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
-  // console.log('profilePhotosArr', profilePhotosArr)
-  //in component did mount. use this.props.user.postcards array
-  console.log('profilePhotosArr', profilePhotosArr)
   const profileDir = `${FileSystem.cacheDirectory}profile`;
   const localPostcards = await localStorageDirExist(profileDir);
-  console.log(localPostcards)
 
   if (localPostcards.length === profilePhotosArr.length) {
     console.log('profile photos loading from local storage');
     const newPostcards = async () =>
       Promise.all(
         profilePhotosArr.map(async (postcard) => {
-          console.log('postcard', postcard)
-          const newURL = await FileSystem.getInfoAsync(profileDir + `/${postcard.imageId}`);
-          console.log('newURL', newURL)
+          console.log('postcard', postcard);
+          const newURL = await FileSystem.getInfoAsync(
+            profileDir + `/${postcard.imageId}`
+          );
+          console.log('newURL', newURL);
           const audio = await FileSystem.getInfoAsync(
-            `${FileSystem.cacheDirectory}audio` + `/${postcard.imageId}` + '.mp3'
+            `${FileSystem.cacheDirectory}audio` +
+              `/${postcard.imageId}` +
+              '.mp3'
           );
           if (audio.exists) {
-            postcard.audioLink = audio.uri
+            postcard.firebaseAudioURL = postcard.audioURL;
+            postcard.audioURL = audio.uri;
           }
           postcard.firebaseURL = postcard.imageURL;
           postcard.imageURL = newURL.uri;
@@ -364,11 +382,12 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     profilePhotosArr.forEach(async (postcardDB) => {
       // console.log(postcardDB);
       let audioURL = '';
-      if(postcardDB.audioURL) {
+      if (postcardDB.audioURL) {
         const newAudioURL = await FileSystem.downloadAsync(
-          postcardDB.audioURL, FileSystem.cacheDirectory + 'audio/' + postcardDB.imageId + '.mp3'
-        )
-        audioURL = newAudioURL.uri
+          postcardDB.audioURL,
+          FileSystem.cacheDirectory + 'audio/' + postcardDB.imageId + '.mp3'
+        );
+        audioURL = newAudioURL.uri;
       }
       await FileSystem.downloadAsync(
         postcardDB.imageURL,
@@ -380,7 +399,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
             imageId: postcardDB.imageId,
             imageURL: data.uri,
             FirebaseURL: postcardDB.imageURL,
-            audioURL: audioURL
+            audioURL: audioURL,
           });
         })
         .catch((error) => {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,18 +11,18 @@ import {
   Dimensions,
   Keyboard,
   Animated,
-} from "react-native";
-import background from "../assets/whiteBG.jpg";
-import { Loader } from "./Loader";
-import ButtonOptions from "./ButtonOptions";
-import TextBox from "./TextBox";
-import AudioRecorder from "./AudioRecorder";
+} from 'react-native';
+import background from '../assets/whiteBG.jpg';
+import { Loader } from './Loader';
+import ButtonOptions from './ButtonOptions';
+import TextBox from './TextBox';
+import AudioRecorder from './AudioRecorder';
 
 class PhotoEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputText: "",
+      inputText: '',
       isActive: false,
       xCoord: 0,
       yCoord: 0,
@@ -56,8 +56,8 @@ class PhotoEditor extends Component {
     onPanResponderRelease: () => {
       this.pan.flattenOffset();
       if (this.pan.x._value > 0) {
-        console.log("x", this.pan.x);
-        console.log("y", this.pan.y);
+        console.log('x', this.pan.x);
+        console.log('y', this.pan.y);
         this.setState({
           isActive: true,
           xCoord: this.pan.x._value,
@@ -74,7 +74,7 @@ class PhotoEditor extends Component {
       message: this.state.inputText,
     };
     this.setState({
-      inputText: "",
+      inputText: '',
       textArray: [...this.state.textArray, messageObj],
     });
   }
@@ -84,8 +84,8 @@ class PhotoEditor extends Component {
     const audioObj = {
       xCoord: this.state.xCoord,
       yCoord: this.state.yCoord,
-      audioLink: audioURI
-    }
+      audioLink: audioURI,
+    };
     this.setState({
       audioArray: [...this.state.audioArray, audioObj],
     });
@@ -93,18 +93,18 @@ class PhotoEditor extends Component {
 
   uploadPostcard(type) {
     // console.log('uploadpostcard', this.state.textArray, this.state.audioArray)
-    this.props.upload(this.state.textArray, this.state.audioArray)
-    this.setState({loading: false})
+    this.props.upload(this.state.textArray, this.state.audioArray);
+    this.setState({ loading: false });
   }
 
   showButton(type) {
-    if (type === "text") {
+    if (type === 'text') {
       this.setState({
         textActive: true,
         audioActive: false,
       });
     }
-    if (type === "audio") {
+    if (type === 'audio') {
       this.setState({
         textActive: false,
         audioActive: true,
@@ -123,11 +123,11 @@ class PhotoEditor extends Component {
       return obj.message;
     });
 
-    const width = Dimensions.get("window").width;
-    const height = Dimensions.get("window").height;
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
 
     const { upload, image, setImage } = this.props;
-    console.log('state', this.state)
+    console.log('state', this.state);
     return (
       <View style={styles.container}>
         <Loader loader={this.state.loading} />
@@ -143,13 +143,12 @@ class PhotoEditor extends Component {
             {...this.panResponder.panHandlers}
           >
             <View>
-              <Image source={require("../assets/cursor1.png")} />
+              <Image source={require('../assets/cursor1.png')} />
             </View>
           </Animated.View>
         </ImageBackground>
         {this.state.isActive ? (
           <View style={styles.inputBox}>
-
             {this.state.textActive && (
               <TextBox
                 onChangeText={this.onChangeText}
@@ -158,16 +157,18 @@ class PhotoEditor extends Component {
               />
             )}
 
-            {this.state.audioActive && <AudioRecorder getAudio={(audioURI) => this.getAudio(audioURI)}/>}
+            {this.state.audioActive && (
+              <AudioRecorder getAudio={(audioURI) => this.getAudio(audioURI)} />
+            )}
 
             <Button
               style={styles.button}
-              title="Upload Postcard"
+              title='Upload Postcard'
               onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}
-              title="Cancel"
+              title='Cancel'
               onPress={() => setImage(null)}
             />
 
@@ -191,12 +192,12 @@ class PhotoEditor extends Component {
             </Text>
             <Button
               style={styles.button}
-              title="Upload Postcard"
+              title='Upload Postcard'
               onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}
-              title="Cancel"
+              title='Cancel'
               onPress={() => setImage(null)}
             />
           </ImageBackground>
@@ -214,57 +215,57 @@ class PhotoEditor extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
     flex: 1,
     marginBottom: -50,
   },
   pointer: {
     height: 18,
     width: 18,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
-    borderColor: "black",
+    borderColor: 'black',
     borderWidth: 3,
   },
   imageBackground: {
-    width: "100%",
+    width: '100%',
     flex: 0.6,
   },
   button: {
     flex: 1,
   },
   innerPhoto: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "stretch",
-    position: "absolute",
+    width: '100%',
+    height: '100%',
+    resizeMode: 'stretch',
+    position: 'absolute',
   },
   inputBackground: {
     flex: 1,
-    width: "100%",
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     padding: 35,
-    textAlign: "center",
+    textAlign: 'center',
   },
   textContainer: {
     marginTop: 15,
   },
   textSaved: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   inputBox: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     fontSize: 14,
-    textAlign: "center",
-    backgroundColor: "#fff",
+    textAlign: 'center',
+    backgroundColor: '#fff',
   },
 });
 
