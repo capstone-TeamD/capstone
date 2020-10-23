@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     padding: 5,
+    backgroundColor: 'white',
   },
   separation: {
     padding: 5,
