@@ -61,13 +61,23 @@ class Profile extends Component {
     }
   };
 
-  async handleDelete(imageId, firebaseURL, localURL) {
-    console.log('firebase', firebaseURL);
+  async handleDelete(imageId, firebaseURL, localURL, firebaseAudioURL) {
+    console.log(
+      'imageId',
+      imageId,
+      'firebaseURL',
+      firebaseURL,
+      'localURL',
+      localURL,
+      'firebaseAudioURL',
+      firebaseAudioURL
+    );
     await this.props.deletePhoto(
       imageId,
       this.props.user.id,
       firebaseURL,
-      localURL
+      localURL,
+      firebaseAudioURL
     );
   }
 
@@ -139,13 +149,8 @@ class Profile extends Component {
             <Text style={styles.infoName}>{username}</Text>
             <Text style={styles.infoDesc}>{about}</Text>
           </View>
+          <View style={styles.infoLine} />
         </View>
-        <TouchableOpacity
-          style={styles.edit}
-          onPress={() => navigate('EditProfile')}
-        >
-          <Image source={require('../assets/pencil-outline.png')} />
-        </TouchableOpacity>
         <View style={styles.gallery}>
           <PhotoGrid
             photos={this.props.postcards}
@@ -234,13 +239,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignContent: 'flex-start',
     backgroundColor: '#F8F8F8',
-    marginBottom: 5,
+    paddingBottom: 10,
+    // borderBottomWidth: .2,
+    // marginBottom: 50,
     shadowColor: '#000000',
     shadowOpacity: 0.5,
-    shadowRadius: 1,
+    shadowRadius: 0.5,
     shadowOffset: {
-      height: 1,
-      width: 1,
+      height: 0.5,
+      width: 0.5,
     },
   },
   info: {
@@ -259,6 +266,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 17,
     marginBottom: 4,
+    paddingHorizontal: 10,
   },
   modalView: {
     backgroundColor: 'white',
@@ -270,9 +278,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
+  infoLine: {
+    borderBottomWidth: 0.2,
+    paddingTop: 5,
+    paddingBottom: 10,
+    width: '100%',
+    opacity: 0.3,
+  },
+  textStyle: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   circleImage: {
-    height: 110,
-    width: 110,
+    height: 100,
+    width: 100,
+    marginTop: 10,
     borderRadius: 500,
     borderWidth: 0.3,
     borderColor: '#B8B8B8',
@@ -297,8 +318,16 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getUser: (id) => dispatch(getUser(id)),
-    deletePhoto: (imageId, userId, firebaseURL, localURL) =>
-      dispatch(deleteSinglePhoto(imageId, userId, firebaseURL, localURL)),
+    deletePhoto: (imageId, userId, firebaseURL, localURL, firebaseAudioURL) =>
+      dispatch(
+        deleteSinglePhoto(
+          imageId,
+          userId,
+          firebaseURL,
+          localURL,
+          firebaseAudioURL
+        )
+      ),
     getProfilePhotos: (data) => dispatch(profilePhotos(data)),
   };
 };

@@ -34,7 +34,7 @@ export default function PhotoGrid({
     });
   }, []);
 
-  // console.log('photos', photos);
+  console.log('photos in profile', photos);
   const { width } = Dimensions.get('window');
   const size = width / numColumns;
 
@@ -64,7 +64,12 @@ export default function PhotoGrid({
           <TouchableOpacity
             style={{ ...styles.swipeButton, backgroundColor: 'red' }}
             onPress={() =>
-              handleDelete(item.imageId, item.firebaseURL, item.imageURL)
+              handleDelete(
+                item.imageId,
+                item.firebaseURL,
+                item.imageURL,
+                item.firebaseAudioURL
+              )
             }
           >
             <Image source={require('../assets/delete.png')} />
@@ -81,6 +86,7 @@ export default function PhotoGrid({
               navigate('Postcard View', {
                 imageId: item.imageId,
                 imageURL: item.imageURL,
+                audioURL: item.audioURL,
               })
             }
           >

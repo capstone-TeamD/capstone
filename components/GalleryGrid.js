@@ -63,7 +63,6 @@ export default function PhotoGrid({
                 uri: item.imageURI,
               }}
             />
-            {/* <Image style={styles.icon} source={cameraicon} /> */}
             <Text style={styles.userText}>
               Created By: {`${item.username}`}
             </Text>

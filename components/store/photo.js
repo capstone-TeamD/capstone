@@ -239,16 +239,23 @@ const discoverUpdateFirestore = async (userId, updateDate) => {
 };
 
 // delete a photo in the user's gallery
-export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
-  dispatch
-) => {
+export const deleteSinglePhoto = (
+  id,
+  userId,
+  firebaseURL,
+  localURL,
+  firebaseAudioURL
+) => async (dispatch) => {
   try {
-    // console.log('photo url in delete', firebaseURL);
+    // console.log(firebaseURL);
+    console.log('firebase audio url in deleteSinglePhoto', firebaseAudioURL);
     const nameArr = firebaseURL.split('%')[1];
     const fileName = nameArr.split('.jpg')[0];
     const finalFile = fileName.slice(2);
     // console.log(finalFile);
     const photoRef = firebase.storage().ref().child(`photos/${finalFile}.jpg`);
+    // TO DO: need to verify that photo file name is the same as audio file name during upload
+    // const audioRef = firebase.storage().ref().child(`audio/${finalFile}.mp3`);
     await photoRef
       .delete()
       .then(async function () {
@@ -261,11 +268,22 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
             console.log(
               'Document successfully deleted from cloud firestore - postcards'
             );
+            console.log(
+              'userId',
+              userId,
+              'id',
+              id,
+              'imageURL',
+              firebaseURL,
+              'audioURL RIGHT ABOVE FUNCTION',
+              firebaseAudioURL
+            );
             await db
               .collection('users')
               .doc(userId)
               .update({
                 postcards: firebase.firestore.FieldValue.arrayRemove({
+                  audioURL: firebaseAudioURL,
                   imageId: id,
                   imageURL: firebaseURL,
                 }),
@@ -314,6 +332,7 @@ export const deleteSinglePhoto = (id, userId, firebaseURL, localURL) => async (
 export const localStorageDirExist = async (dirName) => {
   const { exists } = await FileSystem.getInfoAsync(dirName);
   if (!exists) {
+    console.log('makeDir');
     await FileSystem.makeDirectoryAsync(dirName);
   }
   return await FileSystem.readDirectoryAsync(dirName);
@@ -321,9 +340,6 @@ export const localStorageDirExist = async (dirName) => {
 
 //profile photo fetch
 export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
-  // console.log('profilePhotosArr', profilePhotosArr)
-  //in component did mount. use this.props.user.postcards array
-
   const profileDir = `${FileSystem.cacheDirectory}profile`;
   const localPostcards = await localStorageDirExist(profileDir);
 
@@ -332,9 +348,20 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     const newPostcards = async () =>
       Promise.all(
         profilePhotosArr.map(async (postcard) => {
+          console.log('postcard', postcard);
           const newURL = await FileSystem.getInfoAsync(
             profileDir + `/${postcard.imageId}`
           );
+          console.log('newURL', newURL);
+          const audio = await FileSystem.getInfoAsync(
+            `${FileSystem.cacheDirectory}audio` +
+              `/${postcard.imageId}` +
+              '.mp3'
+          );
+          if (audio.exists) {
+            postcard.firebaseAudioURL = postcard.audioURL;
+            postcard.audioURL = audio.uri;
+          }
           postcard.firebaseURL = postcard.imageURL;
           postcard.imageURL = newURL.uri;
           return postcard;
@@ -345,7 +372,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
     // if local storage has no postcards or lengh in database !== localPostcards
     console.log('profile photos loading from database');
     // delete local storage postcard directory and make new directory
-    localStorageDirExist(profileDir);
+    // localStorageDirExist(profileDir)
     await FileSystem.deleteAsync(profileDir);
     await FileSystem.makeDirectoryAsync(profileDir);
 
@@ -354,9 +381,17 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
 
     profilePhotosArr.forEach(async (postcardDB) => {
       // console.log(postcardDB);
+      let audioURL = '';
+      if (postcardDB.audioURL) {
+        const newAudioURL = await FileSystem.downloadAsync(
+          postcardDB.audioURL,
+          FileSystem.cacheDirectory + 'audio/' + postcardDB.imageId + '.mp3'
+        );
+        audioURL = newAudioURL.uri;
+      }
       await FileSystem.downloadAsync(
         postcardDB.imageURL,
-        FileSystem.cacheDirectory + `profile//` + postcardDB.imageId
+        FileSystem.cacheDirectory + `profile/` + postcardDB.imageId
       )
         .then((data) => {
           console.log('finsh downloading');
@@ -364,6 +399,7 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
             imageId: postcardDB.imageId,
             imageURL: data.uri,
             FirebaseURL: postcardDB.imageURL,
+            audioURL: audioURL,
           });
         })
         .catch((error) => {

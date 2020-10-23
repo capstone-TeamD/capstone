@@ -2,8 +2,8 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
-import React, { Component } from "react";
-import {ActivityIndicator} from 'react-native'
+import { audioUpload } from './audio';
+import { localStorageDirExist } from '../store/photo';
 
 class Fire {
   constructor() {
@@ -36,8 +36,19 @@ class Fire {
   };
 
   // this is to add photo uri to firebase - cloud firestore
-  addPhoto = async (localUri, currentUser, messageObj = []) => {
+  addPhoto = async (localUri, currentUser, messageObj, audioObj) => {
+    console.log('addPhoto func', messageObj, audioObj);
+    // addPhoto = async (localUri, currentUser, messageObj = [])=> {
     const remoteUri = await this.uploadPhotoAsync(localUri);
+    // audioupload function that needs the uri
+    console.log('audioObj', audioObj);
+    let audioURLLocal = '';
+    let audioFirebaseUri = '';
+    if (audioObj.length) {
+      audioURLLocal = audioObj[0].audioLink;
+      audioFirebaseUri = await audioUpload(audioURLLocal);
+      audioObj[0].audioLink = audioFirebaseUri;
+    }
     return new Promise((res, rej) => {
       this.firestore
         .collection('postcards')
@@ -46,7 +57,8 @@ class Fire {
           creatorName: currentUser.username,
           dateCreated: this.timestamp,
           imageURI: remoteUri,
-          textArr: messageObj || null
+          textArr: messageObj,
+          audioArr: audioObj, //added audio obj to firestore
         })
         .then((docRef) => {
           this.firestore
@@ -56,22 +68,41 @@ class Fire {
               postcards: firebase.firestore.FieldValue.arrayUnion({
                 imageId: docRef.id,
                 imageURL: remoteUri,
+                audioURL: audioFirebaseUri, //added the audioURL to postcard firestore
               }),
             })
             .then(async function () {
               console.log('New postcard added to user array!');
+              //download audio file to local storage
               await FileSystem.downloadAsync(
                 remoteUri,
                 FileSystem.cacheDirectory + 'profile//' + docRef.id
               )
-                .then((data) => {
+                .then(async (data) => {
                   console.log('New postcard added to local storage!');
-                  const newPostcard = {
-                    imageId: docRef.id,
-                    imageURL: data.uri,
-                    firebaseURL: remoteUri,
-                  };
-                  res(newPostcard);
+                  const imageURL = data.uri;
+                  if (audioObj.length) {
+                    const audioDir = `${FileSystem.cacheDirectory}audio`;
+                    await localStorageDirExist(audioDir);
+                    await FileSystem.downloadAsync(
+                      audioFirebaseUri,
+                      FileSystem.cacheDirectory + 'audio//' + docRef.id + '.mp3'
+                    )
+                      .then((data) => {
+                        console.log('Audio added to local storage!');
+                        const newPostcard = {
+                          imageId: docRef.id,
+                          imageURL: imageURL,
+                          firebaseURL: remoteUri,
+                          audioURL: data.uri,
+                          firebaseAudioURL: audioFirebaseUri,
+                        };
+                        res(newPostcard);
+                      })
+                      .catch((error) => {
+                        console.error('Error dispatching new audio: ', error);
+                      });
+                  }
                 })
                 .catch((error) => {
                   console.error('Error dispatching new photo: ', error);

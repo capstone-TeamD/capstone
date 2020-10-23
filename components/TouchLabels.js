@@ -1,9 +1,7 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 
 export default function TouchLabels({ touchActive, setActive, textArr }) {
-
-
   return (
     <View>
       {textArr && touchActive
@@ -19,7 +17,7 @@ export default function TouchLabels({ touchActive, setActive, textArr }) {
               >
                 <View style={styles.triangle} />
                 <Text style={styles.boxText} onPress={() => setActive(false)}>
-                  {textObj.message}{" "}
+                  {textObj.message}
                 </Text>
               </View>
             );
@@ -31,17 +29,17 @@ export default function TouchLabels({ touchActive, setActive, textArr }) {
 
 const styles = StyleSheet.create({
   box: {
-    position: "absolute",
+    position: 'absolute',
     borderWidth: 2,
-    backgroundColor: "#303030",
-    borderColor: "#303030",
+    backgroundColor: '#303030',
+    borderColor: '#303030',
     padding: 5,
     paddingHorizontal: 10,
     borderRadius: 3,
     height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000000",
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000000',
     shadowOpacity: 0.3,
     shadowRadius: 2,
     shadowOffset: {
@@ -52,19 +50,19 @@ const styles = StyleSheet.create({
   triangle: {
     width: 10,
     height: 10,
-    position: "absolute",
+    position: 'absolute',
     top: -10,
     left: 15,
     borderLeftWidth: 10,
-    borderLeftColor: "transparent",
+    borderLeftColor: 'transparent',
     borderRightWidth: 10,
-    borderRightColor: "transparent",
+    borderRightColor: 'transparent',
     borderBottomWidth: 8,
-    borderBottomColor: "#303030",
+    borderBottomColor: '#303030',
     borderRadius: 20,
   },
   boxText: {
     fontSize: 12,
-    color: "white",
+    color: 'white',
   },
 });
