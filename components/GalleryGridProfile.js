@@ -75,7 +75,7 @@ export default function PhotoGrid({
           </TouchableOpacity>
           <TouchableOpacity
             style={{...styles.swipeButton, backgroundColor: "#B8B8B8"}}
-            onPress={() => navigate("Postcard View", {imageId: item.imageId, imageURL: item.imageURL })}
+            onPress={() => navigate("Postcard View", {imageId: item.imageId, imageURL: item.imageURL, audioLink: item.audioLink})}
           >
             <Image source={require("../assets/magnify-plus.png")} />
           </TouchableOpacity>

@@ -6,10 +6,11 @@ import {
 } from "@react-native-community/hooks";
 import { touchpointText, touchpointAudio } from "./helperFunctions/touchpoints";
 import  TouchLabels from "./TouchLabels";
+import { Audio } from "expo-av";
 
 export default function PhotoView(props) {
   const { landscape } = useDeviceOrientation();
-  const { imageId, imageURL } = props.route.params;
+  const { imageId, imageURL, audioLink} = props.route.params;
   const [textArr, setTextArr] = useState([]);
   const [audioArr, setAudioArr] = useState([]);
   const [touchActive, setActive] = useState(false);
@@ -31,10 +32,26 @@ export default function PhotoView(props) {
     setAudioArr(aud)
   }
 
+  const playAudio = async () => {
+    const recording = new Audio.Recording();
+    try {
+      console.log('audioLink', audioLink)
+      const soundObject = await Audio.Sound.createAsync(
+        { uri: audioLink },
+        { shouldPlay: true }
+      )
+      // Your sound is playing!
+      console.log('playing music')
+      
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   const { width, height } = useDimensions().window;
   
   console.log("width, height", width, height);
-  console.log('audioArr', audioArr)
+  console.log('props', props.route.params)
   
   return (
     <View style={styles.container}>
@@ -74,6 +91,15 @@ export default function PhotoView(props) {
           textArr={textArr}
         />
       )}
+      <View
+        style={{
+          ...styles.pointer,
+          top: audioArr.yCoord,
+          left: audioArr.xCoord,
+        }}
+      >
+        <Button title="p" onPress={() => playAudio()}/>
+        </View>
     </View>
   );
 }
