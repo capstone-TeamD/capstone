@@ -4,9 +4,9 @@ import {
   useDeviceOrientation,
   useDimensions,
 } from "@react-native-community/hooks";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { TextInput } from "react-native-gesture-handler";
 
-export default function TextBox({ inputText }) {
+export default function TextBox({ inputText, onChangeText, getText }) {
   const { landscape } = useDeviceOrientation();
   const { width, height } = useDimensions().window;
  
@@ -15,7 +15,7 @@ export default function TextBox({ inputText }) {
     <View style={styles.inputBox}>
       <TextInput
         value={inputText}
-        onChangeText={(inputText) => this.setState({ inputText })}
+        onChangeText={(inputText) => onChangeText(inputText)}
         placeholder="Enter text"
         autoCapitalize="none"
         multiline={true}
@@ -30,18 +30,8 @@ export default function TextBox({ inputText }) {
       />
       <Button
         style={styles.button}
-        onPress={() => this.getText()}
+        onPress={() => getText(inputText)}
         title="Save Touchpoint"
-      />
-      <Button
-        style={styles.button}
-        title="Upload Postcard"
-        onPress={() => this.uploadPostcard(true)}
-      />
-      <Button
-        style={styles.button}
-        title="Cancel"
-        onPress={() => setImage(null)}
       />
     </View>
   );
