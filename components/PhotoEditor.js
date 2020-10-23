@@ -9,7 +9,6 @@ import {
   TextInput,
   Button,
   Dimensions,
-  Modal,
   Keyboard,
   Animated,
 } from "react-native";
@@ -17,7 +16,7 @@ import background from "../assets/whiteBG.jpg";
 import { Loader } from "./Loader";
 import ButtonOptions from "./ButtonOptions";
 import TextBox from "./TextBox";
-import AudioRecorder from "./AudioRecorder"
+import AudioRecorder from "./AudioRecorder";
 
 class PhotoEditor extends Component {
   constructor(props) {
@@ -36,6 +35,7 @@ class PhotoEditor extends Component {
       audioActive: false,
     };
     this.getText = this.getText.bind(this);
+    this.onChangeText = this.onChangeText.bind(this);
     this.uploadPostcard = this.uploadPostcard.bind(this);
     this.showButton = this.showButton.bind(this);
   }
@@ -99,6 +99,12 @@ class PhotoEditor extends Component {
     }
   }
 
+  onChangeText(text) {
+    this.setState({
+      inputText: text,
+    });
+  }
+
   render() {
     const texts = this.state.textArray.map((obj) => {
       return obj.message;
@@ -130,10 +136,25 @@ class PhotoEditor extends Component {
         </ImageBackground>
         {this.state.isActive ? (
           <View style={styles.inputBox}>
-
-            {this.state.textActive && <TextBox />}
+            {this.state.textActive && (
+              <TextBox
+                onChangeText={this.onChangeText}
+                inputText={this.state.inputText}
+                getText={this.getText}
+              />
+            )}
             {this.state.audioActive && <AudioRecorder />}
 
+            <Button
+              style={styles.button}
+              title="Upload Postcard"
+              onPress={() => this.uploadPostcard(true)}
+            />
+            <Button
+              style={styles.button}
+              title="Cancel"
+              onPress={() => setImage(null)}
+            />
 
             {texts[0] ? (
               texts.map((message, index) => (
@@ -197,31 +218,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 0.6,
   },
-  inputBox: {
-    flex: 1,
-    width: "100%",
-    fontSize: 14,
-    textAlign: "center",
-    backgroundColor: "#fff",
-  },
-  textInput: {
-    width: "70%",
-    height: "15%",
-    alignSelf: "center",
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 10,
-    padding: 14,
-    borderColor: "#585858",
-    backgroundColor: "#F5F5F5",
-    shadowColor: "#000000",
-    shadowOpacity: 0.7,
-    shadowRadius: 1,
-    shadowOffset: {
-      height: -1,
-      width: -1,
-    },
-  },
   button: {
     flex: 1,
   },
@@ -247,6 +243,13 @@ const styles = StyleSheet.create({
   },
   textSaved: {
     textAlign: "center",
+  },
+  inputBox: {
+    flex: 1,
+    width: "100%",
+    fontSize: 14,
+    textAlign: "center",
+    backgroundColor: "#fff",
   },
 });
 
