@@ -1,7 +1,7 @@
 // upload audio to firestore
 // audio api from expo already tell downloads the uri to local storage
 // readFileSystem(dir) methods to get the uri
-// get the contents of the file and turn it into a blob formet to upload
+// get the contents of the file and turn it into a blob format to upload
 // upload in audio folder
 
 import * as firebase from 'firebase';
@@ -38,6 +38,7 @@ export const audioUpload = async (uri) => {
         })
   })
 }
+
 
 //On Upload, the firebaseURL has to be uploaded to the firestore audio field
 // in the addphoto upload.js file add a field

@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     borderRadius: 500,
     borderWidth: 0.3,
     borderColor: '#B8B8B8',
+    flexBasis: "auto"
   },
   inputBox: {
     height: 50,

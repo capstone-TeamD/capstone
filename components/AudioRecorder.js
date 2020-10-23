@@ -34,8 +34,6 @@ export default class AudioRecorder extends Component {
       if (response.granted) console.log("permission granted");
       const granted = await Permissions.getAsync(Permissions.AUDIO_RECORDING)
       console.log("granted", granted)
-    //   await Audio.setAudioModeAsync(true)
-    //   console.log("enable audio")
     } catch (error) {
       console.log("Mic permissions denied");
       console.warn(error);
@@ -94,9 +92,9 @@ export default class AudioRecorder extends Component {
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.askMicPermissions}>
+        {/* <TouchableOpacity onPress={this.askMicPermissions}>
           <Text>Recorder</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity onPress={this.startRecording}>
           <Text>Start</Text>
@@ -124,7 +122,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "space-evenly",
+    // justifyContent: "space-evenly",
     alignItems: "center",
   },
 });
+
