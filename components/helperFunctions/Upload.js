@@ -74,6 +74,7 @@ class Fire {
             .then(async function () {
               console.log('New postcard added to user array!');
               //download audio file to local storage
+
               await FileSystem.downloadAsync(
                 remoteUri,
                 FileSystem.cacheDirectory + 'profile//' + docRef.id
@@ -102,6 +103,15 @@ class Fire {
                       .catch((error) => {
                         console.error('Error dispatching new audio: ', error);
                       });
+                  } else {
+                    const newPostcard = {
+                      imageId: docRef.id,
+                      imageURL: imageURL,
+                      firebaseURL: remoteUri,
+                      audioURL: '',
+                      firebaseAudioURL: audioFirebaseUri,
+                    };
+                    res(newPostcard);
                   }
                 })
                 .catch((error) => {

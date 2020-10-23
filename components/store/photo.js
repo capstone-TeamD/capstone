@@ -278,15 +278,19 @@ export const deleteSinglePhoto = (
               'audioURL RIGHT ABOVE FUNCTION',
               firebaseAudioURL
             );
+            const deleteObj = {
+              imageId: id,
+              imageURL: firebaseURL,
+              audioURL: ''
+            }
+            if (firebaseAudioURL) {
+              deleteObj.audioURL = firebaseAudioURL
+            }
             await db
               .collection('users')
               .doc(userId)
               .update({
-                postcards: firebase.firestore.FieldValue.arrayRemove({
-                  audioURL: firebaseAudioURL,
-                  imageId: id,
-                  imageURL: firebaseURL,
-                }),
+                postcards: firebase.firestore.FieldValue.arrayRemove(deleteObj),
               })
               .then(async () => {
                 console.log(
@@ -361,6 +365,9 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
           if (audio.exists) {
             postcard.firebaseAudioURL = postcard.audioURL;
             postcard.audioURL = audio.uri;
+          } else {
+            postcard.firebaseAudioURL = '';
+            postcard.audioURL = '';
           }
           postcard.firebaseURL = postcard.imageURL;
           postcard.imageURL = newURL.uri;
