@@ -73,13 +73,14 @@ class Profile extends Component {
             <Text style={styles.infoName}>{username}</Text>
             <Text style={styles.infoDesc}>{about}</Text>
           </View>
+          <View style={styles.infoLine}/>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.edit}
           onPress={() => navigate("EditProfile")}
         >
           <Image source={require("../assets/pencil-outline.png")} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.gallery}>
           <PhotoGrid
             photos={this.props.postcards}
@@ -153,13 +154,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "flex-start",
     backgroundColor: "#F8F8F8",
-    marginBottom: 5,
+    paddingBottom: 10,
+    // borderBottomWidth: .2,
+    // marginBottom: 50,
     shadowColor: "#000000",
-    shadowOpacity: 0.5,
-    shadowRadius: 1,
+    shadowOpacity: .5,
+    shadowRadius: .5,
     shadowOffset: {
-      height: 1,
-      width: 1,
+      height: .5,
+      width: .5,
     },
   },
   info: {
@@ -178,6 +181,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 17,
     marginBottom: 4,
+    paddingHorizontal: 10,
+  },
+  infoLine: {
+    borderBottomWidth: .2, 
+    paddingTop: 5,
+    paddingBottom: 10, 
+    width: "100%", 
+    opacity: .3
   },
   // modalView: {
   //   backgroundColor: "white",
@@ -194,8 +205,9 @@ const styles = StyleSheet.create({
   //   textAlign: "center",
   // },
   circleImage: {
-    height: 110,
-    width: 110,
+    height: 100,
+    width: 100,
+    marginTop: 10,
     borderRadius: 500,
     borderWidth: 0.3,
     borderColor: "#B8B8B8",

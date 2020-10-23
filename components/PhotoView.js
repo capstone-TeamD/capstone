@@ -13,13 +13,13 @@ export default function PhotoView(props) {
   const [textArr, setTextArr] = useState([]);
   const [audioArr, setAudioArr] = useState([]);
   const [touchActive, setActive] = useState(false);
-
+  
   useEffect(() => {
     console.log("useEffect");
     funcText(imageId);
     funcAudio(imageId)
   }, []);
-
+  
   const funcText = async (imageId) => {
     const msgs = await touchpointText(imageId);
     setTextArr(msgs);
@@ -32,7 +32,7 @@ export default function PhotoView(props) {
   }
 
   const { width, height } = useDimensions().window;
-
+  
   console.log("width, height", width, height);
   console.log('audioArr', audioArr)
   
@@ -48,7 +48,7 @@ export default function PhotoView(props) {
       >
         <Image
           source={{ uri: imageURL }}
-          style={{ width: "100%", height: landscape ? "100%" : "43%" }}
+          style={{ width: "100%", height: landscape ? "100%" : "30%" }}
         />
       </View>
       {textArr && !touchActive ? (
