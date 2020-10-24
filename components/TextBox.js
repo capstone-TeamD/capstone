@@ -9,20 +9,18 @@ import { TextInput } from "react-native-gesture-handler";
 export default function TextBox({ inputText, onChangeText, getText }) {
   const { landscape } = useDeviceOrientation();
   const { width, height } = useDimensions().window;
- 
 
   return (
-    <View style={styles.inputBox}>
+    <View style={styles.textContainer}>
       <TextInput
         value={inputText}
         onChangeText={(inputText) => onChangeText(inputText)}
-        placeholder="Enter text"
+        placeholder="Enter Description"
         autoCapitalize="none"
-        multiline={true}
         enablesReturnKeyAutomatically={true}
         style={styles.textInput}
         returnKeyType="done"
-        maxLength={25}
+        maxLength={30}
         blurOnSubmit={true}
         onSubmitEditing={() => {
           Keyboard.dismiss();
@@ -38,30 +36,24 @@ export default function TextBox({ inputText, onChangeText, getText }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  textContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  inputBox: {
-    flex: 1,
-    width: "100%",
-    fontSize: 14,
-    textAlign: "center",
-    backgroundColor: "#fff",
+    flexDirection: "column",
+    marginTop: 20,
+    marginBottom: -50
   },
   textInput: {
     width: "70%",
-    height: "15%",
+    height: 45,
     alignSelf: "center",
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderRadius: 5,
-    margin: 10,
+    margin: 15,
     padding: 14,
     borderColor: "#585858",
     backgroundColor: "#F5F5F5",
     shadowColor: "#000000",
-    shadowOpacity: 0.7,
+    shadowOpacity: 0.2,
     shadowRadius: 1,
     shadowOffset: {
       height: -1,

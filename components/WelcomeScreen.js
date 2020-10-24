@@ -18,8 +18,10 @@ export default class WelcomeScreen extends Component {
           source={require("../assets/backgroundCS.jpg")}
       >
         <View style={styles.logoContainer}>
-          <Text style={styles.title}>postbox</Text>
+          <Image style={styles.logo} source={require('../assets/pbLogo2.png')}/>
+          {/* <Text style={styles.title}>postbox</Text> */}
         </View>
+        <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.loginButton}>
           <Text
             style={styles.buttonText}
@@ -36,6 +38,7 @@ export default class WelcomeScreen extends Component {
             Signup
           </Text>
         </TouchableOpacity>
+        </View>
       </ImageBackground>
     );
   }
@@ -50,14 +53,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 190,
+    height: 130,
+    marginRight: 25,
   },
   logoContainer: {
     position: "absolute",
-    top: 70,
+    top: "7%",
     alignItems: "center",
     padding: 100,
+  },
+  buttonContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    bottom: "1%"
   },
   loginButton: {
     width: "80%",
@@ -66,15 +76,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 15,
-    opacity: 0.4,
+    opacity: 0.5,
     borderRadius: 8,
     shadowColor: "#000000",
     shadowOpacity: 0.5,
     shadowRadius: 1,
     shadowOffset: {
-      height: 1,
-      width: 1
-    }
+      height: .5,
+      width: .5
+    },
   },
   registerButton: {
     width: "80%",
@@ -83,15 +93,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 120,
-    opacity: 0.3,
+    opacity: 0.5,
     borderRadius: 8,
     shadowColor: "#000000",
     shadowOpacity: 0.5,
     shadowRadius: 1,
     shadowOffset: {
-      height: 1,
-      width: 1
-    }
+      height: .5,
+      width: .5
+    },
   },
   buttonText: {
     fontSize: 17,

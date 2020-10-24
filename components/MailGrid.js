@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   sender: {
-    alignSelf: 'center',
     fontStyle: 'italic',
     marginTop: 5
   },
