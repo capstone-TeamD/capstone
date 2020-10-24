@@ -34,7 +34,6 @@ export default class AudioRecorder extends Component {
   askMicPermissions = async () => {
     try {
       const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-      console.log("permissions for microphone", response);
       if (response.granted) console.log("permission granted");
       const granted = await Permissions.getAsync(Permissions.AUDIO_RECORDING);
       console.log("granted", granted);
@@ -49,7 +48,6 @@ export default class AudioRecorder extends Component {
       recording._isDoneRecording = false;
       recording.options = null;
       recording.uri = null;
-      console.log("recording started", recording);
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
@@ -84,7 +82,7 @@ export default class AudioRecorder extends Component {
         { shouldPlay: true }
       );
       console.log("playing music");
-      // await soundObject.unloadAsync();
+      await soundObject.unloadAsync();
     } catch (error) {
       console.log("error", error);
     }
@@ -152,51 +150,3 @@ export default class AudioRecorder extends Component {
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flexDirection: "column",
-//     alignItems: "center",
-//     marginTop: -15,
-//   },
-//   micContainer: {
-//     position: "absolute",
-//     alignItems: "center",
-//   },
-//   mic: {
-//     width: 120,
-//     height: 120,
-//   },
-//   buttons: {
-//     flexDirection: "row",
-//     marginTop: 130,
-//     alignItems: "center",
-//     marginBottom: 10,
-//   },
-//   playButton: {
-//     width: 30,
-//     height: 30,
-//     marginHorizontal: 9,
-//   },
-//   saveContainer: {
-//     width: 100,
-//     height: 25,
-//     borderWidth: 1,
-//     borderRadius: 20,
-//     margin: 9,
-//     backgroundColor: "white",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     shadowColor: "black",
-//     shadowOpacity: 0.5,
-//     shadowRadius: 1,
-//     shadowOffset: {
-//       height: 0.5,
-//       width: 0.5,
-//     },
-//   },
-//   saveText: {
-//     color: "#ff3279",
-//     fontSize: 12,
-//   },
-// });

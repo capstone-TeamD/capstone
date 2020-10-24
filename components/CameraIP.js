@@ -15,6 +15,7 @@ import { getUser } from './store/user';
 import PhotoEditor from './PhotoEditor';
 import * as Permissions from 'expo-permissions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import styles from '../styles/cameraIP';
 
 function CameraIP(props) {
   const [image, setImage] = useState(null);
@@ -115,16 +116,6 @@ function CameraIP(props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-    backgroundColor: "#fff"
-  },
-});
 
 const mapState = (state) => {
   return {
