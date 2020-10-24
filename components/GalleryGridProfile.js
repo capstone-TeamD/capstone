@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import styles from '../styles/galleryGridProfile'
 
 export default function PhotoGrid({
   photos,
@@ -93,29 +94,3 @@ export default function PhotoGrid({
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'row-reverse',
-  },
-  photo: {
-    height: 140,
-    marginBottom: 3,
-  },
-  icon: {
-    width: 80,
-    height: 80,
-    marginTop: 25,
-    marginHorizontal: 30,
-  },
-  swipeButton: {
-    width: 75,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFA500',
-    marginBottom: -3,
-  },
-});

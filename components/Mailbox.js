@@ -27,7 +27,7 @@ function Mailbox(props) {
           />
         </View>
       ) : (
-        <Text>Your mailbox is empty</Text>
+        <Text style={styles.noMail}>Your mailbox is empty</Text>
       )}
     </View>
   );

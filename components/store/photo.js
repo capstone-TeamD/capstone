@@ -30,8 +30,10 @@ export const addPhotoToProfile = (newPhotoObj) => ({
 
 // THUNK CREATORS
 
+//pull update for featured daily
 export const fetchUpdate = (currentId) => async (dispatch) => {
   try {
+    //get the firestore postcards
     const allPhotos = [];
     let lastUpdate;
     await db
@@ -76,10 +78,10 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
     currentDate = { currentTime, currentDay, timeStamp: Date.now() };
 
     const dir = `${FileSystem.cacheDirectory}postcards`;
-    //names of postcards from the directory
     const localPostcards = await localStorageDirExist(dir);
 
     if (currentMs - lastUpdate.timeStamp === 0) {
+      //first ever entry into featured daily
       console.log('new');
       dispatch(fetchDatabase(allPhotos, dir));
       discoverUpdateFirestore(currentId, currentDate);
@@ -126,6 +128,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
   }
 };
 
+//downloading photos into local storage
 const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
   try {
     console.log('fetch from database');
@@ -138,6 +141,8 @@ const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
 
     const databaseLength = allPhotos.length;
     const localPostcards = [];
+
+    //create an array of the random numbers or generating featured daily
     const randomFiveNums = (totalPostcardAmt) => {
       while (localPostcards.length < 10) {
         const num = Math.floor(Math.random() * Math.max(totalPostcardAmt));
@@ -146,7 +151,6 @@ const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
         }
       }
     };
-    //create an array of the random numbers
     randomFiveNums(databaseLength);
 
     //downloading from database to local storage
@@ -181,6 +185,7 @@ const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
   }
 };
 
+//loading photos from local storage
 const loadFromCache = (localPostcards, dir) => async (dispatch) => {
   console.log('loadFromCache');
   try {
@@ -188,7 +193,6 @@ const loadFromCache = (localPostcards, dir) => async (dispatch) => {
       Promise.all(
         localPostcards.map(async (postcard) => {
           if (typeof postcard === 'string') {
-            console.log('didnotcachefromfire');
             const newURL = await FileSystem.getInfoAsync(dir + `/${postcard}`);
             const indexsplit = postcard.indexOf('-');
             return {
@@ -197,7 +201,6 @@ const loadFromCache = (localPostcards, dir) => async (dispatch) => {
               username: postcard.slice(0, indexsplit),
             };
           } else {
-            console.log('afterdownloadfromfire');
             const uri = postcard.username + '-' + postcard.imageId;
             const newURL = await FileSystem.getInfoAsync(dir + `/${uri}`);
             return {
@@ -216,6 +219,7 @@ const loadFromCache = (localPostcards, dir) => async (dispatch) => {
   }
 };
 
+//gets the discover update field
 const discoverUpdateFirestore = async (userId, updateDate) => {
   await db
     .collection('users')
@@ -227,7 +231,6 @@ const discoverUpdateFirestore = async (userId, updateDate) => {
       console.log('Document successfully updated!');
     })
     .catch(function (error) {
-      // The document probably doesn't exist.
       console.error('Error updating document: ', error);
     });
 };
@@ -241,12 +244,9 @@ export const deleteSinglePhoto = (
   firebaseAudioURL
 ) => async (dispatch) => {
   try {
-    // console.log(firebaseURL);
-    console.log('firebase audio url in deleteSinglePhoto', firebaseAudioURL);
     const nameArr = firebaseURL.split('%')[1];
     const fileName = nameArr.split('.jpg')[0];
     const finalFile = fileName.slice(2);
-    // console.log(finalFile);
     const photoRef = firebase.storage().ref().child(`photos/${finalFile}.jpg`);
     // TO DO: need to verify that photo file name is the same as audio file name during upload
     // const audioRef = firebase.storage().ref().child(`audio/${finalFile}.mp3`);
@@ -261,16 +261,6 @@ export const deleteSinglePhoto = (
           .then(async function () {
             console.log(
               'Document successfully deleted from cloud firestore - postcards'
-            );
-            console.log(
-              'userId',
-              userId,
-              'id',
-              id,
-              'imageURL',
-              firebaseURL,
-              'audioURL RIGHT ABOVE FUNCTION',
-              firebaseAudioURL
             );
             const deleteObj = {
               imageId: id,
@@ -335,21 +325,20 @@ export const localStorageDirExist = async (dirName) => {
   return await FileSystem.readDirectoryAsync(dirName);
 };
 
-//profile photo fetch
+//get profile photos 
 export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
   const profileDir = `${FileSystem.cacheDirectory}profile`;
   const localPostcards = await localStorageDirExist(profileDir);
 
+  //check if firestore matches local storage
   if (localPostcards.length === profilePhotosArr.length) {
     console.log('profile photos loading from local storage');
     const newPostcards = async () =>
       Promise.all(
         profilePhotosArr.map(async (postcard) => {
-          // console.log('postcard', postcard);
           const newURL = await FileSystem.getInfoAsync(
             profileDir + `/${postcard.imageId}`
           );
-          // console.log('newURL', newURL);
           const audio = await FileSystem.getInfoAsync(
             `${FileSystem.cacheDirectory}audio` +
               `/${postcard.imageId}` +
@@ -369,18 +358,15 @@ export const profilePhotos = (profilePhotosArr) => async (dispatch) => {
       );
     newPostcards().then((data) => dispatch(getProfilePhotos(data)));
   } else {
-    // if local storage has no postcards or lengh in database !== localPostcards
+    // if local storage not up to date
     console.log('profile photos loading from database');
-    // delete local storage postcard directory and make new directory
-    // localStorageDirExist(profileDir)
+
     await FileSystem.deleteAsync(profileDir);
     await FileSystem.makeDirectoryAsync(profileDir);
 
-    // download to local storage / cache
     const postcardLinks = [];
 
     profilePhotosArr.forEach(async (postcardDB) => {
-      // console.log(postcardDB);
       let audioURL = '';
       if (postcardDB.audioURL) {
         const newAudioURL = await FileSystem.downloadAsync(
