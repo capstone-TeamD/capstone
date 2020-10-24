@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { getUser } from './store/user';
 import { viewPostcard } from './helperFunctions/Send';
 import { useFocusEffect } from '@react-navigation/native';
+
+import postcard from '../assets/postcard.jpg' 
 
 function Mailbox(props) {
   useFocusEffect(
@@ -38,7 +40,8 @@ function Mailbox(props) {
     let date = new Date(msFormat);
     let formattedDate = date.toLocaleDateString('en-US');
     let formattedTime = date.toLocaleTimeString('en-US');
-    return `${formattedDate} at ${formattedTime}`;
+    return `${formattedDate}
+    at ${formattedTime}`;
   };
 
   // console.log('user in mailbox', props.user);
@@ -54,16 +57,31 @@ function Mailbox(props) {
               style={styles.message}
               onPress={() => openPostcard(msg.postcardId, navigate)}
             >
-              <View style={styles.separation}>
-                <Text> From: {msg.senderUsername}</Text>
-                <Text> Sent on: {dateToDisplay(msg.sentDate)}</Text>
+              <ImageBackground source={postcard} style={{ width: '100%', height: undefined, aspectRatio: 7/5, resizeMode:'contain'}}>
+
+              <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
+                <View style={{...styles.separation, justifyContent: 'center'}}>
+                  <Text>{msg.messageText}</Text>
+                  <Text style={{
+                    alignSelf: 'center'
+                      }}> --{msg.senderUsername}</Text>
+                </View>
+
+                <View style={styles.separation}>
+                  <View style={{
+                    height: '59%',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    }}>
+                    <Text>{dateToDisplay(msg.sentDate)}</Text>
+                  </View>
+                  <Text style={{ textAlign: 'center', marginTop: 35}}>
+                    Click to view postcard
+                  </Text>
+                </View>
               </View>
-              <View style={styles.separation}>
-                <Text> Message: {msg.messageText}</Text>
-                <Text style={{ textAlign: 'center', marginTop: 10 }}>
-                  Click to view postcard
-                </Text>
-              </View>
+
+              </ImageBackground>
             </TouchableOpacity>
           ))}
         </View>
@@ -95,6 +113,7 @@ const styles = StyleSheet.create({
   },
   separation: {
     padding: 5,
+    width: '50%'
   },
 });
 

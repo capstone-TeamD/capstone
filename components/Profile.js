@@ -62,16 +62,6 @@ class Profile extends Component {
   };
 
   async handleDelete(imageId, firebaseURL, localURL, firebaseAudioURL) {
-    console.log(
-      'imageId',
-      imageId,
-      'firebaseURL',
-      firebaseURL,
-      'localURL',
-      localURL,
-      'firebaseAudioURL',
-      firebaseAudioURL
-    );
     await this.props.deletePhoto(
       imageId,
       this.props.user.id,
@@ -84,7 +74,7 @@ class Profile extends Component {
   async sendPostard(recipientEmail, messageText) {
     const postcardId = this.state.imageId;
     const senderUsername = this.props.user.username;
-    // console.log(postcardId, senderId, recipientEmail, messageText);
+
     await mailPostcard(
       postcardId,
       senderUsername,
@@ -187,7 +177,7 @@ class Profile extends Component {
                   autoCapitalize='none'
                   multiline={true}
                   returnKeyType='done'
-                  maxLength={200}
+                  maxLength={160}
                   blurOnSubmit={true}
                   onSubmitEditing={() => {
                     Keyboard.dismiss();
