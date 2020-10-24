@@ -24,20 +24,15 @@ return (
         onPress={() => openPostcard
           (item.postcardId, navigate)}
       >
-        <View style={{width: '95%', padding: 5}}>
-        <ImageBackground source={postcard} style={{ width: '100%', height: undefined, aspectRatio: 7/5, resizeMode:'contain'}}>
-
-          <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
+        <View style={styles.container}>
+        <ImageBackground source={postcard} style={styles.postcardImg}>
+          <View style={styles.halves}>
             <View style={{...styles.separation, justifyContent: 'center'}}>
               <Text>{item.messageText}</Text>
-              <Text style={{alignSelf: 'center'}}> --{item.senderUsername}</Text>
+              <Text style={styles.sender}> --{item.senderUsername}</Text>
             </View>
             <View style={styles.separation}>
-              <View style={{
-                height: '58%',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                }}>
+              <View style={styles.dateDisplay}>
                 <Text>{dateToDisplay(item.sentDate)}</Text>
               </View>
               {/* <Text style={{ textAlign: 'center', marginTop: 35}}>
@@ -55,16 +50,14 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
     alignItems: 'center',
-    // justifyContent: 'center',
+    width: '95%',
+    padding: 5
   },
   postcard: {
     width: '100%',
-    // borderWidth: 1,
-    // marginTop: 10,
     padding: 10,
-    // backgroundColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000000',
@@ -75,8 +68,25 @@ const styles = StyleSheet.create({
       width: 1,
     },
   },
+  postcardImg: { 
+    width: '100%',
+    height: undefined,
+    aspectRatio: 7/5,
+    resizeMode:'contain'
+  },
+  halves: {
+    flex: 1, flexDirection: 'row', padding: 10
+  },
   separation: {
     padding: 5,
-    width: '50%'
+    width: '50%',
   },
+  sender: {
+    alignSelf: 'center'
+  },
+  dateDisplay: {
+    height: '58%',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  }
 });
