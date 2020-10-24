@@ -11,6 +11,7 @@ import 'firebase/firestore';
 import { connect } from 'react-redux'
 import { signupUser } from './store/user'
 import { Loader } from './Loader'
+import styles from '../styles/auth'
 
 
 class Signup extends Component {
@@ -76,47 +77,6 @@ class Signup extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputBox: {
-    width: "75%",
-    margin: 7,
-    padding: 11,
-    fontSize: 15,
-    borderColor: "#d3d3d3",
-    borderBottomWidth: 1,
-    textAlign: "center",
-  },
-  button: {
-    marginTop: 40,
-    marginBottom: 20,
-    paddingVertical: 7,
-    alignItems: "center",
-    backgroundColor: "black",
-    borderColor: "black",
-    borderWidth: 3.5,
-    borderRadius: 8,
-    width: 190,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  buttonlink: {
-    fontSize: 14,
-    color: "#0000EE",
-    marginTop: 18,
-  },
-});
-
 
 const mapDispatch = dispatch => {
   return {

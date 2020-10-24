@@ -27,7 +27,6 @@ export default function PhotoGrid({
     };
     setRefreshing(true);
     wait(2000).then(() => {
-      console.log('refresh');
       return setRefreshing(false);
     });
   }, []);
