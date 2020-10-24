@@ -11,6 +11,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { viewDiscoverPostcard } from './helperFunctions/Send';
+import styles from '../styles/galleryGrid'
 
 export default function PhotoGrid({
   photos,
@@ -73,7 +74,7 @@ export default function PhotoGrid({
               }}
             />
             <Text style={styles.userText}>
-              Created By: {`${item.username}`}
+              Created by: {`${item.username}`}
             </Text>
           </View>
         </TouchableOpacity>
@@ -84,48 +85,3 @@ export default function PhotoGrid({
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 7,
-    width: '100%',
-    marginTop: 10,
-  },
-  photoContainer: {
-    width: '90%',
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000000',
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    shadowOffset: {
-      height: 1,
-      width: 1,
-    },
-  },
-  photo: {
-    marginTop: 10,
-    backgroundColor: 'black',
-    height: 150,
-    width: '90%',
-    alignSelf: 'center',
-  },
-  icon: {
-    width: 80,
-    height: 80,
-    marginTop: 25,
-    marginHorizontal: 30,
-  },
-  userText: {
-    marginHorizontal: 5,
-    justifyContent: 'center',
-    alignContent: 'center',
-    padding: 3,
-    fontSize: 11,
-  },
-});

@@ -38,9 +38,7 @@ class Fire {
   // this is to add photo uri to firebase - cloud firestore
   addPhoto = async (localUri, currentUser, messageObj, audioObj) => {
     console.log('addPhoto func', messageObj, audioObj);
-    // addPhoto = async (localUri, currentUser, messageObj = [])=> {
     const remoteUri = await this.uploadPhotoAsync(localUri);
-    // audioupload function that needs the uri
     console.log('audioObj', audioObj);
     let audioURLLocal = '';
     let audioFirebaseUri = '';
@@ -58,9 +56,10 @@ class Fire {
           dateCreated: this.timestamp,
           imageURI: remoteUri,
           textArr: messageObj,
-          audioArr: audioObj, //added audio obj to firestore
+          audioArr: audioObj,
         })
         .then((docRef) => {
+          //update firestore profile postcards
           this.firestore
             .collection('users')
             .doc(currentUser.id)
@@ -68,13 +67,13 @@ class Fire {
               postcards: firebase.firestore.FieldValue.arrayUnion({
                 imageId: docRef.id,
                 imageURL: remoteUri,
-                audioURL: audioFirebaseUri, //added the audioURL to postcard firestore
+                audioURL: audioFirebaseUri,
               }),
             })
             .then(async function () {
               console.log('New postcard added to user array!');
-              //download audio file to local storage
 
+              //download audio file to local storage
               await FileSystem.downloadAsync(
                 remoteUri,
                 FileSystem.cacheDirectory + 'profile//' + docRef.id
@@ -136,7 +135,6 @@ class Fire {
 
   get timestamp() {
     return Date.now();
-    // return new Date();
   }
 }
 

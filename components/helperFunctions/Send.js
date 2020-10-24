@@ -22,7 +22,7 @@ export const mailPostcard = (
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          // console.log(doc.id, ' => ', doc.data());
+          // updating recipient's mailbox in firestore
           db.collection('users')
             .doc(doc.id)
             .update({
@@ -51,6 +51,7 @@ export const mailPostcard = (
 
 export const viewPostcard = (postcardId) => {
   return new Promise((res, rej) => {
+    //get specific postcard data from firestore
     db.collection('postcards')
       .doc(postcardId)
       .get()
@@ -88,6 +89,7 @@ export const viewPostcard = (postcardId) => {
 
 export const viewDiscoverPostcard = (postcardId) => {
   return new Promise((res, rej) => {
+    //get specific postcard data from firestore for discover view
     db.collection('postcards')
       .doc(postcardId)
       .get()
@@ -108,6 +110,7 @@ export const viewDiscoverPostcard = (postcardId) => {
 };
 
 export const openPostcard = async (postcardId, navigate) => {
+  //get link for audio and navigate to view postcard
   await viewPostcard(postcardId)
     .then((responseObj) => {
       let imageToRender = responseObj.mbImageLink;
