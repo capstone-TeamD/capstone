@@ -1,20 +1,29 @@
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { firebaseConfig } from '../../firebaseConfig';
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 export const audioUpload = async (uri) => {
   return new Promise(async (res, rej) => {
-    const response = await fetch(uri)
+    const response = await fetch(uri);
     const file = await response.blob();
-    const path = `audio/${Date.now()}.mp3`
-    let upload = firebase.storage().ref(path).put(file)
+    const path = `audio/${Date.now()}.mp3`;
+    let upload = firebase.storage().ref(path).put(file);
     upload.on(
       'state_changed',
-        (snapshot) => {
-          console.log('Audio is uploading...');
-        },
-        (err) => {
-          rej(err);
-        },
-        async () => {
-          const url = await upload.snapshot.ref.getDownloadURL();
-          res(url);
-        })
-  })
-}
+      (snapshot) => {
+        console.log('Audio is uploading...');
+      },
+      (err) => {
+        rej(err);
+      },
+      async () => {
+        const url = await upload.snapshot.ref.getDownloadURL();
+        res(url);
+      }
+    );
+  });
+};
