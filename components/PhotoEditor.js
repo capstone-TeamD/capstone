@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,29 +10,30 @@ import {
   Dimensions,
   Keyboard,
   Animated,
-} from "react-native";
-import background from "../assets/whiteBG.jpg";
-import { Loader } from "./Loader";
-import ButtonOptions from "./ButtonOptions";
-import TextBox from "./TextBox";
-import AudioRecorder from "./AudioRecorder";
+  Alert,
+} from 'react-native';
+import background from '../assets/whiteBG.jpg';
+import { Loader } from './Loader';
+import ButtonOptions from './ButtonOptions';
+import TextBox from './TextBox';
+import AudioRecorder from './AudioRecorder';
 
 class PhotoEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputText: "",
+      inputText: '',
       isActive: false,
       xCoord: 0,
       yCoord: 0,
       addingTouchpoint: false,
       textArray: [],
       loading: false,
-      audioURI: "",
+      audioURI: '',
       audioArray: [],
       textActive: false,
       audioActive: false,
-      orientation: "",
+      orientation: '',
     };
     this.getText = this.getText.bind(this);
     this.onChangeText = this.onChangeText.bind(this);
@@ -56,8 +57,8 @@ class PhotoEditor extends Component {
     onPanResponderRelease: () => {
       this.pan.flattenOffset();
       if (this.pan.x._value > 0) {
-        console.log("x", this.pan.x);
-        console.log("y", this.pan.y);
+        console.log('x', this.pan.x);
+        console.log('y', this.pan.y);
         this.setState({
           isActive: true,
           xCoord: this.pan.x._value,
@@ -74,10 +75,10 @@ class PhotoEditor extends Component {
       message: this.state.inputText,
     };
     this.setState({
-      inputText: "",
+      inputText: '',
       textArray: [...this.state.textArray, messageObj],
     });
-    Keyboard.dismiss()
+    Keyboard.dismiss();
   }
 
   getAudio(audioURI) {
@@ -89,7 +90,17 @@ class PhotoEditor extends Component {
     this.setState({
       audioArray: [...this.state.audioArray, audioObj],
     });
-    alert("Audio saved!")
+    // alert("Audio saved!")
+    Alert.alert(
+      'Success!',
+      'Audio saved.',
+      [
+        {
+          text: 'OK',
+        },
+      ],
+      { cancelable: false }
+    );
   }
 
   uploadPostcard(type) {
@@ -98,13 +109,13 @@ class PhotoEditor extends Component {
   }
 
   showButton(type) {
-    if (type === "text") {
+    if (type === 'text') {
       this.setState({
         textActive: true,
         audioActive: false,
       });
     }
-    if (type === "audio") {
+    if (type === 'audio') {
       this.setState({
         textActive: false,
         audioActive: true,
@@ -123,8 +134,8 @@ class PhotoEditor extends Component {
       return obj.message;
     });
 
-    const width = Dimensions.get("window").width;
-    const height = Dimensions.get("window").height;
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
 
     const { upload, image, setImage } = this.props;
 
@@ -143,7 +154,7 @@ class PhotoEditor extends Component {
             {...this.panResponder.panHandlers}
           >
             <View>
-              <Image source={require("../assets/cursor1.png")} />
+              <Image source={require('../assets/cursor1.png')} />
             </View>
           </Animated.View>
         </ImageBackground>
@@ -185,12 +196,12 @@ class PhotoEditor extends Component {
 
             <Button
               style={styles.button}
-              title="Upload Postcard"
+              title='Upload Postcard'
               onPress={() => this.uploadPostcard(true)}
             />
             <Button
               style={styles.button}
-              title="Cancel"
+              title='Cancel'
               onPress={() => setImage(null)}
             />
           </ImageBackground>
@@ -202,7 +213,6 @@ class PhotoEditor extends Component {
           audioActive={this.state.audioActive}
           setImage={setImage}
           uploadPostcard={this.uploadPostcard}
-
         />
       </View>
     );
@@ -211,54 +221,54 @@ class PhotoEditor extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    width: "100%",
-    height: "100%",
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    height: '100%',
     flex: 1,
     marginBottom: -50,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   pointer: {
     height: 18,
     width: 18,
-    backgroundColor: "blue",
+    backgroundColor: 'blue',
     borderRadius: 10,
-    borderColor: "black",
+    borderColor: 'black',
     borderWidth: 3,
   },
   imageBackground: {
-    width: "100%",
+    width: '100%',
     flex: 0.6,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   buttonContainer: {
     margin: 15,
   },
   innerPhoto: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    resizeMode: "cover"
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    resizeMode: 'cover',
   },
   inputBackground: {
     flex: 1,
   },
   text: {
     padding: 35,
-    textAlign: "center",
+    textAlign: 'center',
   },
   textContainer: {
     marginTop: 15,
   },
   textSaved: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   inputBox: {
     flex: 1,
-    width: "100%",
-    textAlign: "center",
-    backgroundColor: "#fff",
+    width: '100%',
+    textAlign: 'center',
+    backgroundColor: '#fff',
   },
 });
 
