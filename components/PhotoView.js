@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Button } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, Image, StyleSheet, Button, TouchableOpacity, Text } from "react-native";
 import {
   useDeviceOrientation,
   useDimensions,
-} from '@react-native-community/hooks';
-import { touchpointText, touchpointAudio } from './helperFunctions/touchpoints';
-import TouchLabels from './TouchLabels';
-import { Audio } from 'expo-av';
+} from "@react-native-community/hooks";
+import { touchpointText, touchpointAudio } from "./helperFunctions/touchpoints";
+import TouchLabels from "./TouchLabels";
+import { Audio } from "expo-av";
 
 export default function PhotoView(props) {
   const { landscape } = useDeviceOrientation();
@@ -16,7 +16,6 @@ export default function PhotoView(props) {
   const [touchActive, setActive] = useState(false);
 
   useEffect(() => {
-    // console.log('useEffect');
     funcText(imageId);
     funcAudio(imageId);
   }, []);
@@ -35,36 +34,32 @@ export default function PhotoView(props) {
   const playAudio = async () => {
     const recording = new Audio.Recording();
     try {
-      // console.log('audioURL', audioURL);
       const soundObject = await Audio.Sound.createAsync(
         { uri: audioURL },
         { shouldPlay: true }
       );
       // Your sound is playing!
-      console.log('playing music');
+      console.log("playing music");
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
     }
   };
 
   const { width, height } = useDimensions().window;
 
-  // console.log('width, height', width, height);
-  // console.log('props', props.route.params);
-
   return (
     <View style={styles.container}>
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           width: width,
           height: height,
-          resizeMode: 'contain',
+          resizeMode: "contain",
         }}
       >
         <Image
           source={{ uri: imageURL }}
-          style={{ width: '100%', height: landscape ? '100%' : '30%' }}
+          style={{ width: "100%", height: landscape ? "100%" : "30%" }}
         />
       </View>
       {textArr && !touchActive ? (
@@ -78,8 +73,7 @@ export default function PhotoView(props) {
                 left: textObj.xCoord,
               }}
             >
-              {/* {console.log('inside of body', touchActive)} */}
-              <Button title='p' onPress={() => setActive(true)} />
+              <Button title="p" onPress={() => setActive(true)} />
             </View>
           );
         })
@@ -92,17 +86,19 @@ export default function PhotoView(props) {
       )}
       <>
         {audioArr[0] ? (
-          <View
-            style={{
-              ...styles.pointer,
-              top: audioArr[0].yCoord,
-              left: audioArr[0].xCoord,
-            }}
-          >
-            <Button title='p' onPress={() => playAudio()} />
-          </View>
+          <TouchableOpacity style={{
+            top: audioArr[0].yCoord,
+            left: audioArr[0].xCoord,
+          }} onPress={() => playAudio()}>
+             <Image style={styles.mic}
+              source={require("../assets/micCircle.png")} 
+            /> 
+          </TouchableOpacity>
         ) : null}
       </>
+      <View style={styles.text}>
+        <Text>Tap on touchpoints to reveal or close messages/audio</Text>
+      </View>
     </View>
   );
 }
@@ -114,10 +110,18 @@ const styles = StyleSheet.create({
   pointer: {
     height: 20,
     width: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 3,
     opacity: 0.8,
   },
+  mic: {
+    width: 25,
+    height: 25,
+  },
+  text: {
+    alignSelf: "center",
+    marginTop: "75%",
+  }
 });

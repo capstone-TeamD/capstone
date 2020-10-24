@@ -20,7 +20,7 @@ export default function TextBox({ inputText, onChangeText, getText }) {
         enablesReturnKeyAutomatically={true}
         style={styles.textInput}
         returnKeyType="done"
-        maxLength={25}
+        maxLength={30}
         blurOnSubmit={true}
         onSubmitEditing={() => {
           Keyboard.dismiss();
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: "70%",
-    height: 40,
+    height: 45,
     alignSelf: "center",
     borderWidth: 0.5,
     borderRadius: 5,

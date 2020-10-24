@@ -54,7 +54,7 @@ export default function BottonOptions({
             initalSnap={0}
             callbackNode={fall}
             enabledGestureInteraction={true}
-            enabledGestureInteraction={false}
+            // enabledGestureInteraction={false}
           />
         </View>
       ) : null}

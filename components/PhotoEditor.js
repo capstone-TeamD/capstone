@@ -33,6 +33,7 @@ class PhotoEditor extends Component {
       audioArray: [],
       textActive: false,
       audioActive: false,
+      orientation: "",
     };
     this.getText = this.getText.bind(this);
     this.onChangeText = this.onChangeText.bind(this);
@@ -80,7 +81,6 @@ class PhotoEditor extends Component {
   }
 
   getAudio(audioURI) {
-    // console.log(this.state)
     const audioObj = {
       xCoord: this.state.xCoord,
       yCoord: this.state.yCoord,
@@ -89,10 +89,10 @@ class PhotoEditor extends Component {
     this.setState({
       audioArray: [...this.state.audioArray, audioObj],
     });
+    alert("Audio saved!")
   }
 
   uploadPostcard(type) {
-    // console.log('uploadpostcard', this.state.textArray, this.state.audioArray)
     this.props.upload(this.state.textArray, this.state.audioArray);
     this.setState({ loading: type });
   }
@@ -202,6 +202,7 @@ class PhotoEditor extends Component {
           audioActive={this.state.audioActive}
           setImage={setImage}
           uploadPostcard={this.uploadPostcard}
+
         />
       </View>
     );
@@ -216,6 +217,7 @@ const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
     marginBottom: -50,
+    backgroundColor: "#fff",
   },
   pointer: {
     height: 18,
@@ -228,6 +230,7 @@ const styles = StyleSheet.create({
   imageBackground: {
     width: "100%",
     flex: 0.6,
+    backgroundColor: "#fff",
   },
   buttonContainer: {
     margin: 15,
@@ -235,8 +238,8 @@ const styles = StyleSheet.create({
   innerPhoto: {
     width: "100%",
     height: "100%",
-    resizeMode: "stretch",
     position: "absolute",
+    resizeMode: "cover"
   },
   inputBackground: {
     flex: 1,
@@ -249,13 +252,13 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   textSaved: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   inputBox: {
     flex: 1,
     width: "100%",
     textAlign: "center",
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 });
 

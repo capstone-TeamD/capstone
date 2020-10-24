@@ -143,7 +143,7 @@ class Profile extends Component {
         <View style={styles.header}>
           <Image
             style={styles.circleImage}
-            source={require('../assets/nip.jpg')}
+            source={require('../assets/defaultpic.png')}
           />
           <View style={styles.info}>
             <Text style={styles.infoName}>{username}</Text>
@@ -234,21 +234,22 @@ const styles = StyleSheet.create({
   header: {
     flex: 0.5,
     paddingTop: -20,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'column',
     alignContent: 'flex-start',
     backgroundColor: '#F8F8F8',
     paddingBottom: 10,
+    paddingTop: 10,
     // borderBottomWidth: .2,
     // marginBottom: 50,
-    shadowColor: '#000000',
-    shadowOpacity: 0.5,
-    shadowRadius: 0.5,
-    shadowOffset: {
-      height: 0.5,
-      width: 0.5,
-    },
+    // shadowColor: '#000000',
+    // shadowOpacity: 0.5,
+    // shadowRadius: 0.5,
+    // shadowOffset: {
+    //   height: 0.5,
+    //   width: 0.5,
+    // },
   },
   info: {
     marginTop: 10,
@@ -291,8 +292,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   circleImage: {
-    height: 100,
-    width: 100,
+    height: 90,
+    width: 90,
     marginTop: 10,
     borderRadius: 500,
     borderWidth: 0.3,

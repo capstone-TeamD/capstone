@@ -53,7 +53,7 @@ class EditProfile extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image style={styles.circleImage} source={require("../assets/nip.jpg")} />
+          <Image style={styles.circleImage} source={require("../assets/defaultpic.png")} />
           <View>
             <Text style={styles.infoDesc}>Choose Photo</Text>
           </View>
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     alignContent: "flex-start",
     backgroundColor: "#f6f6f6",
     borderBottomWidth: 0.2,
+    padding: 30,
   },
   infoDesc: {
     fontSize: 13,
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     backgroundColor: "black",
     borderWidth: 2,
-    borderRadius: 4,
+    borderRadius: 7,
     width: 110,
     alignSelf: "center",
   },
@@ -166,8 +167,8 @@ const styles = StyleSheet.create({
     color: "blue",
   },
   circleImage: {
-    height: 100,
-    width: 100,
+    height: 90,
+    width: 90,
     borderRadius: 500,
     marginBottom: 13,
   },

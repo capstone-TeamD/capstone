@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
-    // justifyContent: 'center',
+    justifyContent: 'center',
   },
   header: {
     textAlign: 'center',
