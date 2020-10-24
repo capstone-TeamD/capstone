@@ -157,7 +157,7 @@ class Profile extends Component {
           >
             <View style={styles.container}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Send postcard to:</Text>
+                <Text style={styles.modalText}>Send to:</Text>
                 <TextInput
                   style={styles.inputBox}
                   value={this.state.recipient}
@@ -165,7 +165,6 @@ class Profile extends Component {
                   placeholder='Enter e-mail address for recipient here'
                   autoCapitalize='none'
                 />
-                <Text style={styles.modalText}>Include a message:</Text>
                 <TextInput
                   style={styles.inputBox}
                   value={this.state.message}
@@ -184,7 +183,10 @@ class Profile extends Component {
                   title='Send'
                   onPress={() => this.sendPostard(recipient, message)}
                 />
-                <Button title='Cancel' onPress={this.toggleModal} />
+                <Button
+                  color='red'
+                  title='Cancel'
+                  onPress={this.toggleModal} />
               </View>
             </View>
           </Modal>
@@ -200,7 +202,9 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#e1e1e4',
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    // backgroundColor: 'red',
+    // marginVertical: 10
   },
   gallery: {
     flex: 1,
@@ -257,11 +261,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 15
   },
   modalText: {
-    fontWeight: 'bold',
+    fontSize: 17,
     textAlign: 'center',
     margin: 10,
+    marginTop: 10
   },
   infoLine: {
     borderBottomWidth: 0.2,
@@ -290,6 +296,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     padding: 10,
+    borderRadius: 5
   },
 });
 

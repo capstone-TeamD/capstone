@@ -129,7 +129,11 @@ export const openPostcard = async (postcardId, navigate) => {
 export const dateToDisplay = (msFormat) => {
   let date = new Date(msFormat);
   let formattedDate = date.toLocaleDateString('en-US');
-  let formattedTime = date.toLocaleTimeString('en-US');
-  return `${formattedDate}
-  at ${formattedTime}`;
+  return `${formattedDate}`;
 };
+
+export const timeToDisplay = (msFormat) => {
+  let date = new Date(msFormat);
+  let formattedTime = date.toLocaleTimeString('en-US');
+  return `${formattedTime}`
+}

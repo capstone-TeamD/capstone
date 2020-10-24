@@ -1,6 +1,6 @@
 import React from 'react'
 import {TouchableOpacity, View, StyleSheet, ImageBackground, Text, FlatList} from 'react-native'
-import {openPostcard, dateToDisplay} from './helperFunctions/Send'
+import {openPostcard, dateToDisplay, timeToDisplay} from './helperFunctions/Send'
 import postcard from '../assets/postcard.jpg'
 
 export default function MailGrid ({
@@ -28,16 +28,17 @@ return (
         <ImageBackground source={postcard} style={styles.postcardImg}>
           <View style={styles.halves}>
             <View style={{...styles.separation, justifyContent: 'center'}}>
-              <Text>{item.messageText}</Text>
-              <Text style={styles.sender}> --{item.senderUsername}</Text>
+              <Text style={{}}>{item.messageText}</Text>
+              <Text style={styles.sender}> from {item.senderUsername}</Text>
             </View>
             <View style={styles.separation}>
               <View style={styles.dateDisplay}>
-                <Text>{dateToDisplay(item.sentDate)}</Text>
+                <Text style={{lineHeight: -25, margin: 5}}>{dateToDisplay(item.sentDate)}</Text>
+                <Text style={{lineHeight: -25, margin: 5}}>{timeToDisplay(item.sentDate)}</Text>
               </View>
-              {/* <Text style={{ textAlign: 'center', marginTop: 35}}>
-                Click to view postcard
-              </Text> */}
+              <Text style={{ textAlign: 'center', marginTop: 35, color: '#AE5C6C' }}>
+                Click to view
+              </Text>
             </View>
           </View>
         </ImageBackground>
@@ -53,12 +54,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     width: '95%',
-    padding: 5
+    padding: 5,
   },
   postcard: {
     width: '100%',
     padding: 10,
     justifyContent: 'center',
+    alignSelf: 'center',
     alignItems: 'center',
     shadowColor: '#000000',
     shadowOpacity: 0.3,
@@ -82,10 +84,12 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   sender: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontStyle: 'italic',
+    marginTop: 5
   },
   dateDisplay: {
-    height: '58%',
+    height: '65%',
     justifyContent: 'flex-end',
     alignItems: 'center',
   }
