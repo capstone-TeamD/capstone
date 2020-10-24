@@ -6,7 +6,6 @@ import {
   Text,
   ImageBackground,
   Image,
-  TextInput,
   Button,
   Dimensions,
   Keyboard,
@@ -78,6 +77,7 @@ class PhotoEditor extends Component {
       inputText: "",
       textArray: [...this.state.textArray, messageObj],
     });
+    Keyboard.dismiss()
   }
 
   getAudio(audioURI) {

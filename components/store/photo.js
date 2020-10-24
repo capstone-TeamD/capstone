@@ -53,7 +53,7 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
     const userData = user.data();
     lastUpdate = userData.discoverUpdate;
 
-    //check if it needs to be updated
+    //check if discover needs to be updated
     if (lastUpdate === undefined) {
       //in lastupdate is undefined, then return update object
       const currentMs = Date.now();
@@ -78,7 +78,6 @@ export const fetchUpdate = (currentId) => async (dispatch) => {
     const dir = `${FileSystem.cacheDirectory}postcards`;
     //names of postcards from the directory
     const localPostcards = await localStorageDirExist(dir);
-    // const localPostcards = await FileSystem.readDirectoryAsync(dir);
 
     if (currentMs - lastUpdate.timeStamp === 0) {
       console.log('new');
@@ -132,13 +131,9 @@ const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
     console.log('fetch from database');
     //read what is listed in directory, if no directory exist then makedir
     const { exists } = await FileSystem.getInfoAsync(dir);
-    if (!exists) {
-      await FileSystem.makeDirectoryAsync(dir);
+    if (exists) {
+      await FileSystem.deleteAsync(dir);
     }
-
-    console.log('from database');
-    //delete local storage postcard directory and make new directory
-    await FileSystem.deleteAsync(dir);
     await FileSystem.makeDirectoryAsync(dir);
 
     const databaseLength = allPhotos.length;
@@ -151,9 +146,9 @@ const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
         }
       }
     };
-
     //create an array of the random numbers
     randomFiveNums(databaseLength);
+
     //downloading from database to local storage
     const postcardLink = async () =>
       Promise.all(
@@ -193,7 +188,6 @@ const loadFromCache = (localPostcards, dir) => async (dispatch) => {
       Promise.all(
         localPostcards.map(async (postcard) => {
           if (typeof postcard === 'string') {
-            //did not fetch from database
             console.log('didnotcachefromfire');
             const newURL = await FileSystem.getInfoAsync(dir + `/${postcard}`);
             const indexsplit = postcard.indexOf('-');
@@ -336,7 +330,6 @@ export const deleteSinglePhoto = (
 export const localStorageDirExist = async (dirName) => {
   const { exists } = await FileSystem.getInfoAsync(dirName);
   if (!exists) {
-    console.log('makeDir');
     await FileSystem.makeDirectoryAsync(dirName);
   }
   return await FileSystem.readDirectoryAsync(dirName);

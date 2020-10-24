@@ -9,8 +9,6 @@ import {
 } from "react-native";
 import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
-import * as FileSystem from "expo-file-system";
-import { audioUpload } from "./helperFunctions/audio";
 
 const { width, height } = Dimensions.get("window");
 const recording = new Audio.Recording();
@@ -152,9 +150,6 @@ export default class AudioRecorder extends Component {
         >
           <Text style={styles.saveText}>Save Audio</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={() => audioUpload(this.state.audioURI)}>
-        <Text>Upload</Text>
-        </TouchableOpacity> */}
       </View>
     );
   }

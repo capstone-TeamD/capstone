@@ -34,7 +34,6 @@ export default function PhotoGrid({
     });
   }, []);
   const { width } = Dimensions.get('window');
-  // console.log('photos', photos);
   const navigation = useNavigation();
 
   const openDiscoverPostcard = async (imageId, imageURI) => {

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import panda from '../assets/panda.jpg';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import PhotoGrid from './GalleryGridProfile';
@@ -11,9 +10,7 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity,
   Modal,
-  TouchableHighlight,
   Dimensions,
   TextInput,
   Button,
@@ -62,16 +59,6 @@ class Profile extends Component {
   };
 
   async handleDelete(imageId, firebaseURL, localURL, firebaseAudioURL) {
-    console.log(
-      'imageId',
-      imageId,
-      'firebaseURL',
-      firebaseURL,
-      'localURL',
-      localURL,
-      'firebaseAudioURL',
-      firebaseAudioURL
-    );
     await this.props.deletePhoto(
       imageId,
       this.props.user.id,
@@ -84,7 +71,7 @@ class Profile extends Component {
   async sendPostard(recipientEmail, messageText) {
     const postcardId = this.state.imageId;
     const senderUsername = this.props.user.username;
-    // console.log(postcardId, senderId, recipientEmail, messageText);
+
     await mailPostcard(
       postcardId,
       senderUsername,
@@ -170,7 +157,7 @@ class Profile extends Component {
           >
             <View style={styles.container}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Send postcard to:</Text>
+                <Text style={styles.modalText}>Send to:</Text>
                 <TextInput
                   style={styles.inputBox}
                   value={this.state.recipient}
@@ -178,7 +165,6 @@ class Profile extends Component {
                   placeholder='Enter e-mail address for recipient here'
                   autoCapitalize='none'
                 />
-                <Text style={styles.modalText}>Include a message:</Text>
                 <TextInput
                   style={styles.inputBox}
                   value={this.state.message}
@@ -187,7 +173,7 @@ class Profile extends Component {
                   autoCapitalize='none'
                   multiline={true}
                   returnKeyType='done'
-                  maxLength={200}
+                  maxLength={160}
                   blurOnSubmit={true}
                   onSubmitEditing={() => {
                     Keyboard.dismiss();
@@ -197,7 +183,10 @@ class Profile extends Component {
                   title='Send'
                   onPress={() => this.sendPostard(recipient, message)}
                 />
-                <Button title='Cancel' onPress={this.toggleModal} />
+                <Button
+                  color='red'
+                  title='Cancel'
+                  onPress={this.toggleModal} />
               </View>
             </View>
           </Modal>
@@ -213,7 +202,7 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#e1e1e4',
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
   gallery: {
     flex: 1,
@@ -241,15 +230,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
     paddingBottom: 10,
     paddingTop: 10,
-    // borderBottomWidth: .2,
-    // marginBottom: 50,
-    // shadowColor: '#000000',
-    // shadowOpacity: 0.5,
-    // shadowRadius: 0.5,
-    // shadowOffset: {
-    //   height: 0.5,
-    //   width: 0.5,
-    // },
   },
   info: {
     marginTop: 10,
@@ -273,11 +253,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 15
   },
   modalText: {
-    fontWeight: 'bold',
+    fontSize: 17,
     textAlign: 'center',
     margin: 10,
+    marginTop: 10
   },
   infoLine: {
     borderBottomWidth: 0.2,
@@ -307,6 +289,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     padding: 10,
+    borderRadius: 5
   },
 });
 

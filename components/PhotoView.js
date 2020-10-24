@@ -34,7 +34,7 @@ export default function PhotoView(props) {
   const playAudio = async () => {
     const recording = new Audio.Recording();
     try {
-      const soundObject = await Audio.Sound.createAsync(
+      await Audio.Sound.createAsync(
         { uri: audioURL },
         { shouldPlay: true }
       );
