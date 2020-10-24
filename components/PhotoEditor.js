@@ -17,6 +17,7 @@ import { Loader } from './Loader';
 import ButtonOptions from './ButtonOptions';
 import TextBox from './TextBox';
 import AudioRecorder from './AudioRecorder';
+import styles from '../styles/photoEditor';
 
 class PhotoEditor extends Component {
   constructor(props) {
@@ -177,6 +178,7 @@ class PhotoEditor extends Component {
               <View style={styles.buttonContainer} />
             )}
             {!texts[0] && (
+              //TODO: later add saved touchpoint texts to screen for viewing
               // texts.map((message, index) => (
               //   <View style={styles.textContainer} key={index}>
               //     <Text style={styles.textSaved}>{message}</Text>
@@ -218,58 +220,5 @@ class PhotoEditor extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    width: '100%',
-    height: '100%',
-    flex: 1,
-    marginBottom: -50,
-    backgroundColor: '#fff',
-  },
-  pointer: {
-    height: 18,
-    width: 18,
-    backgroundColor: 'blue',
-    borderRadius: 10,
-    borderColor: 'black',
-    borderWidth: 3,
-  },
-  imageBackground: {
-    width: '100%',
-    flex: 0.6,
-    backgroundColor: '#fff',
-  },
-  buttonContainer: {
-    margin: 15,
-  },
-  innerPhoto: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    resizeMode: 'cover',
-  },
-  inputBackground: {
-    flex: 1,
-  },
-  text: {
-    padding: 35,
-    textAlign: 'center',
-  },
-  textContainer: {
-    marginTop: 15,
-  },
-  textSaved: {
-    textAlign: 'center',
-  },
-  inputBox: {
-    flex: 1,
-    width: '100%',
-    textAlign: 'center',
-    backgroundColor: '#fff',
-  },
-});
 
 export default PhotoEditor;

@@ -29,7 +29,6 @@ export default function PhotoGrid({
     setRefreshing(true);
     wait(2000).then(() => {
       checkUpdateDate(userId);
-      console.log('refresh');
       return setRefreshing(false);
     });
   }, []);
