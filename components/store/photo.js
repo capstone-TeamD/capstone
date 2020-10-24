@@ -139,7 +139,7 @@ const fetchDatabase = (allPhotos, dir) => async (dispatch) => {
     const databaseLength = allPhotos.length;
     const localPostcards = [];
     const randomFiveNums = (totalPostcardAmt) => {
-      while (localPostcards.length < 1) {
+      while (localPostcards.length < 10) {
         const num = Math.floor(Math.random() * Math.max(totalPostcardAmt));
         if (!localPostcards.includes(num)) {
           localPostcards.push(num);
