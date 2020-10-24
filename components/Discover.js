@@ -9,7 +9,6 @@ class Discover extends Component {
   }
 
   render() {    
-    console.log('all photos', this.props.allPhotos);
     return (
       <PhotoGrid
         numColumns={1}
