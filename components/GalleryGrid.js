@@ -73,7 +73,7 @@ export default function PhotoGrid({
               }}
             />
             <Text style={styles.userText}>
-              Created By: {`${item.username}`}
+              Created by: {`${item.username}`}
             </Text>
           </View>
         </TouchableOpacity>

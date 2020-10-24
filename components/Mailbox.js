@@ -26,7 +26,7 @@ function Mailbox(props) {
           />
         </View>
       ) : (
-        <Text>Your mailbox is empty</Text>
+        <Text style={styles.noMail}>Your mailbox is empty</Text>
       )}
     </View>
   );
@@ -44,6 +44,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
   },
+  noMail: {
+    opacity: .3
+  }
 });
 
 const mapState = (state) => {

@@ -8,6 +8,7 @@ if (firebase.apps.length === 0) {
 
 const db = firebase.firestore();
 
+//retrieve text touchpoints from firestore
 export const touchpointText = async (postcardId) => {
   let data;
   await db
@@ -16,14 +17,12 @@ export const touchpointText = async (postcardId) => {
     .get()
     .then(async (doc) => {
       data = doc.data();
-      // console.log('insideFunc', data.textArr)
-      // return data.textArr
-      // console.log('fetchedData', doc.data())
     })
     .catch((error) => console.error(error));
   return data.textArr;
 };
 
+//retrieve audio touchpoints from firestore
 export const touchpointAudio = async (postcardId) => {
   let data;
   await db
@@ -32,9 +31,6 @@ export const touchpointAudio = async (postcardId) => {
     .get()
     .then(async (doc) => {
       data = doc.data();
-      // console.log('insideFunc', data.audioArr)
-      // return data.textArr
-      // console.log('fetchedData', doc.data())
     })
     .catch((error) => console.error(error));
   return data.audioArr;

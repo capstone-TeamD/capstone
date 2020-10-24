@@ -139,14 +139,20 @@ class Profile extends Component {
           <View style={styles.infoLine} />
         </View>
         <View style={styles.gallery}>
-          <PhotoGrid
-            photos={this.props.postcards}
-            numColumns={1}
-            handleDelete={this.handleDelete}
-            getProfilePostcards={this.props.getProfilePhotos}
-            navigate={navigate}
-            toggleModal={this.toggleModal}
-          />
+          {
+            this.props.postcards.length > 0 ? (
+            <PhotoGrid
+              photos={this.props.postcards}
+              numColumns={1}
+              handleDelete={this.handleDelete}
+              getProfilePostcards={this.props.getProfilePhotos}
+              navigate={navigate}
+              toggleModal={this.toggleModal}
+            />)
+            :<Text 
+              style={{opacity: .3}}
+            >No postcards created</Text>
+          }
         </View>
         <View style={styles.centeredView}>
           <Modal
@@ -207,6 +213,8 @@ const styles = StyleSheet.create({
   gallery: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   edit: {
     justifyContent: 'center',

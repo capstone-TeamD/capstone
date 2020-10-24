@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
+import styles from '../styles/audioRecorder'
 
 const { width, height } = Dimensions.get("window");
 const recording = new Audio.Recording();
@@ -21,7 +22,6 @@ export default class AudioRecorder extends Component {
       isRecording: "false",
     };
 
-    // this.askMicPermissions = this.askMicPermissions.bind(this);
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
     this.playbackRecording = this.playbackRecording.bind(this);
@@ -59,7 +59,6 @@ export default class AudioRecorder extends Component {
       );
       await recording.startAsync();
       console.log("you are now recording");
-      // You are now recording!
     } catch (error) {
       console.warn(error);
     }
@@ -84,9 +83,8 @@ export default class AudioRecorder extends Component {
         { uri: this.state.audioURI },
         { shouldPlay: true }
       );
-      // Your sound is playing!
       console.log("playing music");
-      await soundObject.unloadAsync();
+      // await soundObject.unloadAsync();
     } catch (error) {
       console.log("error", error);
     }
@@ -155,50 +153,50 @@ export default class AudioRecorder extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    alignItems: "center",
-    marginTop: -15,
-  },
-  micContainer: {
-    position: "absolute",
-    alignItems: "center",
-  },
-  mic: {
-    width: 120,
-    height: 120,
-  },
-  buttons: {
-    flexDirection: "row",
-    marginTop: 130,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  playButton: {
-    width: 30,
-    height: 30,
-    marginHorizontal: 9,
-  },
-  saveContainer: {
-    width: 100,
-    height: 25,
-    borderWidth: 1,
-    borderRadius: 20,
-    margin: 9,
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    shadowRadius: 1,
-    shadowOffset: {
-      height: 0.5,
-      width: 0.5,
-    },
-  },
-  saveText: {
-    color: "#ff3279",
-    fontSize: 12,
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flexDirection: "column",
+//     alignItems: "center",
+//     marginTop: -15,
+//   },
+//   micContainer: {
+//     position: "absolute",
+//     alignItems: "center",
+//   },
+//   mic: {
+//     width: 120,
+//     height: 120,
+//   },
+//   buttons: {
+//     flexDirection: "row",
+//     marginTop: 130,
+//     alignItems: "center",
+//     marginBottom: 10,
+//   },
+//   playButton: {
+//     width: 30,
+//     height: 30,
+//     marginHorizontal: 9,
+//   },
+//   saveContainer: {
+//     width: 100,
+//     height: 25,
+//     borderWidth: 1,
+//     borderRadius: 20,
+//     margin: 9,
+//     backgroundColor: "white",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     shadowColor: "black",
+//     shadowOpacity: 0.5,
+//     shadowRadius: 1,
+//     shadowOffset: {
+//       height: 0.5,
+//       width: 0.5,
+//     },
+//   },
+//   saveText: {
+//     color: "#ff3279",
+//     fontSize: 12,
+//   },
+// });

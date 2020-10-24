@@ -77,6 +77,7 @@ class EditProfile extends Component {
                 onChangeText={(about) => this.setState({ about })}
                 autoCapitalize="none"
                 multiline={true}
+                placeholder='tell us about yourself'
               />
             </View>
           </View>
