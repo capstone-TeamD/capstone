@@ -55,4 +55,7 @@ export default StyleSheet.create({
       fontWeight: 'bold',
       marginTop: 10,
     },
+    noMail: {
+      opacity: .3
+    }
   });
