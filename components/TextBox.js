@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Button, Text , Keyboard} from "react-native";
+import { View, StyleSheet, Button, Keyboard} from "react-native";
 import {
   useDeviceOrientation,
   useDimensions,

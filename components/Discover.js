@@ -1,12 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  RefreshControl,
-} from 'react-native';
 import { fetchUpdate } from './store/photo';
 import { connect } from 'react-redux';
 import PhotoGrid from './GalleryGrid';

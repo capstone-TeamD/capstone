@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import photo from './store/photo';
 
 export default function PhotoGrid({
   photos,
@@ -16,7 +15,6 @@ export default function PhotoGrid({
   onEndReached,
   toggleModal,
   handleDelete,
-  getProfilePostcards,
   navigate,
 }) {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -28,13 +26,11 @@ export default function PhotoGrid({
     };
     setRefreshing(true);
     wait(2000).then(() => {
-      // getProfilePostcards(photos)
       console.log('refresh');
       return setRefreshing(false);
     });
   }, []);
 
-  // console.log('photos in profile', photos);
   const { width } = Dimensions.get('window');
   const size = width / numColumns;
 
@@ -92,12 +88,6 @@ export default function PhotoGrid({
           >
             <Image source={require('../assets/magnify-plus.png')} />
           </TouchableOpacity>
-          {/* <TouchableOpacity
-            style={{...styles.swipeButton, backgroundColor: "#B8B8B8"}}
-            onPress={() => toggleModal({ item })}
-          >
-            <Image source={require("../assets/magnify-plus.png")} />
-          </TouchableOpacity> */}
         </View>
       )}
       rightOpenValue={-225}

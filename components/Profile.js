@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import panda from '../assets/panda.jpg';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import PhotoGrid from './GalleryGridProfile';
@@ -11,9 +10,7 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity,
   Modal,
-  TouchableHighlight,
   Dimensions,
   TextInput,
   Button,
@@ -230,8 +227,6 @@ const styles = StyleSheet.create({
     alignContent: 'flex-start',
     backgroundColor: '#F8F8F8',
     paddingBottom: 10,
-    // borderBottomWidth: .2,
-    // marginBottom: 50,
     shadowColor: '#000000',
     shadowOpacity: 0.5,
     shadowRadius: 0.5,
