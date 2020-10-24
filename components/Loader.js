@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   Modal,
   ActivityIndicator,
   StyleSheet
 } from 'react-native';
+
+//TODO: change the state for loading to the redux store
 
 export const Loader = (props) => {
   const { loader } = props

@@ -65,7 +65,7 @@ export const viewPostcard = (postcardId) => {
         )
           .then((data) => {
             console.log('New postcard message added to local storage!');
-            if (postcard.audioArr.length) {
+            if (postcard.audioArr.length > 0) {
               let audio = postcard.audioArr[0];
               console.log('audio obj in viewPostcard', audio);
               res({ mbImageLink: data.uri, mbAudioLink: audio.audioLink });
@@ -93,7 +93,7 @@ export const viewDiscoverPostcard = (postcardId) => {
       .get()
       .then(async (doc) => {
         const postcard = doc.data();
-        if (postcard.audioArr.length) {
+        if (postcard.audioArr.length > 0) {
           let audio = postcard.audioArr[0];
           console.log('audio obj in viewPostcard', audio);
           res(audio.audioLink);
@@ -106,3 +106,34 @@ export const viewDiscoverPostcard = (postcardId) => {
       });
   });
 };
+
+export const openPostcard = async (postcardId, navigate) => {
+  await viewPostcard(postcardId)
+    .then((responseObj) => {
+      let imageToRender = responseObj.mbImageLink;
+      let audioToRender = '';
+      if (responseObj.mbAudioLink) {
+        audioToRender = responseObj.mbAudioLink;
+      }
+      navigate('Postcard View', {
+        imageId: postcardId,
+        imageURL: imageToRender,
+        audioURL: audioToRender,
+      });
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
+};
+
+export const dateToDisplay = (msFormat) => {
+  let date = new Date(msFormat);
+  let formattedDate = date.toLocaleDateString('en-US');
+  return `${formattedDate}`;
+};
+
+export const timeToDisplay = (msFormat) => {
+  let date = new Date(msFormat);
+  let formattedTime = date.toLocaleTimeString('en-US');
+  return `${formattedTime}`
+}

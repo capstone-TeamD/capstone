@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button,
   Image,
   View,
   Platform,
-  SafeAreaView,
   Text,
   StyleSheet,
   Alert,
@@ -58,9 +56,6 @@ function CameraIP(props) {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log('image picked', result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
@@ -76,7 +71,6 @@ function CameraIP(props) {
         quality: 1,
       });
       console.log('image captured', result);
-
       if (!result.cancelled) {
         setImage(result.uri);
       }

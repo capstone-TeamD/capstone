@@ -9,7 +9,7 @@ import {
 import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
-import {audioUpload} from './helperFunctions/audio'
+import {audioUpload} from './helperFunctions/audioUpload'
 
 const { width, height } = Dimensions.get("window");
 const recording = new Audio.Recording();

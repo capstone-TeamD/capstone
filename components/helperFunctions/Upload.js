@@ -2,7 +2,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { firebaseConfig } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
-import { audioUpload } from './audio';
+import { audioUpload } from './audioUpload';
 import { localStorageDirExist } from '../store/photo';
 
 class Fire {

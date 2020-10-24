@@ -6,7 +6,6 @@ import {
   Text,
   ImageBackground,
   Image,
-  TextInput,
   Button,
   Dimensions,
   Keyboard,
@@ -77,10 +76,10 @@ class PhotoEditor extends Component {
       inputText: '',
       textArray: [...this.state.textArray, messageObj],
     });
+    Keyboard.dismiss()
   }
 
   getAudio(audioURI) {
-    // console.log(this.state)
     const audioObj = {
       xCoord: this.state.xCoord,
       yCoord: this.state.yCoord,
@@ -92,7 +91,6 @@ class PhotoEditor extends Component {
   }
 
   uploadPostcard(type) {
-    // console.log('uploadpostcard', this.state.textArray, this.state.audioArray)
     this.props.upload(this.state.textArray, this.state.audioArray);
     this.setState({ loading: type });
   }

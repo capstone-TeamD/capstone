@@ -1,12 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  RefreshControl,
-} from 'react-native';
 import { fetchUpdate } from './store/photo';
 import { connect } from 'react-redux';
 import PhotoGrid from './GalleryGrid';
@@ -17,7 +9,6 @@ class Discover extends Component {
   }
 
   render() {    
-    console.log('all photos', this.props.allPhotos);
     return (
       <PhotoGrid
         numColumns={1}
