@@ -15,13 +15,14 @@ import { touchpointText, touchpointAudio } from './helperFunctions/touchpoints';
 import TouchLabels from './TouchLabels';
 import { Audio } from 'expo-av';
 import styles from '../styles/photoView'
+import TouchLabelsText from './TouchLabelsText';
+import TouchLabelsAudio from './TouchLabelsAudio';
 
 export default function PhotoView(props) {
   const { landscape } = useDeviceOrientation();
   const { imageId, imageURL, audioURL } = props.route.params;
   const [textArr, setTextArr] = useState([]);
   const [audioArr, setAudioArr] = useState([]);
-  const [touchActive, setActive] = useState(false);
 
   useEffect(() => {
     funcText(imageId);
@@ -67,44 +68,19 @@ export default function PhotoView(props) {
           style={{ width: '100%', height: landscape ? '100%' : '30%' }}
         />
       </View>
-      {textArr && !touchActive ? (
+      {textArr.length > 0 ? (
         textArr.map((textObj, index) => {
           return (
-            <View
-              key={index}
-              style={{
-                ...styles.pointer,
-                top: textObj.yCoord,
-                left: textObj.xCoord,
-              }}
-            >
-              <Button title='p' onPress={() => setActive(true)} />
-            </View>
-          );
-        })
-      ) : (
-        <TouchLabels
-          touchActive={touchActive}
-          setActive={setActive}
-          textArr={textArr}
-        />
-      )}
+            landscape ? 
+              <TouchLabelsText textObj={textObj} key={index} xWidth={width} yHeight={height * 3.3}/> :
+              <TouchLabelsText textObj={textObj} key={index} xWidth={width} yHeight={height}/>
+          )
+        })): null }
       <>
         {audioArr[0] ? (
-          <TouchableOpacity
-            style={{
-              top: audioArr[0].yCoord,
-              left: audioArr[0].xCoord,
-              position: 'absolute',
-            }}
-            onPress={() => playAudio()}
-          >
-            <Image
-              style={styles.mic}
-              source={require('../assets/micCircle.png')}
-            />
-          </TouchableOpacity>
-        ) : null}
+          landscape ? 
+          <TouchLabelsAudio audioArr={audioArr} xWidth={width} yHeight={height * 3.3} playAudio={playAudio}/> : <TouchLabelsAudio audioArr={audioArr} xWidth={width} yHeight={height} playAudio={playAudio}/>
+        ) : null }
       </>
       <View style={styles.text}>
         <Text>Tap on touchpoints to reveal or hide messages/audio</Text>

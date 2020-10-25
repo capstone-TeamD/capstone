@@ -141,7 +141,7 @@ class Profile extends Component {
         </View>
         <View style={styles.gallery}>
           {
-            this.props.postcards.length > 0 ? (
+            this.props.user.postcards ? (
             <PhotoGrid
               photos={this.props.postcards}
               numColumns={1}

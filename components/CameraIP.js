@@ -16,10 +16,13 @@ import PhotoEditor from './PhotoEditor';
 import * as Permissions from 'expo-permissions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from '../styles/cameraIP';
+import {
+  useDimensions,
+} from '@react-native-community/hooks';
 
 function CameraIP(props) {
   const [image, setImage] = useState(null);
-
+  const {width, height} = useDimensions().window;
   const currentUser = props.currentUser;
   const { navigate } = props.navigation;
 
@@ -111,7 +114,7 @@ function CameraIP(props) {
           </TouchableOpacity>
         </View>
       ) : (
-        <PhotoEditor upload={upload} image={image} setImage={setImage} />
+        <PhotoEditor upload={upload} image={image} setImage={setImage} width={width} height={height}/>
       )}
     </View>
   );

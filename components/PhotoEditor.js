@@ -69,10 +69,11 @@ class PhotoEditor extends Component {
     },
   });
 
+
   getText() {
     const messageObj = {
-      xCoord: this.state.xCoord,
-      yCoord: this.state.yCoord,
+      xCoord: this.state.xCoord / this.props.width,
+      yCoord: this.state.yCoord / this.props.height,
       message: this.state.inputText,
     };
     this.setState({
@@ -84,8 +85,8 @@ class PhotoEditor extends Component {
 
   getAudio(audioURI) {
     const audioObj = {
-      xCoord: this.state.xCoord,
-      yCoord: this.state.yCoord,
+      xCoord: this.state.xCoord / this.props.width,
+      yCoord: this.state.yCoord / this.props.height,
       audioLink: audioURI,
     };
     this.setState({
