@@ -11,6 +11,8 @@ export default StyleSheet.create({
     gallery: {
       flex: 1,
       backgroundColor: '#fff',
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     edit: {
       justifyContent: 'center',
