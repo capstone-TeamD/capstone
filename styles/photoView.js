@@ -5,10 +5,10 @@ export default StyleSheet.create({
       flex: 1,
     },
     pointer: {
-      height: 20,
-      width: 20,
+      height: 22,
+      width: 22,
       backgroundColor: 'white',
-      borderRadius: 10,
+      borderRadius: 12,
       borderColor: 'black',
       borderWidth: 3,
       opacity: 0.8,
@@ -20,7 +20,7 @@ export default StyleSheet.create({
     },
     text: {
       alignSelf: 'center',
-      marginTop: '70%',
+      marginTop: '76%',
       marginHorizontal: 20,
       position: 'absolute',
     },
