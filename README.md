@@ -1,30 +1,19 @@
 # PostBox
-<table>
- <tr>
-    <td><b>
-
-A mobile app for creating and sharing interactive postcards.The app allows  <br />
-users to edit postcards to show text or play sounds at defined touch points. <br />
-All profiles have a mailbox for recieving postcards from friends and family. <br />
-Postcards can be viewed globally on the featured daily tab, which updates <br />
-once a day starting at 7AM. The idea was inspired by those who wish to share <br />
-their experiences with those are unable to.
+A mobile app for creating and sharing interactive postcards.
+The app allows users to edit postcards to show text or play sounds at defined touch points.
+All profiles have a mailbox for recieving postcards from friends and family.
+Postcards can be viewed globally on the featured daily tab, which updates once a day starting at 7AM.
+The idea was inspired by those who wish to share their experiences with those are unable to.
 
 Technologies used:
-<b>
  - React Native
  - Redux
  - Expo
  - Firebase Cloud Firestore
  - Firebase Cloud Storage
-</b></td>
-    <td><b>
-  ![Featured Tab](assets/featured.gif)
- </b></td>
- </tr>
-</table>
 
 
+ ![Featured Tab](assets/featured.gif)
 
 ## Installation
 1. Make a [firebase](https://console.firebase.google.com/) project
