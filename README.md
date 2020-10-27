@@ -11,6 +11,7 @@ once a day starting at 7AM. The idea was inspired by those who wish to share <br
 their experiences with those are unable to.
 
 Technologies used:
+<b>
  - React Native
  - Redux
  - Expo
